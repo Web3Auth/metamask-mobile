@@ -574,7 +574,8 @@ export type ControllersToInitialize =
   | 'CurrencyRateController'
   | 'AccountsController'
   | 'MultichainNetworkController'
-  | 'TransactionController';
+  | 'TransactionController'
+  | 'DeFiPositionsController';
 
 /**
  * Callback that returns a controller messenger for a specific controller.
