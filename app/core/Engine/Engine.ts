@@ -249,13 +249,7 @@ export class Engine {
   lastIncomingTxBlockInfo: any;
 
   ///: BEGIN:ONLY_INCLUDE_IF(preinstalled-snaps,external-snaps)
-  /**
-   * Object that runs and manages the execution of Snaps
-   */
-  snapExecutionService: WebViewExecutionService;
-  snapController: SnapController;
   subjectMetadataController: SubjectMetadataController;
-
   ///: END:ONLY_INCLUDE_IF
 
   accountsController: AccountsController;
@@ -987,6 +981,7 @@ export class Engine {
 
     ///: BEGIN:ONLY_INCLUDE_IF(preinstalled-snaps,external-snaps)
     const cronjobController = controllersByName.CronjobController;
+    const executionService = controllersByName.ExecutionService;
     const snapController = controllersByName.SnapController;
     const snapInterfaceController = controllersByName.SnapInterfaceController;
     const snapsRegistry = controllersByName.SnapsRegistry;
@@ -1263,6 +1258,7 @@ export class Engine {
       LoggingController: loggingController,
       ///: BEGIN:ONLY_INCLUDE_IF(preinstalled-snaps,external-snaps)
       CronjobController: cronjobController,
+      ExecutionService: executionService,
       SnapController: snapController,
       SnapInterfaceController: snapInterfaceController,
       SnapsRegistry: snapsRegistry,
