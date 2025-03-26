@@ -32,7 +32,7 @@ import {
 import Device from '../../../util/device';
 import BaseNotification from '../../UI/Notification/BaseNotification';
 import ElevatedView from 'react-native-elevated-view';
-import { loadingSet, loadingUnset } from '../../../actions/user';
+import { loadingSet, loadingUnset, UserActionType } from '../../../actions/user';
 import { storePrivacyPolicyClickedOrClosed as storePrivacyPolicyClickedOrClosedAction } from '../../../reducers/legalNotices';
 import PreventScreenshot from '../../../core/PreventScreenshot';
 import WarningExistingUserModal from '../../UI/WarningExistingUserModal';
@@ -49,6 +49,8 @@ import { selectAccounts } from '../../../selectors/accountTrackerController';
 import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboarding';
 import { trace, TraceName, TraceOperation } from '../../../util/trace';
 import { MetricsEventBuilder } from '../../../core/Analytics/MetricsEventBuilder';
+import Oauth2LoginComponent from '../../Oauth2Login/Oauth2LoginComponent';
+import DevLogger from '../../../core/SDKConnect/utils/DevLogger';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -161,6 +163,10 @@ class Onboarding extends PureComponent {
      */
     unsetLoading: PropTypes.func,
     /**
+     * oauth2LoginReset
+     */
+    oauth2LoginReset: PropTypes.func,
+    /**
      * loadings msg
      */
     loadingMsg: PropTypes.string,
@@ -172,8 +178,23 @@ class Onboarding extends PureComponent {
      * Metrics injected by withMetricsAwareness HOC
      */
     metrics: PropTypes.object,
+    /**
+     * oauth2LoginInProgress
+     */
+    oauth2LoginInProgress: PropTypes.bool,
+    /**
+     * oauth2LoginError
+     */
+    oauth2LoginError: PropTypes.string,
+    /**
+     * oauth2LoginSuccess
+     */
+    oauth2LoginSuccess: PropTypes.bool,
+    /**
+     * oauth2LoginExistingUser
+     */
+    oauth2LoginExistingUser: PropTypes.bool,
   };
-
   notificationAnimated = new Animated.Value(100);
   detailsYAnimated = new Animated.Value(0);
   actionXAnimated = new Animated.Value(0);
@@ -229,6 +250,40 @@ class Onboarding extends PureComponent {
     );
   };
 
+  updateOAuth2Login = async () => {
+    const { oauth2LoginSuccess, oauth2LoginExistingUser, oauth2LoginError, oauth2LoginInProgress, navigation} = this.props;
+    // if oauth2LoginSuccess is true, navigate to home
+    DevLogger.log('updateOAuth2Login: oauth2LoginSuccess', oauth2LoginSuccess);
+    DevLogger.log('updateOAuth2Login: oauth2LoginExistingUser', oauth2LoginExistingUser);
+    DevLogger.log('updateOAuth2Login: oauth2LoginError', oauth2LoginError);
+    // eslint-disable-next-line no-console
+    console.log('updateOAuth2Login: oauth2LoginInProgress', oauth2LoginInProgress);
+
+    if (oauth2LoginSuccess) {
+      if (oauth2LoginExistingUser) {
+        // TODO: handle existing user
+        // Navigate to Relogin Wallet
+        this.props.oauth2LoginReset();
+        await Authentication.lockApp();
+        navigation.navigate(Routes.ONBOARDING.LOGIN);
+      } else {
+        this.props.oauth2LoginReset();
+        // eslint-disable-next-line no-console
+        console.log('updateOAuth2Login: navigate to ChoosePassword');
+        this.props.navigation.navigate('ChoosePassword', {
+          [PREVIOUS_SCREEN]: ONBOARDING,
+        });
+      }
+    }
+    if (oauth2LoginError) {
+      // TODO: handle error
+      // Show error message
+    }
+    if (oauth2LoginInProgress) {
+      // TODO: handle in progress
+    }
+  };
+
   componentDidMount() {
     this.updateNavBar();
     this.mounted = true;
@@ -254,6 +309,7 @@ class Onboarding extends PureComponent {
   }
 
   componentDidUpdate = () => {
+    this.updateOAuth2Login();
     this.updateNavBar();
   };
 
@@ -388,6 +444,7 @@ class Onboarding extends PureComponent {
           </Text>
         </View>
         <View style={styles.createWrapper}>
+          <Oauth2LoginComponent />
           <View style={styles.buttonWrapper}>
             <StyledButton
               type={'normal'}
@@ -495,6 +552,11 @@ const mapStateToProps = (state) => ({
   passwordSet: state.user.passwordSet,
   loading: state.user.loadingSet,
   loadingMsg: state.user.loadingMsg,
+
+  oauth2LoginInProgress: state.user.oauth2LoginInProgress,
+  oauth2LoginError: state.user.oauth2LoginError,
+  oauth2LoginSuccess: state.user.oauth2LoginSuccess,
+  oauth2LoginExistingUser: state.user.oauth2LoginExistingUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -502,6 +564,7 @@ const mapDispatchToProps = (dispatch) => ({
   unsetLoading: () => dispatch(loadingUnset()),
   disableNewPrivacyPolicyToast: () =>
     dispatch(storePrivacyPolicyClickedOrClosedAction()),
+  oauth2LoginReset: () => dispatch({ type: UserActionType.OAUTH2_LOGIN_RESET }),
 });
 
 export default connect(
