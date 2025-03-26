@@ -7,6 +7,7 @@ import DevLogger from '../../core/SDKConnect/utils/DevLogger';
 import { useDispatch } from 'react-redux';
 import { UserAction, UserActionType } from '../../actions/user';
 import { Dispatch } from 'redux';
+import { testPerformance, testPerformance2 } from '../../core/Oauth2Login/test-performace';
 const styles = StyleSheet.create({
   buttonWrapper: {
     marginBottom: 16,
@@ -18,8 +19,28 @@ export default function Oauth2LoginComponent( ) {
 
   return (
     <>
-    <View style={styles.buttonWrapper}>
-      <StyledButton
+      <View style={styles.buttonWrapper}>
+        <StyledButton
+          title="Test Performance"
+          type={'normal'}
+          onPress={async () => {
+            testPerformance();
+          }}
+        > Test Performance </StyledButton>
+      </View>
+
+      <View style={styles.buttonWrapper}>
+        <StyledButton
+          title="Test Performance 2"
+          type={'normal'}
+          onPress={async () => {
+            testPerformance2();
+          }}
+        > Test Performance 2 </StyledButton>
+      </View>
+
+      <View style={styles.buttonWrapper}>
+        <StyledButton
         title="Sign in with Apple"
         type={'normal'}
         testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
