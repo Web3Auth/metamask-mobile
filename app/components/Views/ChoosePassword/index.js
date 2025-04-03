@@ -234,6 +234,10 @@ class ChoosePassword extends PureComponent {
      * Object that represents the current route info like params passed to it
      */
     route: PropTypes.object,
+    /**
+     * The flag to check if the oauth2 login was successful
+     */
+    oauth2LoginSuccess: PropTypes.bool,
   };
 
   state = {
@@ -247,6 +251,7 @@ class ChoosePassword extends PureComponent {
     loading: false,
     error: null,
     inputWidth: { width: '99%' },
+    oauth2LoginSuccess: false,
   };
 
   mounted = true;
@@ -349,6 +354,8 @@ class ChoosePassword extends PureComponent {
         this.state.biometryChoice,
         this.state.rememberMe,
       );
+      authType.oauth2Login = this.props.oauth2LoginSuccess;
+      Logger.log('previous_screen', previous_screen);
 
       if (previous_screen === ONBOARDING) {
         try {
@@ -356,6 +363,10 @@ class ChoosePassword extends PureComponent {
         } catch (error) {
           if (Device.isIos) await this.handleRejectedOsBiometricPrompt();
         }
+
+        // get seedphrase from vault
+        // TODO: seedless onboarding create ( {password, seedPhrase} );
+
         this.keyringControllerPasswordSet = true;
         this.props.seedphraseNotBackedUp();
       } else {
@@ -410,6 +421,7 @@ class ChoosePassword extends PureComponent {
       false,
       false,
     );
+    newAuthData.oauth2Login = this.props.oauth2LoginSuccess;
     try {
       await Authentication.newWalletAndKeychain(
         this.state.password,
@@ -775,4 +787,8 @@ const mapDispatchToProps = (dispatch) => ({
   seedphraseNotBackedUp: () => dispatch(seedphraseNotBackedUp()),
 });
 
-export default connect(null, mapDispatchToProps)(ChoosePassword);
+const mapStateToProps = (state) => ({
+  oauth2LoginSuccess: state.user.oauth2LoginSuccess,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChoosePassword);

@@ -207,6 +207,7 @@ import { EarnController } from '@metamask/earn-controller';
 import { TransactionControllerInit } from './controllers/transaction-controller';
 import I18n from '../../../locales/i18n';
 import { Platform } from '@metamask/profile-sync-controller/sdk';
+import { seedlessOnboardingControllerInit } from './controllers/seedless-onboarding-controller';
 
 const NON_EMPTY = 'NON_EMPTY';
 
@@ -1041,6 +1042,7 @@ export class Engine {
         MultichainBalancesController: multichainBalancesControllerInit,
         MultichainTransactionsController: multichainTransactionsControllerInit,
         ///: END:ONLY_INCLUDE_IF
+        SeedlessOnboardingController: seedlessOnboardingControllerInit,
       },
       persistedState: initialState as EngineState,
       existingControllersByName,
@@ -1050,7 +1052,7 @@ export class Engine {
 
     const accountsController = controllersByName.AccountsController;
     const transactionController = controllersByName.TransactionController;
-
+    const seedlessOnboardingController = controllersByName.SeedlessOnboardingController;
     // Backwards compatibility for existing references
     this.accountsController = accountsController;
     this.transactionController = transactionController;
@@ -1408,6 +1410,7 @@ export class Engine {
       BridgeController: bridgeController,
       BridgeStatusController: bridgeStatusController,
       EarnController: earnController,
+      SeedlessOnboardingController: seedlessOnboardingController,
     };
 
     const childControllers = Object.assign({}, this.context);
