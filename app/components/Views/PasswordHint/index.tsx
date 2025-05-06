@@ -21,11 +21,16 @@ import StorageWrapper from '../../../store/storage-wrapper';
 import { ToastVariants } from '../../../component-library/components/Toast/Toast.types';
 import { ToastContext } from '../../../component-library/components/Toast/Toast.context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import HelpText, {
+  HelpTextSeverity,
+} from '../../../component-library/components/Form/HelpText';
+import Engine from '../../../core/Engine';
 
 const PasswordHint = () => {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [savedHint, setSavedHint] = useState('');
+  const [hintError, setHintError] = useState<string | null>(null);
   const { toastRef } = useContext(ToastContext);
 
   const styles = StyleSheet.create({
@@ -75,7 +80,25 @@ const PasswordHint = () => {
     fetchHintFromStorage();
   }, [navigation, colors]);
 
+  const checkHintMatchesPassword = async (hint: string): Promise<boolean> => {
+    const { KeyringController } = Engine.context;
+    try {
+      await KeyringController.verifyPassword(hint);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const handleSave = async () => {
+    setHintError(null);
+
+    const hintMatches = await checkHintMatchesPassword(savedHint);
+    if (hintMatches) {
+      setHintError(strings('password_hint.error_matches_password'));
+      return;
+    }
+
     const currentSeedphraseHints = await StorageWrapper.getItem(
       SEED_PHRASE_HINTS,
     );
@@ -131,8 +154,16 @@ const PasswordHint = () => {
             placeholder={strings('password_hint.placeholder')}
             size={TextFieldSize.Lg}
             value={savedHint}
-            onChangeText={setSavedHint}
+            onChangeText={(text) => {
+              setSavedHint(text);
+              setHintError(null);
+            }}
           />
+          {hintError && (
+            <HelpText severity={HelpTextSeverity.Error}>
+              {hintError}
+            </HelpText>
+          )}
 
           <Button
             label={strings('password_hint.saved')}

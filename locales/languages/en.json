@@ -4055,7 +4055,8 @@
     "button": "Create hint",
     "placeholder": "e.g. mom’s home",
     "saved": "Save",
-    "saved_toast": "Password hint updated"
+    "saved_toast": "Password hint updated",
+    "error_matches_password": "You cannot use your password as a hint"
   },
   "protect_your_wallet": {
     "title": "Protect your wallet",
