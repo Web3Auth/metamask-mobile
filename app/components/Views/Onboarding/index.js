@@ -6,14 +6,12 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Image,
   InteractionManager,
   Animated,
   Easing,
 } from 'react-native';
 import Text, {
   TextVariant,
-  TextColor,
 } from '../../../component-library/components/Texts/Text';
 import StorageWrapper from '../../../store/storage-wrapper';
 import {
@@ -182,6 +180,18 @@ const createStyles = (colors) =>
       borderColor: colors.border.muted,
       borderWidth: 1,
       color: colors.text.default,
+    },
+    createWalletButton: {
+      borderRadius: 12,
+      color: importedColors.whiteTransparent,
+      backgroundColor: importedColors.btnBlack,
+    },
+    existingWalletButton: {
+      borderRadius: 12,
+      color: colors.text.default,
+      backgroundColor: colors.transparent,
+      borderWidth: 1,
+      borderColor: importedColors.btnBlack,
     },
   });
 
@@ -438,14 +448,23 @@ class Onboarding extends PureComponent {
             label={strings('onboarding.start_exploring_now')}
             width={ButtonWidthTypes.Full}
             size={ButtonSize.Lg}
+            style={styles.createWalletButton}
           />
           <Button
             variant={ButtonVariants.Secondary}
             onPress={() => this.handleCtaActions('existing')}
             testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
-            label={strings('onboarding.have_existing_wallet')}
             width={ButtonWidthTypes.Full}
             size={ButtonSize.Lg}
+            style={styles.existingWalletButton}
+            label={
+              <Text
+                variant={TextVariant.BodyMDMedium}
+                color={colors.text.default}
+              >
+                {strings('onboarding.have_existing_wallet')}
+              </Text>
+            }
           />
         </View>
       </View>
