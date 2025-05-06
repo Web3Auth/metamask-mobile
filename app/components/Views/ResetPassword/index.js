@@ -37,6 +37,7 @@ import {
   TRUE,
   BIOMETRY_CHOICE_DISABLED,
   PASSCODE_DISABLED,
+  BIOMETRY_CHOICE,
 } from '../../../constants/storage';
 import {
   getPasswordStrengthWord,
@@ -352,6 +353,21 @@ class ResetPassword extends PureComponent {
     );
   };
 
+  unlockWithBiometrics = async () => {
+    // Try to use biometrics to unlock
+    const { availableBiometryType } = await Authentication.getType();
+    if (availableBiometryType) {
+      const biometryChoice = await StorageWrapper.getItem(BIOMETRY_CHOICE);
+      // if (biometryChoice !== '' && biometryChoice === availableBiometryType) {
+      if (biometryChoice) {
+        const credentials = await Authentication.getPassword();
+        if (credentials) {
+          this.tryUnlockWithPassword(credentials.password);
+        }
+      }
+    }
+  };
+
   async componentDidMount() {
     this.updateNavBar();
 
@@ -370,11 +386,13 @@ class ResetPassword extends PureComponent {
           passcodePreviouslyDisabled && passcodePreviouslyDisabled === TRUE
         ),
       });
-    else if (authData.availableBiometryType)
+    else if (authData.availableBiometryType) {
       this.setState({
         biometryType: authData.availableBiometryType,
         biometryChoice: !(previouslyDisabled && previouslyDisabled === TRUE),
       });
+      this.unlockWithBiometrics();
+    }
 
     this.setState(state);
 
