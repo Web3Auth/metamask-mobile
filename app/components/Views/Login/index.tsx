@@ -529,7 +529,7 @@ const Login: React.FC = () => {
                 >
                   {strings('login.password')}
                 </Label>
-                {showHint && (
+                {hintText && (
                   <Button
                     variant={ButtonVariants.Link}
                     onPress={toggleHint}
