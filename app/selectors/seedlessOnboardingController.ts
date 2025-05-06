@@ -8,17 +8,17 @@ const selectSeedlessOnboardingControllerState = (state: RootState) =>
 export const selectSeedlessOnboardingUserId = createSelector(
   selectSeedlessOnboardingControllerState,
   (seedlessOnboardingControllerState: SeedlessOnboardingControllerState) =>
-    seedlessOnboardingControllerState.userId,
+    seedlessOnboardingControllerState?.userId || '',
 );
 
 export const selectSeedlessOnboardingUserEmail = createSelector(
   selectSeedlessOnboardingControllerState,
   (seedlessOnboardingControllerState: SeedlessOnboardingControllerState) =>
-    seedlessOnboardingControllerState.socialLoginEmail,
+    seedlessOnboardingControllerState?.socialLoginEmail || '',
 );
 
 export const selectSeedlessOnboardingAuthConnection = createSelector(
   selectSeedlessOnboardingControllerState,
   (seedlessOnboardingControllerState: SeedlessOnboardingControllerState) =>
-    seedlessOnboardingControllerState.authConnection,
+    seedlessOnboardingControllerState?.authConnection || '',
 );

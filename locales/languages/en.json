@@ -4074,7 +4074,9 @@
     "setup": "Set Up",
     "secret_recovery_phrase": "Secret recovery phrase {{num}}",
     "back_up": "Back up",
-    "reveal": "Reveal"
+    "reveal": "Reveal",
+    "email_recovery": "Email recovery enabled",
+    "social_login_description": "Access your wallet anytime with your Google login and password."
   },
   "backupAndSync": {
     "title": "Backup and sync",

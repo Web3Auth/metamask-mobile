@@ -19,6 +19,11 @@ import Banner, {
   BannerAlertSeverity,
   BannerVariant,
 } from '../../../component-library/components/Banners/Banner';
+import Icon, {
+  IconName,
+  IconSize,
+  IconColor,
+} from '../../../component-library/components/Icons/Icon';
 
 const ProtectYourWallet = () => {
   const { colors } = useTheme();
@@ -54,6 +59,50 @@ const ProtectYourWallet = () => {
       marginTop: 16,
       marginHorizontal: 24,
     },
+    socialContainer: {
+      paddingHorizontal: 24,
+      paddingTop: 16,
+      marginBottom: -8,
+    },
+    socialDetailsBox: {
+      flexDirection: 'column',
+      rowGap: 8,
+      backgroundColor: colors.background.muted,
+      padding: 16,
+      borderBottomLeftRadius: 8,
+      borderBottomRightRadius: 8,
+      borderTopWidth: 1,
+      borderTopColor: colors.border.muted,
+    },
+    socialDetailsBoxRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      columnGap: 8,
+    },
+    socialDetailsBoxRowLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      columnGap: 8,
+      flex: 1,
+    },
+    socialDetailsBoxRoot: {
+      width: '100%',
+    },
+    socialBoxContainer: {
+      backgroundColor: colors.background.muted,
+      padding: 16,
+      borderRadius: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      columnGap: 8,
+    },
+    socialDetailsBoxRowRight: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      columnGap: 8,
+    },
   });
 
   useEffect(() => {
@@ -71,7 +120,7 @@ const ProtectYourWallet = () => {
   useEffect(() => {
     if (userEmail) {
       if (userEmail.endsWith('@privaterelay.appleid.com')) {
-        setFinalUserEmail(undefined);
+        setFinalUserEmail('');
       } else {
         setFinalUserEmail(userEmail);
       }
@@ -101,6 +150,26 @@ const ProtectYourWallet = () => {
           style={styles.accessory}
         />
       )}
+
+      <View style={styles.socialContainer}>
+        <View style={styles.socialDetailsBoxRoot}>
+          <View style={styles.socialBoxContainer}>
+            <Icon
+              name={IconName.Google}
+              size={IconSize.Md}
+              color={IconColor.Alternative}
+            />
+            <Text variant={TextVariant.BodyMDMedium} color={TextColor.Default}>
+              {strings('protect_your_wallet.email_recovery')}
+            </Text>
+          </View>
+          <View style={styles.socialDetailsBox}>
+            <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+              {strings('protect_your_wallet.social_login_description')}
+            </Text>
+          </View>
+        </View>
+      </View>
 
       <SelectSRP />
     </View>
