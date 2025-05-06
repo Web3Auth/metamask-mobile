@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   statusButton: {
+    width: '48%',
+  },
+  fullWidthButton: {
     width: '100%',
   },
   description: {
@@ -22,6 +25,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '70%',
     marginHorizontal: 'auto',
+  },
+  ctaContainer: {
+    flexDirection: 'row',
+    gap: 16,
+    width: '100%',
+    marginTop: 16,
   },
 });
 

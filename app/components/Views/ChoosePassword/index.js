@@ -714,14 +714,16 @@ class ChoosePassword extends PureComponent {
                       }
                     />
                     {!this.isError() ? (
-                      <Text
-                        variant={TextVariant.BodySM}
-                        color={TextColor.Alternative}
-                      >
-                        {strings('choose_password.must_be_at_least', {
-                          number: MIN_PASSWORD_LENGTH,
-                        })}
-                      </Text>
+                      password === '' || password !== confirmPassword ? (
+                        <Text
+                          variant={TextVariant.BodySM}
+                          color={TextColor.Alternative}
+                        >
+                          {strings('choose_password.must_be_at_least', {
+                            number: MIN_PASSWORD_LENGTH,
+                          })}
+                        </Text>
+                      ) : null
                     ) : (
                       <Text
                         variant={TextVariant.BodySM}

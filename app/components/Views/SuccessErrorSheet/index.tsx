@@ -28,6 +28,10 @@ export interface SuccessErrorSheetParams {
   buttonLabel: string | React.ReactNode;
   type: 'success' | 'error';
   icon: IconName;
+  secondaryButtonLabel?: string;
+  secondaryButtonPress?: () => void;
+  primaryButtonLabel?: string;
+  primaryButtonPress?: () => void;
 }
 
 export interface SuccessErrorSheetProps {
@@ -37,23 +41,19 @@ export interface SuccessErrorSheetProps {
 const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
   const {
     onClose,
-    onButtonPress,
     title,
     description,
     buttonLabel,
     type = 'success',
     icon,
+    secondaryButtonLabel,
+    secondaryButtonPress,
+    primaryButtonLabel,
+    primaryButtonPress,
   } = route.params;
 
   const { colors } = useTheme();
   const sheetRef = useRef<BottomSheetRef>(null);
-
-  const handleCtaActions = () => {
-    if (onButtonPress) {
-      onButtonPress();
-      type === 'error' && sheetRef.current?.onCloseBottomSheet();
-    }
-  };
 
   const handleClose = () => {
     if (onClose) {
@@ -69,6 +69,20 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
     return type === 'success' ? IconName.SuccessSolid : IconName.CircleX;
   };
 
+  const handleSecondaryButtonPress = () => {
+    if (secondaryButtonPress) {
+      secondaryButtonPress();
+    }
+    sheetRef.current?.onCloseBottomSheet();
+  };
+
+  const handlePrimaryButtonPress = () => {
+    if (primaryButtonPress) {
+      primaryButtonPress();
+    }
+    sheetRef.current?.onCloseBottomSheet();
+  };
+
   return (
     <BottomSheet ref={sheetRef} onClose={handleClose}>
       <View style={styles.statusContainer}>
@@ -79,6 +93,7 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
             type === 'success' ? colors.success.default : colors.error.default
           }
         />
+
         {typeof title === 'string' ? (
           <Text
             variant={TextVariant.HeadingMD}
@@ -90,6 +105,7 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
         ) : (
           title
         )}
+
         {typeof description === 'string' ? (
           <Text
             variant={TextVariant.BodyMD}
@@ -101,15 +117,41 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
         ) : (
           description
         )}
-        {typeof buttonLabel === 'string' ? (
-          <Button
-            variant={ButtonVariants.Primary}
-            label={buttonLabel}
-            width={ButtonWidthTypes.Full}
-            style={styles.statusButton}
-            onPress={handleCtaActions}
-            size={ButtonSize.Lg}
-          />
+
+        {typeof secondaryButtonLabel === 'string' ||
+        typeof primaryButtonLabel === 'string' ||
+        secondaryButtonLabel ||
+        primaryButtonLabel ? (
+          <View style={styles.ctaContainer}>
+            {secondaryButtonLabel && (
+              <Button
+                variant={ButtonVariants.Secondary}
+                label={secondaryButtonLabel}
+                width={ButtonWidthTypes.Full}
+                style={
+                  primaryButtonLabel && secondaryButtonLabel
+                    ? styles.statusButton
+                    : styles.fullWidthButton
+                }
+                onPress={handleSecondaryButtonPress}
+                size={ButtonSize.Lg}
+              />
+            )}
+            {primaryButtonLabel && (
+              <Button
+                variant={ButtonVariants.Primary}
+                label={primaryButtonLabel}
+                width={ButtonWidthTypes.Full}
+                style={
+                  primaryButtonLabel && secondaryButtonLabel
+                    ? styles.statusButton
+                    : styles.fullWidthButton
+                }
+                onPress={handlePrimaryButtonPress}
+                size={ButtonSize.Lg}
+              />
+            )}
+          </View>
         ) : (
           buttonLabel
         )}
