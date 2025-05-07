@@ -393,7 +393,7 @@
     "re_enter_password": "Re-enter your password",
     "use_at_least_8_characters": "Use at least 8 characters",
     "unlock_with_face_id": "Unlock with Face ID?",
-    "learn_more": "MetaMask can’t reset this password if you forget it",
+    "learn_more": "MetaMask can’t reset this password if you forget it.",
     "seed_phrase_length_error": "Secret Recovery Phrase must be 12, 15, 18, 21, or 24 words",
     "continue": "Continue",
     "clear_all": "Clear all",

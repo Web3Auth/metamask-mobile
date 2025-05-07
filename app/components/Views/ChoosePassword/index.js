@@ -145,12 +145,7 @@ const createStyles = (colors) =>
       marginBottom: 16,
     },
     learnMoreTextContainer: {
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-      gap: 1,
-      width: '100%',
-      flexWrap: 'wrap',
+      flex: 1,
     },
     headerLeft: {
       marginLeft: 16,
@@ -752,24 +747,22 @@ class ChoosePassword extends PureComponent {
                       ChoosePasswordSelectorsIDs.IOS_I_UNDERSTAND_BUTTON_ID
                     }
                     style={styles.checkbox}
-                    label={
-                      <View style={styles.learnMoreTextContainer}>
-                        <Text
-                          variant={TextVariant.BodySM}
-                          color={TextColor.Default}
-                        >
-                          {strings('import_from_seed.learn_more')}{' '}
-                        </Text>
-                        <Text
-                          variant={TextVariant.BodySM}
-                          color={TextColor.Primary}
-                          onPress={this.learnMore}
-                        >
-                          {' ' + strings('reset_password.learn_more')}
-                        </Text>
-                      </View>
-                    }
                   />
+                  <View style={styles.learnMoreTextContainer}>
+                    <Text
+                      variant={TextVariant.BodySM}
+                      color={TextColor.Default}
+                    >
+                      {strings('import_from_seed.learn_more')}
+                      <Text
+                        variant={TextVariant.BodySM}
+                        color={TextColor.Primary}
+                        onPress={this.learnMore}
+                      >
+                        {' ' + strings('reset_password.learn_more')}
+                      </Text>
+                    </Text>
+                  </View>
                 </View>
 
                 {/* <View>{this.renderSwitch()}</View> */}
