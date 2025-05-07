@@ -92,8 +92,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { BIOMETRY_TYPE } from 'react-native-keychain';
 import FOX_LOGO from '../../../images/branding/fox.png';
 import METAMASK_NAME from '../../../images/branding/metamask-name.png';
-import { SecurityOptionToggle } from '../../UI/SecurityOptionToggle';
 import OAuthService from '../../../core/OAuthService/OAuthService';
+import { LoginOptionsSwitch } from '../../UI/LoginOptionsSwitch';
 
 /**
  * View where returning users can authenticate
@@ -199,6 +199,7 @@ const Login: React.FC = () => {
         setRememberMe(true);
         setAllowLoginWithRememberMe(true);
       } else if (authData.availableBiometryType) {
+        Logger.log('authData', authData);
         setBiometryType(authData.availableBiometryType);
         setHasBiometricCredentials(
           authData.currentAuthType === AUTHENTICATION_TYPE.BIOMETRIC &&
@@ -454,20 +455,20 @@ const Login: React.FC = () => {
   const shouldRenderBiometricLogin =
     biometryType && !biometryPreviouslyDisabled ? biometryType : null;
 
-  // const renderSwitch = () => {
-  //   const handleUpdateRememberMe = (rememberMeChoice: boolean) => {
-  //     setRememberMe(rememberMeChoice);
-  //   };
+  const renderSwitch = () => {
+    const handleUpdateRememberMe = (rememberMeChoice: boolean) => {
+      setRememberMe(rememberMeChoice);
+    };
 
-  //   return (
-  //     <LoginOptionsSwitch
-  //       shouldRenderBiometricOption={shouldRenderBiometricLogin}
-  //       biometryChoiceState={biometryChoice}
-  //       onUpdateBiometryChoice={updateBiometryChoice}
-  //       onUpdateRememberMe={handleUpdateRememberMe}
-  //     />
-  //   );
-  // };
+    return (
+      <LoginOptionsSwitch
+        shouldRenderBiometricOption={shouldRenderBiometricLogin}
+        biometryChoiceState={biometryChoice}
+        onUpdateBiometryChoice={updateBiometryChoice}
+        onUpdateRememberMe={handleUpdateRememberMe}
+      />
+    );
+  };
 
   const handleDownloadStateLogs = () => {
     const fullState = ReduxService.store.getState();
@@ -479,6 +480,7 @@ const Login: React.FC = () => {
   };
 
   const shouldHideBiometricAccessoryButton = !(
+    !oauthLoginSuccess &&
     biometryChoice &&
     biometryType &&
     hasBiometricCredentials
@@ -565,8 +567,6 @@ const Login: React.FC = () => {
               />
             </View>
 
-            {/* {renderSwitch()} */}
-
             <View style={styles.helperTextContainer}>
               {showHint && (
                 <Text
@@ -593,13 +593,7 @@ const Login: React.FC = () => {
               style={styles.ctaWrapper}
               testID={LoginViewSelectors.LOGIN_BUTTON_ID}
             >
-              {shouldRenderBiometricLogin && (
-                <SecurityOptionToggle
-                  title={strings('import_from_seed.unlock_with_face_id')}
-                  value={biometryChoice}
-                  onOptionUpdated={updateBiometryChoice}
-                />
-              )}
+              {renderSwitch()}
 
               <Button
                 variant={ButtonVariants.Primary}
@@ -641,18 +635,6 @@ const Login: React.FC = () => {
                 />
               </View>
             )}
-            {/* <View style={styles.footer}>
-              <Text variant={TextVariant.HeadingSMRegular} style={styles.cant}>
-                {strings('login.go_back')}
-              </Text>
-              <Button
-                style={styles.goBack}
-                variant={ButtonVariants.Link}
-                onPress={toggleWarningModal}
-                testID={LoginViewSelectors.RESET_WALLET}
-                label={strings('login.reset_wallet')}
-              />
-            </View> */}
           </View>
         </KeyboardAwareScrollView>
         <FadeOutOverlay />
