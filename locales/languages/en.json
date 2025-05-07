@@ -990,7 +990,8 @@
     "learn_more": "Learn more.",
     "seedphrase_not_backed_up": "Back up Secret Recovery Phrase",
     "seedphrase_backed_up": "Secret Recovery Phrase backed up",
-    "social_login_linked": "Log in with Apple or Google",
+    "social_login_linked": "Logged in with",
+    "social_login_not_linked": "Link your wallet to an Apple or Google account",
     "back_up_now": "Back up now",
     "back_up_again": "Back up again",
     "view_hint": "View hint",
@@ -4072,11 +4073,16 @@
   },
   "protect_your_wallet": {
     "title": "Protect your wallet",
-    "login_with_social": "Log in with Apple or Google",
+    "login_with_social": "Log in with Social Accounts",
     "setup": "Set Up",
     "secret_recovery_phrase": "Secret recovery phrase {{num}}",
     "back_up": "Back up",
-    "reveal": "Reveal"
+    "reveal": "Reveal",
+    "social_recovery_title": "GOOGLE OR APPLE RECOVERY",
+    "social_recovery_enable": "Enabled",
+    "social_login_description": "This email and your MetaMask password will help you recover your account and recovery phrases.",
+    "srps_title": "SECRET RECOVERY PHRASES",
+    "srps_description": "Your wallet is most protected when both recovery methods are set up. If one fail, the other helps you recover your wallet."
   },
   "backupAndSync": {
     "title": "Backup and sync",
