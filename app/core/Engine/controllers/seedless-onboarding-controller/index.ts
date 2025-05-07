@@ -1,3 +1,4 @@
+import './shim';
 import type { ControllerInitFunction } from '../../types';
 import {
   SeedlessOnboardingController,
