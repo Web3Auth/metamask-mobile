@@ -4744,15 +4744,16 @@
     single-call-balance-checker-abi "^1.0.0"
     uuid "^8.3.2"
 
-"@metamask/auth-network-utils@./auth-network-utils.tgz", "@metamask/auth-network-utils@^0.0.0", "@metamask/auth-network-utils@https://github.com/MetaMask/core/raw/51da76643b1ac73b7e3cceb511188fa51857c186/packages/seedless-onboarding-controller/auth-network-utils.tgz":
-  version "0.0.0"
-  resolved "https://github.com/MetaMask/core/raw/51da76643b1ac73b7e3cceb511188fa51857c186/packages/seedless-onboarding-controller/auth-network-utils.tgz#96ab0a3fef49ae4882acc427aac7c1efc504db56"
+"@metamask/auth-network-utils@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@metamask/auth-network-utils/-/auth-network-utils-0.1.0.tgz#8520c4dd69b758030975dfb6802f4ee921033c64"
+  integrity sha512-eSxnbDxu+s/LCoPt/d9bSDoHfb3hWazT3xPnOxn9aeWov6L4vnjew37zUlKHDxfYzxw7oEeEsdZEHzNo5C8enQ==
   dependencies:
     "@noble/curves" "^1.8.1"
     "@noble/hashes" "^1.7.1"
     "@toruslabs/bs58" "^1.0.0"
     "@toruslabs/constants" "^15.0.0"
-    "@toruslabs/eccrypto" "^6.0.2"
+    "@toruslabs/eccrypto" "^6.1.0"
     bn.js "^5.2.1"
     elliptic "^6.6.1"
     json-stable-stringify "^1.2.1"
@@ -5595,14 +5596,13 @@
     utf-8-validate "^5.0.2"
     uuid "^8.3.2"
 
-"@metamask/seedless-onboarding-controller@https://github.com/Web3Auth/core/raw/e26e29b9184b783a0f3247fe7c85eb2483980903/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz":
+"@metamask/seedless-onboarding-controller@https://github.com/Web3Auth/core/raw/765bfcc8929b797e0a3e0f9526b97d1c9afbdbb2/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz":
   version "0.0.0"
-  resolved "https://github.com/Web3Auth/core/raw/e26e29b9184b783a0f3247fe7c85eb2483980903/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz#28203cba0a04a9c18456e00efec630335a8a63ca"
+  resolved "https://github.com/Web3Auth/core/raw/765bfcc8929b797e0a3e0f9526b97d1c9afbdbb2/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz#e0b3eb850ffb78fdcbd76398086f6825a78b1f0d"
   dependencies:
-    "@metamask/auth-network-utils" "./auth-network-utils.tgz"
-    "@metamask/base-controller" "^8.0.0"
-    "@metamask/browser-passworder" "^4.3.0"
-    "@metamask/toprf-secure-backup" "./toprf-secure-backup.tgz"
+    "@metamask/auth-network-utils" "^0.1.0"
+    "@metamask/base-controller" "^8.0.1"
+    "@metamask/toprf-secure-backup" "^0.1.0"
     "@metamask/utils" "^11.2.0"
     async-mutex "^0.5.0"
 
@@ -5847,17 +5847,18 @@
     "@metamask/base-controller" "^8.0.0"
     "@metamask/utils" "^11.2.0"
 
-"@metamask/toprf-secure-backup@./toprf-secure-backup.tgz", "@metamask/toprf-secure-backup@https://github.com/MetaMask/core/raw/51da76643b1ac73b7e3cceb511188fa51857c186/packages/seedless-onboarding-controller/toprf-secure-backup.tgz":
-  version "0.0.0"
-  resolved "https://github.com/MetaMask/core/raw/51da76643b1ac73b7e3cceb511188fa51857c186/packages/seedless-onboarding-controller/toprf-secure-backup.tgz#8738631035d1abff09bea183425a6e9718f63114"
+"@metamask/toprf-secure-backup@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@metamask/toprf-secure-backup/-/toprf-secure-backup-0.1.0.tgz#e06f34efb3497e43600131f63ca20ed7067f3fbb"
+  integrity sha512-vcbvVgT/FY08judGDbQAepPp4wgSeCYcUOyljKgvrk2bRrO4n10tkg/Vke7dJSMT8LLtWR641yY2A14bPM3KQA==
   dependencies:
-    "@metamask/auth-network-utils" "^0.0.0"
+    "@metamask/auth-network-utils" "^0.1.0"
     "@noble/ciphers" "^1.2.1"
     "@noble/curves" "^1.8.1"
     "@noble/hashes" "^1.7.1"
     "@sentry/core" "^9.10.0"
     "@toruslabs/constants" "^15.0.0"
-    "@toruslabs/eccrypto" "^6.0.2"
+    "@toruslabs/eccrypto" "^6.1.0"
     "@toruslabs/fetch-node-details" "^15.0.0"
     "@toruslabs/http-helpers" "^8.1.1"
     bn.js "^5.2.1"
@@ -9655,10 +9656,10 @@
   resolved "https://registry.yarnpkg.com/@toruslabs/constants/-/constants-15.0.0.tgz#1de2c1eb578e7ed1b5c1d68d33861b2f591c7a2d"
   integrity sha512-0nr6vU3FQT2eRsnPYRwfVIkjwawLTkDTkCusiny9DgAw1M2zbmNqPOAqWuljUcDaK/u4VB0/PrN5SzhVBLnNGg==
 
-"@toruslabs/eccrypto@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@toruslabs/eccrypto/-/eccrypto-6.0.2.tgz#ded158a8e6d831c49cae6197f713af88c703874e"
-  integrity sha512-C2MOqtg3UrmAqRSUiOFXzGRaKkQzTN2fIHxxSnaj86no//ziVDPIJLTiPPAqyny/QMPZbCODQAofwPXF0G0juA==
+"@toruslabs/eccrypto@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/eccrypto/-/eccrypto-6.1.0.tgz#1d640c0375d529dc59cbca2d57de0b8b23e3066f"
+  integrity sha512-9eC8UJ+XsztgJTcFbhiXIDl9bFXCY1TOKMCnfH2T+RVtpLOKQ0OWCRlFKqeMZ3ffz3gbrUwXZaE5BJ/MW4Hnkw==
   dependencies:
     elliptic "^6.6.1"
 
