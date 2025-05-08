@@ -90,10 +90,13 @@ import stylesheet from './styles';
 import ReduxService from '../../../core/redux';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BIOMETRY_TYPE } from 'react-native-keychain';
-import FOX_LOGO from '../../../images/branding/fox.png';
+// import FOX_LOGO from '../../../images/branding/fox.png';
 import METAMASK_NAME from '../../../images/branding/metamask-name.png';
 import OAuthService from '../../../core/OAuthService/OAuthService';
 import { LoginOptionsSwitch } from '../../UI/LoginOptionsSwitch';
+import ConcealingFox from '../../../animations/Concealing_Fox.json';
+import SearchingFox from '../../../animations/Searching_Fox.json';
+import LottieView from 'lottie-react-native';
 
 /**
  * View where returning users can authenticate
@@ -507,10 +510,12 @@ const Login: React.FC = () => {
               onLongPress={handleDownloadStateLogs}
               activeOpacity={1}
             >
-              <Image
-                source={FOX_LOGO}
+              <LottieView
                 style={styles.image}
-                resizeMethod={'auto'}
+                autoPlay
+                loop
+                source={password.length > 0 ? ConcealingFox : SearchingFox}
+                resizeMode="contain"
               />
             </TouchableOpacity>
 

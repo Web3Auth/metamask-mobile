@@ -29,7 +29,7 @@ import { MetricsEventBuilder } from '../../../core/Analytics/MetricsEventBuilder
 import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboarding';
 import { IMetaMetricsEvent } from '../../../core/Analytics/MetaMetrics.types';
 
-const account_status_img = require('../../../images/account_status.png'); // eslint-disable-line
+import AccountStatusImg from '../../../images/already_exist.png';
 
 interface AccountStatusProps {
   type?: 'found' | 'not_exist';
@@ -108,7 +108,7 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
             : strings('account_status.account_not_found')}
         </Text>
         <Image
-          source={account_status_img}
+          source={AccountStatusImg}
           resizeMethod={'auto'}
           style={styles.walletReadyImage}
         />

@@ -689,10 +689,11 @@ export function getOnboardingNavbarOptions(
 export function getTransparentOnboardingNavbarOptions(
   themeColors,
   showLogo = true,
+  color,
 ) {
   const innerStyles = StyleSheet.create({
     headerStyle: {
-      backgroundColor: themeColors.background.default,
+      backgroundColor: color || themeColors.background.default,
       shadowColor: importedColors.transparent,
       elevation: 0,
     },
@@ -763,10 +764,10 @@ export function getOnboardingCarouselNavbarOptions(
  *
  * @returns {Object} - Corresponding navbar options containing headerTitle and a back button
  */
-export function getTransparentBackOnboardingNavbarOptions(themeColors) {
+export function getTransparentBackOnboardingNavbarOptions(themeColors, color) {
   const innerStyles = StyleSheet.create({
     headerStyle: {
-      backgroundColor: themeColors.background.default,
+      backgroundColor: color || themeColors.background.default,
       shadowColor: importedColors.transparent,
       elevation: 0,
     },

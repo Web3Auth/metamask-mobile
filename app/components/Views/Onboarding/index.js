@@ -6,14 +6,12 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Image,
   InteractionManager,
   Animated,
   Easing,
 } from 'react-native';
 import Text, {
   TextVariant,
-  TextColor,
 } from '../../../component-library/components/Texts/Text';
 import StorageWrapper from '../../../store/storage-wrapper';
 import {
@@ -49,6 +47,7 @@ import { OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onbo
 import Routes from '../../../constants/navigation/Routes';
 import { selectAccounts } from '../../../selectors/accountTrackerController';
 import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboarding';
+import LottieView from 'lottie-react-native';
 // import { trace, TraceName, TraceOperation } from '../../../util/trace';
 import { MetricsEventBuilder } from '../../../core/Analytics/MetricsEventBuilder';
 import Button, {
@@ -58,6 +57,10 @@ import Button, {
 } from '../../../component-library/components/Buttons/Button';
 import OAuthLoginService from '../../../core/OAuthService/OAuthService';
 import { OAuthError, OAuthErrorType } from '../../../core/OAuthService/error';
+
+import fox from '../../../animations/Searching_Fox.json';
+
+const pageBackgroundColor = '#EAC2FF';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -71,18 +74,18 @@ const createStyles = (colors) =>
       paddingVertical: 30,
     },
     foxWrapper: {
-      width: Device.isIos() ? 90 : 45,
-      height: Device.isIos() ? 90 : 45,
+      width: 200,
+      height: 200,
       marginVertical: 20,
     },
     image: {
       alignSelf: 'center',
-      width: Device.isIos() ? 90 : 45,
-      height: Device.isIos() ? 90 : 45,
+      width: 200,
+      height: 200,
     },
     largeFoxWrapper: {
       alignItems: 'center',
-      marginVertical: 60,
+      marginVertical: 80,
     },
     foxImage: {
       width: 145,
@@ -90,7 +93,14 @@ const createStyles = (colors) =>
       resizeMode: 'contain',
     },
     title: {
+      fontSize: 40,
+      lineHeight: 40,
+      marginBottom: 28,
+      justifyContent: 'center',
       textAlign: 'center',
+      paddingHorizontal: 60,
+      fontFamily: 'MMSans-Regular',
+      marginTop: 80,
     },
     ctas: {
       flex: 1,
@@ -176,6 +186,18 @@ const createStyles = (colors) =>
       borderColor: colors.border.muted,
       borderWidth: 1,
       color: colors.text.default,
+    },
+    createWalletButton: {
+      borderRadius: 12,
+      color: importedColors.whiteTransparent,
+      backgroundColor: importedColors.btnBlack,
+    },
+    existingWalletButton: {
+      borderRadius: 12,
+      color: colors.text.default,
+      backgroundColor: colors.transparent,
+      borderWidth: 1,
+      borderColor: importedColors.btnBlack,
     },
   });
 
@@ -268,8 +290,15 @@ class Onboarding extends PureComponent {
     const colors = this.context.colors || mockTheme.colors;
     navigation.setOptions(
       route.params?.delete
-        ? getTransparentOnboardingNavbarOptions(colors)
-        : getTransparentBackOnboardingNavbarOptions(colors),
+        ? getTransparentOnboardingNavbarOptions(
+            colors,
+            true,
+            pageBackgroundColor,
+          )
+        : getTransparentBackOnboardingNavbarOptions(
+            colors,
+            pageBackgroundColor,
+          ),
     );
   };
 
@@ -490,17 +519,19 @@ class Onboarding extends PureComponent {
     return (
       <View style={styles.ctas}>
         <View style={styles.largeFoxWrapper}>
-          <Image
-            source={require('../../../images/branding/fox.png')}
-            style={styles.foxImage}
-            resizeMethod={'auto'}
+          <LottieView
+            style={styles.image}
+            autoPlay
+            loop
+            source={fox}
+            resizeMode="contain"
           />
         </View>
+
         <Text
-          variant={TextVariant.DisplayMD}
-          color={TextColor.Default}
-          testID={OnboardingSelectorIDs.SCREEN_TITLE}
+          variant={TextVariant.HeadingSMRegular}
           style={styles.title}
+          testID={OnboardingSelectorIDs.SCREEN_TITLE}
         >
           {strings('onboarding.title')}
         </Text>
@@ -513,14 +544,23 @@ class Onboarding extends PureComponent {
             label={strings('onboarding.start_exploring_now')}
             width={ButtonWidthTypes.Full}
             size={ButtonSize.Lg}
+            style={styles.createWalletButton}
           />
           <Button
             variant={ButtonVariants.Secondary}
             onPress={() => this.handleCtaActions('existing')}
             testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
-            label={strings('onboarding.have_existing_wallet')}
             width={ButtonWidthTypes.Full}
             size={ButtonSize.Lg}
+            style={styles.existingWalletButton}
+            label={
+              <Text
+                variant={TextVariant.BodyMDMedium}
+                color={colors.text.default}
+              >
+                {strings('onboarding.have_existing_wallet')}
+              </Text>
+            }
           />
         </View>
       </View>
@@ -561,7 +601,7 @@ class Onboarding extends PureComponent {
 
     return (
       <View
-        style={baseStyles.flexGrow}
+        style={[baseStyles.flexGrow, { backgroundColor: pageBackgroundColor }]}
         testID={OnboardingSelectorIDs.CONTAINER_ID}
       >
         <ScrollView
@@ -571,10 +611,17 @@ class Onboarding extends PureComponent {
           <View style={styles.wrapper}>
             {loading && (
               <View style={styles.foxWrapper}>
-                <Image
+                {/* <Image
                   source={require('../../../images/branding/fox.png')}
                   style={styles.image}
                   resizeMethod={'auto'}
+                /> */}
+                <LottieView
+                  style={styles.image}
+                  autoPlay
+                  loop
+                  source={fox}
+                  resizeMode="contain"
                 />
               </View>
             )}

@@ -26,7 +26,7 @@ import { ManualBackUpStepsSelectorsIDs } from '../../../../e2e/selectors/Onboard
 import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboarding';
 import Routes from '../../../../app/constants/navigation/Routes';
 import { MetricsEventBuilder } from '../../../core/Analytics/MetricsEventBuilder';
-import SRPDesign from '../../../images/srp-lock-design.png';
+import SRPDesign from '../../../images/secure_wallet.png';
 import Button, {
   ButtonVariants,
   ButtonWidthTypes,
@@ -87,8 +87,8 @@ const createStyles = (colors) =>
       marginBottom: 16,
     },
     srpDesign: {
-      width: 200,
-      height: 225,
+      width: 250,
+      height: 250,
       marginHorizontal: 'auto',
     },
     headerLeft: {
