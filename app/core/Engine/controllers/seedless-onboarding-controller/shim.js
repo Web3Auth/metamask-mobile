@@ -1,12 +1,9 @@
-// import Crypto from 'react-native-quick-crypto';
-// eslint-disable-next-line import/no-nodejs-modules
-// import Crypto from 'react-native-crypto';
-// eslint-disable-next-line import/no-nodejs-modules
-import Crypto from 'crypto';
+import Crypto from 'react-native-quick-crypto';
 
-// TODO: FIX ME
-// eslint-disable-next-line no-console
 global.crypto = {
-  ...Crypto,
+  createHmac: Crypto.createHmac,
+  createHash: Crypto.createHash,
+  createCipheriv: Crypto.createCipheriv,
+  createDecipheriv: Crypto.createDecipheriv,
   ...global.crypto,
 };
