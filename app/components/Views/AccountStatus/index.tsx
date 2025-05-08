@@ -113,7 +113,11 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
           style={styles.walletReadyImage}
         />
         <View style={styles.descriptionWrapper}>
-          <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+          <Text
+            variant={TextVariant.BodyMD}
+            color={TextColor.Alternative}
+            style={styles.description}
+          >
             {type === 'found'
               ? strings('account_status.account_already_exists_description', {
                   accountName,
@@ -125,33 +129,36 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
         </View>
       </View>
 
-      <Button
-        variant={ButtonVariants.Primary}
-        size={ButtonSize.Lg}
-        width={ButtonWidthTypes.Full}
-        onPress={() => {
-          if (type === 'found') {
-            navigateNextScreen('Login', 'Onboarding', 'import');
-          } else {
-            navigateNextScreen('ChoosePassword', 'Onboarding', 'create');
-          }
-        }}
-        label={
-          type === 'found'
+      <View style={styles.buttonContainer}>
+        <Button
+          variant={ButtonVariants.Primary}
+          size={ButtonSize.Lg}
+          width={ButtonWidthTypes.Full}
+          onPress={() => {
+            if (type === 'found') {
+              navigateNextScreen('Login', 'Onboarding', 'import');
+            } else {
+              navigateNextScreen('ChoosePassword', 'Onboarding', 'create');
+            }
+          }}
+          label={
+            type === 'found'
             ? strings('account_status.log_in')
             : strings('account_status.create_new_wallet')
-        }
-      />
-      <Button
-        variant={ButtonVariants.Secondary}
-        size={ButtonSize.Lg}
-        width={ButtonWidthTypes.Full}
-        onPress={() => {
-          navigation.goBack();
-        }}
-        label={strings('account_status.use_different_login_method')}
-        style={styles.secondaryButton}
-      />
+          }
+          style={styles.button}
+        />
+        <Button
+          variant={ButtonVariants.Secondary}
+          size={ButtonSize.Lg}
+          width={ButtonWidthTypes.Full}
+          onPress={() => {
+            navigation.goBack();
+          }}
+          label={strings('account_status.use_different_login_method')}
+          style={styles.button}
+        />
+      </View>
     </View>
   );
 };

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Device from '../../../util/device';
 
 const styles = StyleSheet.create({
   root: {
@@ -7,23 +8,19 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 24,
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: Device.isLargeDevice() ? 16 : 0,
   },
   content: {
-    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    rowGap: 16,
   },
   walletReadyImage: {
     marginHorizontal: 'auto',
-    marginVertical: 20,
     alignSelf: 'center',
   },
   description: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'left',
-    marginTop: 14,
     lineHeight: 22,
     fontWeight: '400',
   },
@@ -32,8 +29,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     rowGap: 20,
   },
-  secondaryButton: {
-    marginTop: 16,
+  buttonContainer: {
+    width: '100%',
+    flexDirection: 'column',
+    rowGap: 16,
+  },
+  button: {
+    borderRadius: 12,
   },
 });
 
