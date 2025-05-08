@@ -549,20 +549,20 @@ class ChoosePassword extends PureComponent {
     this.setState({ biometryChoice });
   };
 
-  // renderSwitch = () => {
-  //   const { biometryType, biometryChoice } = this.state;
-  //   const handleUpdateRememberMe = (rememberMe) => {
-  //     this.setState({ rememberMe });
-  //   };
-  //   return (
-  //     <LoginOptionsSwitch
-  //       shouldRenderBiometricOption={biometryType}
-  //       biometryChoiceState={biometryChoice}
-  //       onUpdateBiometryChoice={this.updateBiometryChoice}
-  //       onUpdateRememberMe={handleUpdateRememberMe}
-  //     />
-  //   );
-  // };
+  renderSwitch = () => {
+    const { biometryType, biometryChoice } = this.state;
+    const handleUpdateRememberMe = (rememberMe) => {
+      this.setState({ rememberMe });
+    };
+    return (
+      <LoginOptionsSwitch
+        shouldRenderBiometricOption={biometryType}
+        biometryChoiceState={biometryChoice}
+        onUpdateBiometryChoice={this.updateBiometryChoice}
+        onUpdateRememberMe={handleUpdateRememberMe}
+      />
+    );
+  };
 
   onPasswordChange = (val) => {
     const passInfo = zxcvbn(val);
@@ -785,13 +785,7 @@ class ChoosePassword extends PureComponent {
                     )}
                   </View>
 
-                  {this.state.biometryType && (
-                    <SecurityOptionToggle
-                      title={strings('import_from_seed.unlock_with_face_id')}
-                      value={this.state.biometryChoice}
-                      onOptionUpdated={this.updateBiometryChoice}
-                    />
-                  )}
+                  {this.renderSwitch()}
                 </View>
 
                 <View style={styles.learnMoreContainer}>
