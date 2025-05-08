@@ -25,13 +25,16 @@ export interface SuccessErrorSheetParams {
   onButtonPress?: () => void;
   title: string | React.ReactNode;
   description: string | React.ReactNode;
-  buttonLabel: string | React.ReactNode;
+  customButton: React.ReactNode;
   type: 'success' | 'error';
   icon: IconName;
   secondaryButtonLabel?: string;
-  secondaryButtonPress?: () => void;
+  onSecondaryButtonPress?: () => void;
   primaryButtonLabel?: string;
-  primaryButtonPress?: () => void;
+  onPrimaryButtonPress?: () => void;
+  closeOnPrimaryButtonPress?: boolean;
+  closeOnSecondaryButtonPress?: boolean;
+  reverseButtonOrder?: boolean;
 }
 
 export interface SuccessErrorSheetProps {
@@ -43,13 +46,16 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
     onClose,
     title,
     description,
-    buttonLabel,
+    customButton,
     type = 'success',
     icon,
     secondaryButtonLabel,
-    secondaryButtonPress,
+    onSecondaryButtonPress,
     primaryButtonLabel,
-    primaryButtonPress,
+    onPrimaryButtonPress,
+    closeOnPrimaryButtonPress = false,
+    closeOnSecondaryButtonPress = true,
+    reverseButtonOrder = false,
   } = route.params;
 
   const { colors } = useTheme();
@@ -70,17 +76,17 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
   };
 
   const handleSecondaryButtonPress = () => {
-    if (secondaryButtonPress) {
-      secondaryButtonPress();
+    if (onSecondaryButtonPress) {
+      onSecondaryButtonPress();
     }
-    sheetRef.current?.onCloseBottomSheet();
+    closeOnSecondaryButtonPress && sheetRef.current?.onCloseBottomSheet();
   };
 
   const handlePrimaryButtonPress = () => {
-    if (primaryButtonPress) {
-      primaryButtonPress();
+    if (onPrimaryButtonPress) {
+      onPrimaryButtonPress();
     }
-    sheetRef.current?.onCloseBottomSheet();
+    closeOnPrimaryButtonPress && sheetRef.current?.onCloseBottomSheet();
   };
 
   return (
@@ -118,11 +124,13 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
           description
         )}
 
-        {typeof secondaryButtonLabel === 'string' ||
-        typeof primaryButtonLabel === 'string' ||
-        secondaryButtonLabel ||
-        primaryButtonLabel ? (
-          <View style={styles.ctaContainer}>
+        {secondaryButtonLabel || primaryButtonLabel ? (
+          <View
+            style={[
+              styles.ctaContainer,
+              reverseButtonOrder && styles.reverseCtaContainer,
+            ]}
+          >
             {secondaryButtonLabel && (
               <Button
                 variant={ButtonVariants.Secondary}
@@ -153,7 +161,7 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
             )}
           </View>
         ) : (
-          buttonLabel
+          customButton
         )}
       </View>
     </BottomSheet>

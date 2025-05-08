@@ -650,7 +650,8 @@ class ResetPassword extends PureComponent {
         primaryButtonLabel: strings(
           'reset_password.warning_password_change_button',
         ),
-        primaryButtonPress: this.onPressCreate,
+        onPrimaryButtonPress: this.onPressCreate,
+        closeOnPrimaryButtonPress: true,
       },
     });
   };

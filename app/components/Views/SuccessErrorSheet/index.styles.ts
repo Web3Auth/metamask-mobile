@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 16,
   },
+  reverseCtaContainer: {
+    flexDirection: 'row-reverse',
+  },
 });
 
 export default styles;
