@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   statusButton: {
-    width: '48%',
+    flex: 1,
   },
   fullWidthButton: {
     width: '100%',

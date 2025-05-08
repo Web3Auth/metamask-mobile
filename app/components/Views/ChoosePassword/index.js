@@ -768,6 +768,7 @@ class ChoosePassword extends PureComponent {
                         <Text
                           variant={TextVariant.BodySM}
                           color={TextColor.Default}
+                          numberOfLines={2}
                         >
                           {strings('import_from_seed.learn_more')}{' '}
                         </Text>

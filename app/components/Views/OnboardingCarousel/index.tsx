@@ -184,8 +184,12 @@ export const OnboardingCarousel: React.FC<OnboardingCarouselProps> = ({
   };
 
   const onPressGetStarted = async () => {
-    StorageWrapper.removeItem(USE_TERMS);
-    await termsOfUse();
+    const isTermsAccepted = await StorageWrapper.getItem(USE_TERMS);
+    if (!isTermsAccepted) {
+      await termsOfUse();
+    } else {
+      navigateToOnboarding();
+    }
   };
 
   const renderTabBar = () => <View />;

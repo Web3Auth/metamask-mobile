@@ -333,6 +333,7 @@ const ManualBackupStep2 = ({ navigation, seedphraseBackedUp, route }) => {
         onPrimaryButtonPress: validateWords()
           ? goNext
           : () => setShowStatusBottomSheet((prev) => !prev),
+        closeOnPrimaryButtonPress: !validateWords(),
       },
     });
   };
