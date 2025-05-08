@@ -56,10 +56,14 @@ const createStyles = (colors: any) =>
       borderRadius: 8,
       padding: 16,
     },
+    textTitle: {
+      marginBottom: 30,
+    },
     walletReadyImage: {
       marginHorizontal: 'auto',
-      marginVertical: 20,
       alignSelf: 'center',
+      width: 200,
+      height: 200,
     },
     description: {
       fontSize: 14,
@@ -77,6 +81,7 @@ const createStyles = (colors: any) =>
       width: '100%',
       flexDirection: 'column',
       rowGap: 16,
+      marginTop: 40,
     },
     footerWrapper: {
       marginVertical: 24,
