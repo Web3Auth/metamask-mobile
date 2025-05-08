@@ -109,11 +109,8 @@ const ProtectYourWallet = ({
       <Banner
         variant={BannerVariant.Alert}
         severity={BannerAlertSeverity.Success}
-        title={strings('app_settings.social_login_linked')}
-        description={
-          <Text variant={TextVariant.BodyMD} color={TextColor.Default}>
-            {seedlessOnboardingUserEmail}
-          </Text>
+        title={
+          strings('app_settings.social_login_linked') + ' ' + authConnection
         }
         style={styles.accessory}
       />
@@ -121,7 +118,7 @@ const ProtectYourWallet = ({
       <Banner
         variant={BannerVariant.Alert}
         severity={BannerAlertSeverity.Error}
-        title={strings('app_settings.social_login_linked')}
+        title={strings('app_settings.social_login_not_linked')}
         style={styles.accessory}
       />
     );
