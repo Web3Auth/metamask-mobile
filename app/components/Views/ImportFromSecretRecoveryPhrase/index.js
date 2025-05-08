@@ -911,7 +911,7 @@ const ImportFromSecretRecoveryPhrase = ({
                       ImportFromSeedSelectorsIDs.CONFIRM_PASSWORD_INPUT_ID
                     }
                   />
-                  {!isError ? (
+                  {password === '' || password !== confirmPassword ? (
                     <Text
                       variant={TextVariant.BodySM}
                       color={TextColor.Alternative}
@@ -920,11 +920,12 @@ const ImportFromSecretRecoveryPhrase = ({
                         number: MIN_PASSWORD_LENGTH,
                       })}
                     </Text>
-                  ) : (
+                  ) : null}
+                  {password === '' || password !== confirmPassword ? (
                     <Text variant={TextVariant.BodySM} color={TextColor.Error}>
                       {strings('import_from_seed.password_error')}
                     </Text>
-                  )}
+                  ) : null}
                 </View>
 
                 {biometryType && (

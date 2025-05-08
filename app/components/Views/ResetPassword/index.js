@@ -645,31 +645,14 @@ class ResetPassword extends PureComponent {
         ),
         type: 'error',
         icon: IconName.RichDanger,
-        buttonLabel: (
-          <View style={styles.warningButtonsWrapper}>
-            <Button
-              label={strings('reset_password.warning_password_cancel_button')}
-              variant={ButtonVariants.Secondary}
-              size={ButtonSize.Lg}
-              width={ButtonWidthTypes.Full}
-              style={styles.warningButton}
-              onPress={() => {
-                NavigationService.navigation?.goBack();
-              }}
-            />
-            <Button
-              label={strings('reset_password.warning_password_change_button')}
-              variant={ButtonVariants.Primary}
-              size={ButtonSize.Lg}
-              width={ButtonWidthTypes.Full}
-              style={styles.warningButton}
-              onPress={() => {
-                NavigationService.navigation?.goBack();
-                this.onPressCreate();
-              }}
-            />
-          </View>
+        secondaryButtonLabel: strings(
+          'reset_password.warning_password_cancel_button',
         ),
+        primaryButtonLabel: strings(
+          'reset_password.warning_password_change_button',
+        ),
+        onPrimaryButtonPress: this.onPressCreate,
+        closeOnPrimaryButtonPress: true,
       },
     });
   };
@@ -842,14 +825,16 @@ class ResetPassword extends PureComponent {
                     }
                   />
                   {!this.isError() ? (
-                    <Text
-                      variant={TextVariant.BodySM}
-                      color={TextColor.Alternative}
-                    >
-                      {strings('choose_password.must_be_at_least', {
-                        number: MIN_PASSWORD_LENGTH,
-                      })}
-                    </Text>
+                    password === '' || password !== confirmPassword ? (
+                      <Text
+                        variant={TextVariant.BodySM}
+                        color={TextColor.Alternative}
+                      >
+                        {strings('choose_password.must_be_at_least', {
+                          number: MIN_PASSWORD_LENGTH,
+                        })}
+                      </Text>
+                    ) : null
                   ) : (
                     <Text variant={TextVariant.BodySM} color={TextColor.Error}>
                       {strings('choose_password.password_error')}
