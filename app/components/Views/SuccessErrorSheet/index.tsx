@@ -19,15 +19,21 @@ import Icon, {
   IconName,
   IconSize,
 } from '../../../component-library/components/Icons/Icon';
-import NavigationServices from '../../../core/NavigationService';
 export interface SuccessErrorSheetParams {
   onClose?: () => void;
   onButtonPress?: () => void;
   title: string | React.ReactNode;
   description: string | React.ReactNode;
-  buttonLabel: string | React.ReactNode;
+  customButton: React.ReactNode;
   type: 'success' | 'error';
   icon: IconName;
+  secondaryButtonLabel?: string;
+  onSecondaryButtonPress?: () => void;
+  primaryButtonLabel?: string;
+  onPrimaryButtonPress?: () => void;
+  closeOnPrimaryButtonPress?: boolean;
+  closeOnSecondaryButtonPress?: boolean;
+  reverseButtonOrder?: boolean;
 }
 
 export interface SuccessErrorSheetProps {
@@ -37,25 +43,22 @@ export interface SuccessErrorSheetProps {
 const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
   const {
     onClose,
-    onButtonPress,
     title,
     description,
-    buttonLabel,
+    customButton,
     type = 'success',
     icon,
+    secondaryButtonLabel,
+    onSecondaryButtonPress,
+    primaryButtonLabel,
+    onPrimaryButtonPress,
+    closeOnPrimaryButtonPress = false,
+    closeOnSecondaryButtonPress = true,
+    reverseButtonOrder = false,
   } = route.params;
 
   const { colors } = useTheme();
   const sheetRef = useRef<BottomSheetRef>(null);
-
-  const handleCtaActions = () => {
-    if (onButtonPress) {
-      onButtonPress();
-    }
-    if (type === 'error') {
-      NavigationServices.navigation?.goBack();
-    }
-  };
 
   const handleClose = () => {
     if (onClose) {
@@ -70,6 +73,20 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
     return type === 'success' ? IconName.SuccessSolid : IconName.CircleX;
   };
 
+  const handleSecondaryButtonPress = () => {
+    if (onSecondaryButtonPress) {
+      onSecondaryButtonPress();
+    }
+    closeOnSecondaryButtonPress && sheetRef.current?.onCloseBottomSheet();
+  };
+
+  const handlePrimaryButtonPress = () => {
+    if (onPrimaryButtonPress) {
+      onPrimaryButtonPress();
+    }
+    closeOnPrimaryButtonPress && sheetRef.current?.onCloseBottomSheet();
+  };
+
   return (
     <BottomSheet ref={sheetRef} onClose={handleClose}>
       <View style={styles.statusContainer}>
@@ -80,6 +97,7 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
             type === 'success' ? colors.success.default : colors.error.default
           }
         />
+
         {typeof title === 'string' ? (
           <Text
             variant={TextVariant.HeadingMD}
@@ -91,6 +109,7 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
         ) : (
           title
         )}
+
         {typeof description === 'string' ? (
           <Text
             variant={TextVariant.BodyMD}
@@ -102,17 +121,45 @@ const SuccessErrorSheet = ({ route }: SuccessErrorSheetProps) => {
         ) : (
           description
         )}
-        {typeof buttonLabel === 'string' ? (
-          <Button
-            variant={ButtonVariants.Primary}
-            label={buttonLabel}
-            width={ButtonWidthTypes.Full}
-            style={styles.statusButton}
-            onPress={handleCtaActions}
-            size={ButtonSize.Lg}
-          />
+
+        {secondaryButtonLabel || primaryButtonLabel ? (
+          <View
+            style={[
+              styles.ctaContainer,
+              reverseButtonOrder && styles.reverseCtaContainer,
+            ]}
+          >
+            {secondaryButtonLabel && (
+              <Button
+                variant={ButtonVariants.Secondary}
+                label={secondaryButtonLabel}
+                width={ButtonWidthTypes.Full}
+                style={
+                  primaryButtonLabel && secondaryButtonLabel
+                    ? styles.statusButton
+                    : styles.fullWidthButton
+                }
+                onPress={handleSecondaryButtonPress}
+                size={ButtonSize.Lg}
+              />
+            )}
+            {primaryButtonLabel && (
+              <Button
+                variant={ButtonVariants.Primary}
+                label={primaryButtonLabel}
+                width={ButtonWidthTypes.Full}
+                style={
+                  primaryButtonLabel && secondaryButtonLabel
+                    ? styles.statusButton
+                    : styles.fullWidthButton
+                }
+                onPress={handlePrimaryButtonPress}
+                size={ButtonSize.Lg}
+              />
+            )}
+          </View>
         ) : (
-          buttonLabel
+          customButton
         )}
       </View>
     </BottomSheet>

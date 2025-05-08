@@ -39,7 +39,7 @@ import Button, {
 import { useSignOut } from '../../../util/identity/hooks/useAuthentication';
 import { setCompletedOnboarding } from '../../../actions/onboarding';
 
-const DELETE_KEYWORD = 'delete';
+const ERASE_KEYWORD = 'erase';
 
 if (Device.isAndroid() && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -69,11 +69,11 @@ const DeleteWalletModal = () => {
   //   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   // };
 
-  const isTextDelete = (text: string) => tlc(text) === DELETE_KEYWORD;
+  const isTextErase = (text: string) => tlc(text) === ERASE_KEYWORD;
 
-  const checkDelete = (text: string) => {
+  const checkErase = (text: string) => {
     setDeleteText(text);
-    setDisableButton(!isTextDelete(text));
+    setDisableButton(!isTextErase(text));
   };
 
   const dismissModal = (cb?: () => void): void =>
@@ -169,12 +169,12 @@ const DeleteWalletModal = () => {
           <View style={styles.inputContainer}>
             <Label variant={TextVariant.BodyMDMedium} color={TextColor.Default}>
               {strings('login.type_delete', {
-                [DELETE_KEYWORD]: DELETE_KEYWORD,
+                [ERASE_KEYWORD]: ERASE_KEYWORD,
               })}
             </Label>
             <TextField
               size={TextFieldSize.Lg}
-              onChangeText={checkDelete}
+              onChangeText={checkErase}
               autoCapitalize="none"
               value={deleteText}
               keyboardAppearance={themeAppearance}
@@ -185,7 +185,7 @@ const DeleteWalletModal = () => {
               variant={ButtonVariants.Primary}
               size={ButtonSize.Lg}
               onPress={deleteWallet}
-              label={strings('login.delete_my')}
+              label={strings('login.erase_my')}
               width={ButtonWidthTypes.Full}
               isDanger
               isDisabled={disableButton}

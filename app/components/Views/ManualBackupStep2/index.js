@@ -325,14 +325,15 @@ const ManualBackupStep2 = ({ navigation, seedphraseBackedUp, route }) => {
         description: validateWords()
           ? strings('manual_backup_step_2.success-description')
           : strings('manual_backup_step_2.error-description'),
-        buttonLabel: validateWords()
+        primaryButtonLabel: validateWords()
           ? strings('manual_backup_step_2.success-button')
           : strings('manual_backup_step_2.error-button'),
         type: validateWords() ? 'success' : 'error',
         onClose: () => setShowStatusBottomSheet((prev) => !prev),
-        onButtonPress: validateWords()
+        onPrimaryButtonPress: validateWords()
           ? goNext
           : () => setShowStatusBottomSheet((prev) => !prev),
+        closeOnPrimaryButtonPress: !validateWords(),
       },
     });
   };

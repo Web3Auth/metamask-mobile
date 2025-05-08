@@ -549,20 +549,20 @@ class ChoosePassword extends PureComponent {
     this.setState({ biometryChoice });
   };
 
-  // renderSwitch = () => {
-  //   const { biometryType, biometryChoice } = this.state;
-  //   const handleUpdateRememberMe = (rememberMe) => {
-  //     this.setState({ rememberMe });
-  //   };
-  //   return (
-  //     <LoginOptionsSwitch
-  //       shouldRenderBiometricOption={biometryType}
-  //       biometryChoiceState={biometryChoice}
-  //       onUpdateBiometryChoice={this.updateBiometryChoice}
-  //       onUpdateRememberMe={handleUpdateRememberMe}
-  //     />
-  //   );
-  // };
+  renderSwitch = () => {
+    const { biometryType, biometryChoice } = this.state;
+    const handleUpdateRememberMe = (rememberMe) => {
+      this.setState({ rememberMe });
+    };
+    return (
+      <LoginOptionsSwitch
+        shouldRenderBiometricOption={biometryType}
+        biometryChoiceState={biometryChoice}
+        onUpdateBiometryChoice={this.updateBiometryChoice}
+        onUpdateRememberMe={handleUpdateRememberMe}
+      />
+    );
+  };
 
   onPasswordChange = (val) => {
     const passInfo = zxcvbn(val);
@@ -765,14 +765,16 @@ class ChoosePassword extends PureComponent {
                       }
                     />
                     {!this.isError() ? (
-                      <Text
-                        variant={TextVariant.BodySM}
-                        color={TextColor.Alternative}
-                      >
-                        {strings('choose_password.must_be_at_least', {
-                          number: MIN_PASSWORD_LENGTH,
-                        })}
-                      </Text>
+                      password === '' || password !== confirmPassword ? (
+                        <Text
+                          variant={TextVariant.BodySM}
+                          color={TextColor.Alternative}
+                        >
+                          {strings('choose_password.must_be_at_least', {
+                            number: MIN_PASSWORD_LENGTH,
+                          })}
+                        </Text>
+                      ) : null
                     ) : (
                       <Text
                         variant={TextVariant.BodySM}
@@ -783,13 +785,7 @@ class ChoosePassword extends PureComponent {
                     )}
                   </View>
 
-                  {this.state.biometryType && (
-                    <SecurityOptionToggle
-                      title={strings('import_from_seed.unlock_with_face_id')}
-                      value={this.state.biometryChoice}
-                      onOptionUpdated={this.updateBiometryChoice}
-                    />
-                  )}
+                  {this.renderSwitch()}
                 </View>
 
                 <View style={styles.learnMoreContainer}>
@@ -808,6 +804,7 @@ class ChoosePassword extends PureComponent {
                         <Text
                           variant={TextVariant.BodySM}
                           color={TextColor.Default}
+                          numberOfLines={2}
                         >
                           {strings('import_from_seed.learn_more')}{' '}
                         </Text>

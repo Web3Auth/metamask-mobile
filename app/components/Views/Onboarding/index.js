@@ -61,6 +61,7 @@ import { OAuthError, OAuthErrorType } from '../../../core/OAuthService/error';
 import fox from '../../../animations/Searching_Fox.json';
 
 const pageBackgroundColor = '#EAC2FF';
+const brandColor = '#3D065F';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -101,6 +102,7 @@ const createStyles = (colors) =>
       paddingHorizontal: 60,
       fontFamily: 'MMSans-Regular',
       marginTop: 80,
+      color: brandColor,
     },
     ctas: {
       flex: 1,
