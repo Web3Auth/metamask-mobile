@@ -455,18 +455,28 @@ class Onboarding extends PureComponent {
   };
 
   handleCtaActions = (actionType) => {
+    let seedlessOnboarding;
+    seedlessOnboarding = false;
+    ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
     this.props.navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.SHEET.ONBOARDING_SHEET,
       params: {
         onPressCreate: this.onPressCreate,
         onPressImport: this.onPressImport,
-        ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
         onPressContinueWithGoogle: this.onPressContinueWithGoogle,
         onPressContinueWithApple: this.onPressContinueWithApple,
-        ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
         createWallet: actionType === 'create',
       },
     });
+    seedlessOnboarding = true;
+    ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
+    if (!seedlessOnboarding) {
+      if (actionType === 'create') {
+        this.onPressCreate();
+      } else {
+        this.onPressImport();
+      }
+    }
   };
 
   renderLoader = () => {

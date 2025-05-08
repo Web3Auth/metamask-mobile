@@ -27,12 +27,15 @@ import Banner, {
 import { useMetrics } from '../../../../../../components/hooks/useMetrics';
 ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 import { hasMultipleHDKeyrings } from '../../../../../../selectors/keyringController';
+
+///: END:ONLY_INCLUDE_IF
+///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
 import {
   selectSeedlessOnboardingUserId,
   selectSeedlessOnboardingUserEmail,
   selectSeedlessOnboardingAuthConnection,
 } from '../../../../../../selectors/seedlessOnboardingController';
-///: END:ONLY_INCLUDE_IF
+///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
 interface IProtectYourWalletProps {
   srpBackedup: boolean;
@@ -53,8 +56,13 @@ const ProtectYourWallet = ({
   const shouldShowSRPList = useSelector(hasMultipleHDKeyrings);
   ///: END:ONLY_INCLUDE_IF
 
+  ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
   const seedlessOnboardingUserId = useSelector(selectSeedlessOnboardingUserId);
+  const seedlessOnboardingUserEmail = useSelector(
+    selectSeedlessOnboardingUserEmail,
+  );
   const authConnection = useSelector(selectSeedlessOnboardingAuthConnection);
+  ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
   const openSRPQuiz = () => {
     navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.MODAL.SRP_REVEAL_QUIZ,
@@ -95,6 +103,30 @@ const ProtectYourWallet = ({
     navigation.navigate('ProtectYourWallet');
   };
 
+  ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+  const seedlessOnboardingBanner = () =>
+    seedlessOnboardingUserId ? (
+      <Banner
+        variant={BannerVariant.Alert}
+        severity={BannerAlertSeverity.Success}
+        title={strings('app_settings.social_login_linked')}
+        description={
+          <Text variant={TextVariant.BodyMD} color={TextColor.Default}>
+            {seedlessOnboardingUserEmail}
+          </Text>
+        }
+        style={styles.accessory}
+      />
+    ) : (
+      <Banner
+        variant={BannerVariant.Alert}
+        severity={BannerAlertSeverity.Error}
+        title={strings('app_settings.social_login_linked')}
+        style={styles.accessory}
+      />
+    );
+  ///: END:ONLY_INCLUDE_IF(multi-srp)
+
   return (
     <View style={[styles.setting, styles.firstSetting]}>
       <Text variant={TextVariant.BodyLGMedium}>
@@ -121,24 +153,11 @@ const ProtectYourWallet = ({
         />
       )}
 
-      {seedlessOnboardingUserId && (
-        <Banner
-          variant={BannerVariant.Alert}
-          severity={BannerAlertSeverity.Success}
-          title={
-            strings('app_settings.social_login_linked') + ' ' + authConnection
-          }
-          style={styles.accessory}
-        />
-      )}
-      {!seedlessOnboardingUserId && (
-        <Banner
-          variant={BannerVariant.Alert}
-          severity={BannerAlertSeverity.Error}
-          title={strings('app_settings.social_login_not_linked')}
-          style={styles.accessory}
-        />
-      )}
+      {
+        ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+        seedlessOnboardingBanner()
+        ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
+      }
 
       {srpBackedup ? (
         <Banner
