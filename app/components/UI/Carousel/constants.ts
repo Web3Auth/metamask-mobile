@@ -12,6 +12,7 @@ import cardImage from '../../../images/banners/banner_image_card.png';
 import fundImage from '../../../images/banners/banner_image_fund.png';
 import cashoutImage from '../../../images/banners/banner_image_cashout.png';
 import aggregatedImage from '../../../images/banners/banner_image_aggregated.png';
+import backupAndSyncImage from '../../../images/banners/banner_image_backup_and_sync.png';
 ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 import multiSrpImage from '../../../images/banners/banner_image_multisrp.png';
 ///: END:ONLY_INCLUDE_IF
@@ -138,6 +139,7 @@ export const BANNER_IMAGES: Record<SlideId, ImageSourcePropType> = {
   multisrp: multiSrpImage,
   ///: END:ONLY_INCLUDE_IF
   secure: cardImage,
+  backupAndSync: backupAndSyncImage,
   ///: BEGIN:ONLY_INCLUDE_IF(solana)
   solana: solanaImage,
   ///: END:ONLY_INCLUDE_IF

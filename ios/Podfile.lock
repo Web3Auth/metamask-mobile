@@ -1715,7 +1715,7 @@ PODS:
     - React-Core
   - react-native-quick-base64 (2.0.8):
     - React-Core
-  - react-native-quick-crypto (0.7.12):
+  - react-native-quick-crypto (0.7.13):
     - DoubleConversion
     - glog
     - OpenSSL-Universal
@@ -2799,7 +2799,7 @@ SPEC CHECKSUMS:
   Branch: 4ac024cb3c29b0ef628048694db3c4cfa679beb0
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
+  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: a19d50504b8826546a4782770317bc83fffec87d
@@ -2823,7 +2823,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   FirebaseMessaging: 7b5d8033e183ab59eb5b852a53201559e976d366
   fmt: 01b82d4ca6470831d1cc0852a1af644be019e8f6
-  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GZIP: 3c0abf794bfce8c7cb34ea05a1837752416c8868
@@ -2887,7 +2887,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 31bcb0ec0a6d5d60b7ab659675c33c22454dfc2a
   react-native-performance: 125a96c145e29918b55b45ce25cbba54f1e24dcd
   react-native-quick-base64: daf67f19ee076b77f0755bf4056f3425f164e1d8
-  react-native-quick-crypto: f80a28e96010e0630c1e93aa68cc667bd2d31a44
+  react-native-quick-crypto: 290688915e927da959a384891493a563b51f96f0
   react-native-randombytes: 3c8f3e89d12487fd03a2f966c288d495415fc116
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 667324e20fb3dd9c39c12d6036675ed90099bcd5

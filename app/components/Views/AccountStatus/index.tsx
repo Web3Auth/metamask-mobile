@@ -16,7 +16,7 @@ import Button, {
   ButtonWidthTypes,
 } from '../../../component-library/components/Buttons/Button';
 
-const account_status_img = require('../../../images/account_status.png'); // eslint-disable-line
+import AccountStatusImg from '../../../images/already_exist.png';
 
 interface AccountStatusProps {
   type?: 'found' | 'not_exist';
@@ -43,7 +43,7 @@ const AccountStatus = ({
             : strings('account_status.account_not_found')}
         </Text>
         <Image
-          source={account_status_img}
+          source={AccountStatusImg}
           resizeMethod={'auto'}
           style={styles.walletReadyImage}
         />

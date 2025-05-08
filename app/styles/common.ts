@@ -31,7 +31,7 @@ export const onboardingCarouselColors: Record<
   },
   two: {
     color: '#3D065F',
-    background: '#EAC2FF',
+    background: '#FFA680',
   },
   three: {
     color: '#190066',

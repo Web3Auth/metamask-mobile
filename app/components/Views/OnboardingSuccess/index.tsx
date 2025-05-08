@@ -50,6 +50,8 @@ const wallet_ready_image = require('../../../images/wallet-ready.png'); // eslin
 import importAdditionalAccounts from '../../../util/importAdditionalAccounts';
 import { setCompletedOnboarding } from '../../../actions/onboarding';
 import createStyles from './index.styles';
+import CelebratingFox from '../../../animations/Celebrating_Fox.json';
+import LottieView from 'lottie-react-native';
 
 interface OnboardingSuccessProps {
   onDone: () => void;
@@ -253,14 +255,18 @@ const OnboardingSuccess = ({
     }
     return (
       <>
-        <Text variant={TextVariant.DisplayMD}>
+        <Text variant={TextVariant.DisplayMD} style={styles.textTitle}>
           {strings('onboarding_success.import_title')}
         </Text>
-        <Image
-          source={wallet_ready_image}
-          resizeMethod={'auto'}
+
+        <LottieView
           style={styles.walletReadyImage}
+          autoPlay
+          loop
+          source={CelebratingFox}
+          resizeMode="contain"
         />
+
         <View style={styles.descriptionWrapper}>
           <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
             {strings('onboarding_success.import_description')}
