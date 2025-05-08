@@ -29,14 +29,14 @@ const styleSheet = (params: { theme: Theme }) => {
     foxWrapper: {
       justifyContent: 'center',
       alignSelf: 'center',
-      width: Device.isIos() ? 130 : 100,
-      height: Device.isIos() ? 130 : 100,
+      width: Device.isIos() ? 175 : 150,
+      height: Device.isIos() ? 175 : 150,
       marginTop: 48,
     },
     image: {
       alignSelf: 'center',
-      width: Device.isIos() ? 130 : 100,
-      height: Device.isIos() ? 130 : 100,
+      width: Device.isIos() ? 175 : 150,
+      height: Device.isIos() ? 175 : 150,
     },
     title: {
       textAlign: 'center',

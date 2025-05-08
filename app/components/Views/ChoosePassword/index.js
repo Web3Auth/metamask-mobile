@@ -72,6 +72,8 @@ import Button, {
 import TextField from '../../../component-library/components/Form/TextField/TextField';
 import Label from '../../../component-library/components/Form/Label';
 import { TextFieldSize } from '../../../component-library/components/Form/TextField';
+import fox from '../../../animations/Searching_Fox.json';
+import LottieView from 'lottie-react-native';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -575,10 +577,17 @@ class ChoosePassword extends PureComponent {
         {loading ? (
           <View style={styles.loadingWrapper}>
             <View style={styles.foxWrapper}>
-              <Image
+              {/* <Image
                 source={require('../../../images/branding/fox.png')}
                 style={styles.image}
                 resizeMethod={'auto'}
+              /> */}
+              <LottieView
+                style={styles.image}
+                autoPlay
+                loop
+                source={fox}
+                resizeMode="contain"
               />
             </View>
             <ActivityIndicator size="large" color={colors.text.default} />
@@ -709,14 +718,16 @@ class ChoosePassword extends PureComponent {
                       }
                     />
                     {!this.isError() ? (
-                      <Text
-                        variant={TextVariant.BodySM}
-                        color={TextColor.Alternative}
-                      >
-                        {strings('choose_password.must_be_at_least', {
-                          number: MIN_PASSWORD_LENGTH,
-                        })}
-                      </Text>
+                      password === '' || password !== confirmPassword ? (
+                        <Text
+                          variant={TextVariant.BodySM}
+                          color={TextColor.Alternative}
+                        >
+                          {strings('choose_password.must_be_at_least', {
+                            number: MIN_PASSWORD_LENGTH,
+                          })}
+                        </Text>
+                      ) : null
                     ) : (
                       <Text
                         variant={TextVariant.BodySM}

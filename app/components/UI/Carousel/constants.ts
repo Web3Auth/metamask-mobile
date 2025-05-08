@@ -4,7 +4,7 @@ import { CarouselSlide, SlideId } from './types';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
 import {
   createBuyNavigationDetails,
-  createSecureNavigationDetails,
+  // createSecureNavigationDetails,
   createSellNavigationDetails,
 } from '../../UI/Ramp/routes/utils';
 import Routes from '../../../constants/navigation/Routes';
@@ -12,6 +12,7 @@ import cardImage from '../../../images/banners/banner_image_card.png';
 import fundImage from '../../../images/banners/banner_image_fund.png';
 import cashoutImage from '../../../images/banners/banner_image_cashout.png';
 import aggregatedImage from '../../../images/banners/banner_image_aggregated.png';
+import backupAndSyncImage from '../../../images/banners/banner_image_backup_and_sync.png';
 ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 import multiSrpImage from '../../../images/banners/banner_image_multisrp.png';
 ///: END:ONLY_INCLUDE_IF
@@ -114,19 +115,19 @@ export const PREDEFINED_SLIDES: CarouselSlide[] = [
     testIDCloseButton: WalletViewSelectorsIDs.CAROUSEL_FIFTH_SLIDE_CLOSE_BUTTON,
   },
   ///: END:ONLY_INCLUDE_IF
-  {
-    id: 'secure',
-    title: strings('banner.secure.title'),
-    description: strings('banner.secure.subtitle'),
-    undismissable: false,
-    navigation: {
-      type: 'function',
-      navigate: () => createSecureNavigationDetails(),
-    },
-    testID: WalletViewSelectorsIDs.CAROUSEL_SIXTH_SLIDE,
-    testIDTitle: WalletViewSelectorsIDs.CAROUSEL_SIXTH_SLIDE_TITLE,
-    testIDCloseButton: WalletViewSelectorsIDs.CAROUSEL_SIXTH_SLIDE_CLOSE_BUTTON,
-  },
+  // {
+  //   id: 'secure',
+  //   title: strings('banner.secure.title'),
+  //   description: strings('banner.secure.subtitle'),
+  //   undismissable: false,
+  //   navigation: {
+  //     type: 'function',
+  //     navigate: () => createSecureNavigationDetails(),
+  //   },
+  //   testID: WalletViewSelectorsIDs.CAROUSEL_SIXTH_SLIDE,
+  //   testIDTitle: WalletViewSelectorsIDs.CAROUSEL_SIXTH_SLIDE_TITLE,
+  //   testIDCloseButton: WalletViewSelectorsIDs.CAROUSEL_SIXTH_SLIDE_CLOSE_BUTTON,
+  // },
 ];
 
 export const BANNER_IMAGES: Record<SlideId, ImageSourcePropType> = {
@@ -138,6 +139,7 @@ export const BANNER_IMAGES: Record<SlideId, ImageSourcePropType> = {
   multisrp: multiSrpImage,
   ///: END:ONLY_INCLUDE_IF
   secure: cardImage,
+  backupAndSync: backupAndSyncImage,
   ///: BEGIN:ONLY_INCLUDE_IF(solana)
   solana: solanaImage,
   ///: END:ONLY_INCLUDE_IF

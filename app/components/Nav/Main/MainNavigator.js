@@ -10,6 +10,7 @@ import SimpleWebview from '../../Views/SimpleWebview';
 import Settings from '../../Views/Settings';
 import GeneralSettings from '../../Views/Settings/GeneralSettings';
 import AdvancedSettings from '../../Views/Settings/AdvancedSettings';
+import BackupAndSyncSettings from '../../Views/Settings/Identity/BackupAndSyncSettings';
 import SecuritySettings from '../../Views/Settings/SecuritySettings';
 import ExperimentalSettings from '../../Views/Settings/ExperimentalSettings';
 import NetworksSettings from '../../Views/Settings/NetworksSettings';
@@ -95,6 +96,7 @@ import { BridgeTransactionDetails } from '../../UI/Bridge/components/Transaction
 import { BridgeModalStack, BridgeScreenStack } from '../../UI/Bridge/routes';
 import PasswordHint from '../../Views/PasswordHint';
 import ProtectYourWallet from '../../Views/ProtectYourWallet';
+import TurnOnBackupAndSync from '../../Views/Identity/TurnOnBackupAndSync/TurnOnBackupAndSync';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -427,6 +429,11 @@ const SettingsFlow = () => (
       name={Routes.SETTINGS.NOTIFICATIONS}
       component={NotificationsSettings}
       options={NotificationsSettings.navigationOptions}
+    />
+    <Stack.Screen
+      name={Routes.SETTINGS.BACKUP_AND_SYNC}
+      component={BackupAndSyncSettings}
+      options={BackupAndSyncSettings.navigationOptions}
     />
     {
       ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
@@ -904,6 +911,11 @@ const MainNavigator = () => (
       name={Routes.NOTIFICATIONS.OPT_IN_STACK}
       component={NotificationsOptInStack}
       options={NotificationsOptInStack.navigationOptions}
+    />
+    <Stack.Screen
+      name={Routes.IDENTITY.TURN_ON_BACKUP_AND_SYNC}
+      component={TurnOnBackupAndSync}
+      options={TurnOnBackupAndSync.navigationOptions}
     />
   </Stack.Navigator>
 );
