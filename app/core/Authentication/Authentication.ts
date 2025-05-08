@@ -557,9 +557,14 @@ class AuthenticationService {
         throw new Error('No account data found');
       }
     } catch (error) {
-      Logger.error(error as Error, {
-        message: 'rehydrateSeedPhrase',
-      });
+      Logger.error(error as Error);
+      if (error instanceof Error) {
+        error.message = error.message.replace(
+          'SeedlessOnboardingController - ',
+          '',
+        );
+        throw error.message;
+      }
       throw error;
     }
   };
