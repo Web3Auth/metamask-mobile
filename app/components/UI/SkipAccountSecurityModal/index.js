@@ -16,16 +16,22 @@ import generateTestId from '../../../../wdio/utils/generateTestId';
 import { SkipAccountSecurityModalSelectorsIDs } from '../../../../e2e/selectors/Onboarding/SkipAccountSecurityModal.selectors';
 import BottomSheet from '../../../component-library/components/BottomSheets/BottomSheet';
 import Checkbox from '../../../component-library/components/Checkbox';
-import ActionContent from '../ActionModal/ActionContent';
+import Button, {
+  ButtonSize,
+  ButtonVariants,
+  ButtonWidthTypes,
+} from '../../../component-library/components/Buttons/Button';
 
 const createStyles = (colors) =>
   StyleSheet.create({
     imageWarning: {
       alignSelf: 'center',
       color: colors.error.default,
+      marginBottom: 16,
     },
     modalNoBorder: {
       borderTopWidth: 0,
+      paddingHorizontal: 0,
     },
     skipTitle: {
       fontSize: 24,
@@ -36,12 +42,12 @@ const createStyles = (colors) =>
       ...fontStyles.bold,
     },
     skipModalContainer: {
-      flex: 1,
       flexDirection: 'column',
-      marginTop: 24,
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 16,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      width: '100%',
     },
     skipModalXButton: {
       alignItems: 'flex-end',
@@ -54,6 +60,7 @@ const createStyles = (colors) =>
       flexDirection: 'row',
       alignItems: 'flex-start',
       paddingHorizontal: 16,
+      marginTop: 16,
     },
     skipModalCheckbox: {
       height: 18,
@@ -68,6 +75,19 @@ const createStyles = (colors) =>
       fontSize: 14,
       paddingHorizontal: 10,
       color: colors.text.default,
+    },
+    ctaContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      gap: 16,
+      marginTop: 24,
+    },
+    button: {
+      flex: 1,
+    },
+    skipButton: {
+      flex: 1,
+      backgroundColor: colors.error.default,
     },
   });
 
@@ -98,53 +118,64 @@ const SkipAccountSecurityModal = ({ route }) => {
 
   return (
     <BottomSheet ref={sheetRef}>
-      <ActionContent
-        cancelTestID={SkipAccountSecurityModalSelectorsIDs.CANCEL_BUTTON}
-        confirmTestID={SkipAccountSecurityModalSelectorsIDs.SKIP_BUTTON}
-        confirmText={strings('account_backup_step_1.skip_button_confirm')}
-        cancelText={strings('account_backup_step_1.skip_button_cancel')}
-        confirmButtonMode={'danger'}
-        cancelButtonMode={'normal'}
-        actionContainerStyle={styles.modalNoBorder}
-        onCancelPress={onCancelAction}
-        confirmDisabled={!skipCheckbox}
-        onConfirmPress={onConfirmAction}
-      >
-        <View style={styles.skipModalContainer}>
-          <Icon
-            name={IconName.DangerSolid}
-            size={IconSize.Lg}
-            style={styles.imageWarning}
-            {...generateTestId(Platform, 'skip-backup-warning')}
+      <View style={styles.skipModalContainer}>
+        <Icon
+          name={IconName.DangerSolid}
+          size={IconSize.Lg}
+          style={styles.imageWarning}
+          {...generateTestId(Platform, 'skip-backup-warning')}
+        />
+
+        <Text variant={TextVariant.HeadingMD} color={TextColor.Default}>
+          {strings('account_backup_step_1.skip_title')}
+        </Text>
+
+        <View
+          style={styles.skipModalActionButtons}
+          testID={SkipAccountSecurityModalSelectorsIDs.CONTAINER}
+        >
+          <Checkbox
+            style={styles.skipModalCheckbox}
+            isChecked={skipCheckbox}
+            onPress={toggleSkipCheckbox}
+            testID={
+              SkipAccountSecurityModalSelectorsIDs.iOS_SKIP_BACKUP_BUTTON_ID
+            }
           />
-          <Text variant={TextVariant.HeadingMD} color={TextColor.Default}>
-            {strings('account_backup_step_1.skip_title')}
-          </Text>
-          <View
-            style={styles.skipModalActionButtons}
-            testID={SkipAccountSecurityModalSelectorsIDs.CONTAINER}
+          <Text
+            onPress={toggleSkipCheckbox}
+            variant={TextVariant.BodySM}
+            color={TextColor.Default}
+            testID={
+              SkipAccountSecurityModalSelectorsIDs.ANDROID_SKIP_BACKUP_BUTTON_ID
+            }
           >
-            <Checkbox
-              style={styles.skipModalCheckbox}
-              isChecked={skipCheckbox}
-              onPress={toggleSkipCheckbox}
-              testID={
-                SkipAccountSecurityModalSelectorsIDs.iOS_SKIP_BACKUP_BUTTON_ID
-              }
-            />
-            <Text
-              onPress={toggleSkipCheckbox}
-              variant={TextVariant.BodySM}
-              color={TextColor.Default}
-              testID={
-                SkipAccountSecurityModalSelectorsIDs.ANDROID_SKIP_BACKUP_BUTTON_ID
-              }
-            >
-              {strings('account_backup_step_1.skip_check')}
-            </Text>
-          </View>
+            {strings('account_backup_step_1.skip_check')}
+          </Text>
         </View>
-      </ActionContent>
+
+        <View style={styles.ctaContainer}>
+          <Button
+            onPress={onCancelAction}
+            label={strings('account_backup_step_1.skip_button_cancel')}
+            type={ButtonVariants.Secondary}
+            size={ButtonSize.Lg}
+            variant={ButtonVariants.Secondary}
+            width={ButtonWidthTypes.Full}
+            style={styles.button}
+          />
+          <Button
+            onPress={onConfirmAction}
+            label={strings('account_backup_step_1.skip_button_confirm')}
+            type={ButtonVariants.Primary}
+            size={ButtonSize.Lg}
+            variant={ButtonVariants.Primary}
+            width={ButtonWidthTypes.Full}
+            style={styles.skipButton}
+            isDisabled={!skipCheckbox}
+          />
+        </View>
+      </View>
     </BottomSheet>
   );
 };
