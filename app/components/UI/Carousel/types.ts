@@ -9,6 +9,7 @@ export type SlideId =
   | 'aggregated'
   | 'multisrp'
   | 'secure'
+  | 'backupAndSync'
   | 'solana';
 
 interface NavigationParams {
