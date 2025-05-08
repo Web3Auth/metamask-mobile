@@ -298,7 +298,11 @@
     "vault_error": "Error: Cannot unlock without a previous vault.",
     "clean_vault_error": "MetaMask encountered an error due to reaching a storage limit. The local data has been corrupted. Please reinstall MetaMask and restore with your Secret Recovery Phrase.",
     "security_alert_title": "Security Alert",
-    "security_alert_desc": "In order to proceed, you need to turn Passcode on or any biometrics authentication method supported in your device (FaceID, TouchID or Fingerprint)"
+    "security_alert_desc": "In order to proceed, you need to turn Passcode on or any biometrics authentication method supported in your device (FaceID, TouchID or Fingerprint)",
+    
+    "apple_button": "Sign in with Apple",
+    "google_button": "Sign in with Google",
+    "other_methods": "Use another method"
   },
   "connect_hardware": {
     "title_select_hardware": "Connect a hardware wallet",
@@ -4026,12 +4030,13 @@
     "recipient": "Recipient"
   },
   "account_status": {
-    "account_already_exists": "Account already exists ",
+    "account_already_exists": "Account already exists",
     "account_already_exists_description": "An account with {{accountName}} already exists. Do you want to try logging in instead?",
     "log_in": "Log in",
     "account_not_found": "Account not found",
-    "account_not_found_description": "No existing wallet found for {{accountName}}. Want to create one now with this social login?",
-    "create_new_wallet": "Yes, create a new wallet"
+    "account_not_found_description": "No existing wallet found for {{accountName}}. Want to create one now with this login?",
+    "create_new_wallet": "Create a new wallet",
+    "use_different_login_method": "Use a different login method"
   },
   "error_sheet": {
     "still_there_title": "Still there?",
@@ -4041,7 +4046,14 @@
     "something_went_wrong_title": "Something went wrong",
     "something_went_wrong_description": "An error occurred while logging in. Try again and if the issue continues, contact",
     "support_button": "MetaMask Support.",
-    "error_button": "Try again"
+    "error_button": "Try again",
+    
+    "user_cancelled_title": "Login cancelled",
+    "user_cancelled_description": "You cancelled the login process.\nTry again when you’re ready.",
+    "user_cancelled_button": "Try again",
+    "oauth_error_title": "Login failed",
+    "oauth_error_description": "An error occurred while logging in.\nTry again and if the issue continues, contact MetaMask Support.",
+    "oauth_error_button": "Try again"
   },
   "password_hint": {
     "title": "Password hint",

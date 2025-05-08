@@ -181,6 +181,10 @@ const OnboardingSuccessComponentNoSRP = () => {
   );
 };
 
+const AccountAlreadyExists = () => <AccountStatus type="found" />;
+
+const AccountNotFound = () => <AccountStatus type="not_exist" />;
+
 const OnboardingSuccessFlow = () => (
   <Stack.Navigator initialRouteName={Routes.ONBOARDING.SUCCESS}>
     <Stack.Screen
@@ -239,6 +243,11 @@ const OnboardingNav = () => (
     />
     <Stack.Screen name="OptinMetrics" component={OptinMetrics} />
     <Stack.Screen name="AccountStatus" component={AccountStatus} />
+    <Stack.Screen
+      name="AccountAlreadyExists"
+      component={AccountAlreadyExists}
+    />
+    <Stack.Screen name="AccountNotFound" component={AccountNotFound} />
   </Stack.Navigator>
 );
 
