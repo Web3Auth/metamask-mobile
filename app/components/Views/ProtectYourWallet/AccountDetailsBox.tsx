@@ -24,6 +24,9 @@ const AccountDetailsBox = ({
   const { colors } = useTheme();
 
   const styles = StyleSheet.create({
+    root: {
+      width: '100%',
+    },
     box: {
       backgroundColor: colors.background.muted,
       padding: 16,
@@ -63,7 +66,7 @@ const AccountDetailsBox = ({
   });
 
   return (
-    <View>
+    <View style={styles.root}>
       <View style={styles.box}>
         <Text variant={TextVariant.BodyMDMedium} color={TextColor.Default}>
           {title}
