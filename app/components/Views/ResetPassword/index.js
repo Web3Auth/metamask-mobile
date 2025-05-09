@@ -73,6 +73,7 @@ import Icon, {
 import Routes from '../../../constants/navigation/Routes';
 import { SecurityOptionToggle } from '../../UI/SecurityOptionToggle';
 import NavigationService from '../../../core/NavigationService';
+import ReduxService from '../../../core/redux';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -443,8 +444,20 @@ class ResetPassword extends PureComponent {
       this.setState({ loading: true, showPasswordChangeWarning: false });
 
       await this.recreateVault();
-      // Set biometrics for new password
-      await Authentication.resetPassword();
+
+      ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+      const seedlessOnboardingState =
+        ReduxService.store.getState().engine.backgroundState
+          .SeedlessOnboardingController;
+      if (
+        seedlessOnboardingState.authConnection &&
+        seedlessOnboardingState.authConnectionId
+      ) {
+        // Set biometrics for new password
+        await Authentication.resetPassword();
+      }
+      ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
+
       try {
         // compute and store the new authentication method
         const authData = await Authentication.componentAuthenticationType(
