@@ -34,9 +34,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     rowGap: 16,
   },
-  button: {
-    borderRadius: 12,
-  },
 });
 
 export default styles;

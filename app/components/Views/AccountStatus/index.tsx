@@ -146,7 +146,6 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
             ? strings('account_status.log_in')
             : strings('account_status.create_new_wallet')
           }
-          style={styles.button}
         />
         <Button
           variant={ButtonVariants.Secondary}
@@ -156,7 +155,6 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
             navigation.goBack();
           }}
           label={strings('account_status.use_different_login_method')}
-          style={styles.button}
         />
       </View>
     </View>
