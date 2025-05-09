@@ -38,6 +38,7 @@ import { uint8ArrayToMnemonic } from '../../util/mnemonic';
 import Logger from '../../util/Logger';
 import { resetVaultBackup } from '../BackupVault/backupVault';
 import OAuthService from '../OAuthService/OAuthService';
+import { KeyringTypes } from '@metamask/keyring-controller';
 ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
 /**
@@ -531,25 +532,43 @@ class AuthenticationService {
   ): Promise<void> => {
     try {
       const { SeedlessOnboardingController } = Engine.context;
-
       const result = await SeedlessOnboardingController.fetchAllSeedPhrases(
         password,
       );
 
-      if (result !== null && result.length > 0) {
-        const seedPhrase = uint8ArrayToMnemonic(
-          result.at(-1) ?? new Uint8Array(),
-          wordlist,
-        );
+      if (result.length > 0) {
+        const { KeyringController } = Engine.context;
+
+        const [firstSeedPhrase, ...restOfSeedPhrases] = result;
+        if (!firstSeedPhrase) {
+          throw new Error('No seed phrase found');
+        }
+
+        const seedPhrase = uint8ArrayToMnemonic(firstSeedPhrase, wordlist);
         await this.newWalletAndRestore(password, authData, seedPhrase, false);
         // add in more srps
-        if (result.length > 1) {
-          // for (const item of result.slice(0, -1)) {
-          // vault add new seedphrase
-          // const { KeyringController } = Engine.context;
-          // await KeyringController.addSRP(item, password);
-          // }
+        if (restOfSeedPhrases.length > 0) {
+          for (const item of restOfSeedPhrases) {
+            // vault add new seedphrase
+            try {
+              const keyringMetadata = await KeyringController.addNewKeyring(
+                KeyringTypes.hd,
+                {
+                  mnemonic: item,
+                  numberOfAccounts: 1,
+                },
+              );
+              SeedlessOnboardingController.updateBackupMetadataState({
+                keyringId: keyringMetadata.id,
+                seedPhrase: item,
+              });
+            } catch (error) {
+              // catch error to prevent unable to login
+              Logger.error(error as Error);
+            }
+          }
         }
+
         this.dispatchLogin();
         this.dispatchPasswordSet();
         this.dispatchOauthReset();

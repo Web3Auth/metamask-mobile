@@ -3,9 +3,17 @@ import { wordlist } from '@metamask/scure-bip39/dist/wordlists/english';
 import ExtendedKeyringTypes from '../../constants/keyringTypes';
 import Engine from '../../core/Engine';
 import { KeyringSelector } from '@metamask/keyring-controller';
+import { mnemonicToSeed } from '@metamask/key-tree';
+///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+import ReduxService from '../../core/redux';
+import Logger from '../../util/Logger';
+import { uint8ArrayToMnemonic } from '../../util/mnemonic';
+///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
 export async function importNewSecretRecoveryPhrase(mnemonic: string) {
   const { KeyringController } = Engine.context;
+
+  const { SeedlessOnboardingController } = Engine.context;
 
   // Convert input mnemonic to codepoints
   const mnemonicWords = mnemonic.toLowerCase().split(' ');
@@ -51,6 +59,27 @@ export async function importNewSecretRecoveryPhrase(mnemonic: string) {
     },
     async ({ keyring }) => keyring.getAccounts(),
   );
+
+  ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+  // TODO: to use loginCompleted
+  if (
+    ReduxService.store.getState().engine.backgroundState
+      .SeedlessOnboardingController.authConnection
+  ) {
+    // on Error, wallet should notify user that the newly added seed phrase is not synced properly
+    // user can try manual sync again (phase 2)
+    const seed = new Uint8Array(inputCodePoints.buffer);
+    await SeedlessOnboardingController.addNewSeedPhraseBackup(
+      seed,
+      newKeyring.id,
+    ).catch((error) => {
+      // on Error, wallet should notify user that the newly added seed phrase is not synced properly
+      // user can try manual sync again (phase 2)
+      Logger.log('backup error', error);
+      throw error;
+    });
+  }
+  ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
   return Engine.setSelectedAddress(newAccountAddress);
 }

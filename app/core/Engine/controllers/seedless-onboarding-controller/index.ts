@@ -9,7 +9,7 @@ import {
 } from '@metamask/seedless-onboarding-controller';
 import { Encryptor, LEGACY_DERIVATION_OPTIONS } from '../../../Encryptor';
 import { web3AuthNetwork } from '../../../OAuthService/OAuthLoginHandlers/constants';
-import { EncryptionKey } from '../../../Encryptor/types';
+import { EncryptionKey, EncryptionResult } from '../../../Encryptor/types';
 
 // const web3AuthNetwork = process.env.Web3AuthNetwork as Web3AuthNetwork;
 
@@ -43,10 +43,11 @@ export const seedlessOnboardingControllerInit: ControllerInitFunction<
       seedlessOnboardingControllerState as SeedlessOnboardingControllerState,
     encryptor: {
       ...encryptor,
-      decryptWithKey: async (key: EncryptionKey, encryptedString: string) => {
-        const decryptedJson = JSON.parse(encryptedString);
-        return encryptor.decryptWithKey(key, decryptedJson);
-      },
+      decryptWithKey: async (key: EncryptionKey, encryptedString: string) =>
+        encryptor.decryptWithKey(
+          key,
+          encryptedString as unknown as EncryptionResult,
+        ),
     },
     network: web3AuthNetwork as Web3AuthNetwork,
   });
