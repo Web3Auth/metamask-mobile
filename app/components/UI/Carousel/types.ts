@@ -8,6 +8,7 @@ export type SlideId =
   | 'cashout'
   | 'aggregated'
   | 'multisrp'
+  | 'secure'
   | 'backupAndSync'
   | 'solana';
 

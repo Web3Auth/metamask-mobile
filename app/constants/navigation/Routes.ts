@@ -63,6 +63,8 @@ const Routes = {
     LOGIN: 'Login',
     NAV: 'OnboardingNav',
     MANUAL_BACKUP: {
+      STEP_1: 'ManualBackupStep1',
+      STEP_2: 'ManualBackupStep2',
       STEP_3: 'ManualBackupStep3',
     },
     IMPORT_FROM_SECRET_RECOVERY_PHRASE: 'ImportFromSecretRecoveryPhrase',
@@ -84,6 +86,7 @@ const Routes = {
     NOTIFICATIONS: 'NotificationsSettings',
     REVEAL_PRIVATE_CREDENTIAL: 'RevealPrivateCredentialView',
     SDK_SESSIONS_MANAGER: 'SDKSessionsManager',
+    PASSWORD_HINT: 'PasswordHint',
     BACKUP_AND_SYNC: 'BackupAndSyncSettings',
   },
   SHEET: {
@@ -119,6 +122,10 @@ const Routes = {
     ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
     SELECT_SRP: 'SelectSRP',
     ///: END:ONLY_INCLUDE_IF
+    ONBOARDING_SHEET: 'OnboardingSheet',
+    SEEDPHRASE_MODAL: 'SeedphraseModal',
+    SKIP_ACCOUNT_SECURITY_MODAL: 'SkipAccountSecurityModal',
+    SUCCESS_ERROR_SHEET: 'SuccessErrorSheet',
   },
   BROWSER: {
     HOME: 'BrowserTabHome',
@@ -204,6 +211,8 @@ const Routes = {
   },
   ///: END:ONLY_INCLUDE_IF
   FOX_LOADER: 'FoxLoader',
+  SEEDPHRASE_MODAL: 'SeedphraseModal',
+  SET_PASSWORD_FLOW: 'SetPasswordFlow',
   EDIT_ACCOUNT_NAME: 'EditAccountName',
 };
 
