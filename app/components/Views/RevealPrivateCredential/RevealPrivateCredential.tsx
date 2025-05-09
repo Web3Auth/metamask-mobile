@@ -609,28 +609,6 @@ const RevealPrivateCredential = ({
   );
 
   const renderWarning = (privCredentialName: string) => (
-    // <View style={styles.warningWrapper}>
-    //   <View style={[styles.rowWrapper, styles.warningRowWrapper]}>
-    //     <Icon style={styles.icon} name={IconName.Info} size={IconSize.Lg} />
-    //     {privCredentialName === PRIVATE_KEY ? (
-    //       <TextComp variant={TextVariant.BodySM} color={TextColor.Default}>
-    //         {strings(
-    //           `reveal_credential.${privCredentialName}_warning_explanation`,
-    //         )}{' '}
-    //       </TextComp>
-    //     ) : (
-    //       <TextComp variant={TextVariant.BodySM} color={TextColor.Default}>
-    //         {strings('reveal_credential.seed_phrase_warning_explanation')[0]}
-    //         <TextComp
-    //           variant={TextVariant.BodySMBold}
-    //           color={TextColor.Default}
-    //         >
-    //           {strings('reveal_credential.seed_phrase_warning_explanation')[1]}
-    //         </TextComp>
-    //       </TextComp>
-    //     )}
-    //   </View>
-    // </View>
     <View style={styles.warning}>
       <Banner
         variant={BannerVariant.Alert}
@@ -689,7 +667,6 @@ const RevealPrivateCredential = ({
           RevealSeedViewSelectorsIDs.REVEAL_CREDENTIAL_SCROLL_ID
         }
         buttonContainerStyle={styles.ctaContainer}
-        contentContainerStyle={styles.stretch}
       >
         <>
           <View style={[styles.rowWrapper, styles.normalText]}>

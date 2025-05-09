@@ -129,7 +129,7 @@ export const createStyles = (theme: Theme) =>
       borderColor: theme.colors.border.muted,
     },
     stretch: {
-      height: '95%',
+      flex: 1,
     },
     ctaContainer: {
       flex: 1,
