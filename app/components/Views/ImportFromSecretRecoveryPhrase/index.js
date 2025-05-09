@@ -87,6 +87,7 @@ import Text, {
 import { TextFieldSize } from '../../../component-library/components/Form/TextField';
 import SeedphraseModal from '../../UI/SeedphraseModal';
 import { wordlist } from '@metamask/scure-bip39/dist/wordlists/english';
+import { LoginOptionsSwitch } from '../../UI/LoginOptionsSwitch';
 
 const MINIMUM_SUPPORTED_CLIPBOARD_VERSION = 9;
 
@@ -343,19 +344,19 @@ const ImportFromSecretRecoveryPhrase = ({
     current && current.focus();
   };
 
-  // const renderSwitch = () => {
-  //   const handleUpdateRememberMe = (rememberMe) => {
-  //     setRememberMe(rememberMe);
-  //   };
-  //   return (
-  //     <LoginOptionsSwitch
-  //       shouldRenderBiometricOption={biometryType}
-  //       biometryChoiceState={biometryChoice}
-  //       onUpdateBiometryChoice={updateBiometryChoice}
-  //       onUpdateRememberMe={handleUpdateRememberMe}
-  //     />
-  //   );
-  // };
+  const renderSwitch = () => {
+    const handleUpdateRememberMe = (rememberMe) => {
+      setRememberMe(rememberMe);
+    };
+    return (
+      <LoginOptionsSwitch
+        shouldRenderBiometricOption={biometryType}
+        biometryChoiceState={biometryChoice}
+        onUpdateBiometryChoice={updateBiometryChoice}
+        onUpdateRememberMe={handleUpdateRememberMe}
+      />
+    );
+  };
 
   const passwordStrengthWord = getPasswordStrengthWord(passwordStrength);
 
@@ -365,7 +366,11 @@ const ImportFromSecretRecoveryPhrase = ({
       setSeedPhrase((prev) => {
         // handle use pasting multiple words / whole seed phrase separated by spaces
         const splitArray = text.trim().split(/\s+/); // split by any spaces
-        return [...prev.slice(0, index), ...splitArray, ...prev.slice(index + 1)]; // input the array into the correct index
+        return [
+          ...prev.slice(0, index),
+          ...splitArray,
+          ...prev.slice(index + 1),
+        ]; // input the array into the correct index
       });
     } else {
       setSeedPhrase((prev) => {
@@ -928,13 +933,7 @@ const ImportFromSecretRecoveryPhrase = ({
                   ) : null}
                 </View>
 
-                {biometryType && (
-                  <SecurityOptionToggle
-                    title={strings('import_from_seed.unlock_with_face_id')}
-                    value={biometryChoice}
-                    onOptionUpdated={updateBiometryChoice}
-                  />
-                )}
+                {this.renderSwitch()}
               </View>
 
               <View style={styles.learnMoreContainer}>
