@@ -32,7 +32,7 @@ import { hasMultipleHDKeyrings } from '../../../../../../selectors/keyringContro
 ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
 import {
   selectSeedlessOnboardingUserId,
-  selectSeedlessOnboardingUserEmail,
+  // selectSeedlessOnboardingUserEmail,
   selectSeedlessOnboardingAuthConnection,
 } from '../../../../../../selectors/seedlessOnboardingController';
 ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
@@ -58,9 +58,9 @@ const ProtectYourWallet = ({
 
   ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
   const seedlessOnboardingUserId = useSelector(selectSeedlessOnboardingUserId);
-  const seedlessOnboardingUserEmail = useSelector(
-    selectSeedlessOnboardingUserEmail,
-  );
+  // const seedlessOnboardingUserEmail = useSelector(
+  //   selectSeedlessOnboardingUserEmail,
+  // );
   const authConnection = useSelector(selectSeedlessOnboardingAuthConnection);
   ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
   const openSRPQuiz = () => {
@@ -100,7 +100,7 @@ const ProtectYourWallet = ({
   };
 
   const onProtectYourWalletPressed = () => {
-    navigation.navigate('ProtectYourWallet');
+    navigation.navigate('WalletRecovery');
   };
 
   ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
