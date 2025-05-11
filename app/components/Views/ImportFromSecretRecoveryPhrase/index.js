@@ -671,7 +671,7 @@ const ImportFromSecretRecoveryPhrase = ({
                     <View style={styles.seedPhraseInnerContainer}>
                       {seedPhrase.length <= 1 ? (
                         <TextInput
-                          textAlignVertical="top"
+                          textAlignVertical="center"
                           label={strings('import_from_seed.srp')}
                           placeholder={strings(
                             'import_from_seed.srp_placeholder',
@@ -690,6 +690,7 @@ const ImportFromSecretRecoveryPhrase = ({
                           onKeyPress={(e) => handleKeyPress(e, 0)}
                           autoComplete="off"
                           blurOnSubmit={false}
+                          autoCapitalize="none"
                         />
                       ) : (
                         <View
@@ -754,10 +755,12 @@ const ImportFromSecretRecoveryPhrase = ({
                                   size={TextFieldSize.Md}
                                   style={[styles.input]}
                                   autoComplete="off"
-                                  textAlignVertical="top"
+                                  textAlignVertical="center"
                                   showSoftInputOnFocus
                                   blurOnSubmit={false}
                                   isError={!isValidSeed(item)}
+                                  autoCapitalize="none"
+                                  numberOfLines={1}
                                 />
                               </View>
                             )}
