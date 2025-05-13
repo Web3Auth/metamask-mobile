@@ -176,6 +176,7 @@ export class OAuthService {
       this.#dispatchPostLogin({ type: 'dismiss', existingUser: false });
       return { type: 'dismiss', existingUser: false };
     } catch (error) {
+      Logger.error(error as unknown as Error)
       this.#dispatchPostLogin({
         type: 'error',
         existingUser: false,
