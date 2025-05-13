@@ -136,7 +136,7 @@ const ImportFromSecretRecoveryPhrase = ({
   const [showPasswordIndex, setShowPasswordIndex] = useState([0, 1]);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  const inputPadding = 4;
+  const inputPadding = Platform.OS === 'ios' ? 4 : 3;
   const numColumns = 3; // Number of columns
 
   const seedPhraseLength = seedPhrase.filter((item) => item !== '').length;

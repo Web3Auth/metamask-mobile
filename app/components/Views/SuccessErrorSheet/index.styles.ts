@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   description: {
-    textAlign: 'center',
-    alignSelf: 'center',
+    textAlign: 'left',
+    alignSelf: 'flex-start',
     width: '100%',
   },
   title: {
