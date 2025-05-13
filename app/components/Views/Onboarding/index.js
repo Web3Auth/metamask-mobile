@@ -45,7 +45,7 @@ import { MetaMetricsEvents } from '../../../core/Analytics';
 import { withMetricsAwareness } from '../../hooks/useMetrics';
 import { Authentication } from '../../../core';
 import { ThemeContext, mockTheme } from '../../../util/theme';
-import { OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onboarding.selectors';
+import { OnboardingSelectorIDs } from '../../../../e2e/selectors/SeedlessOnboarding/Onboarding.selectors';
 import Routes from '../../../constants/navigation/Routes';
 import { selectAccounts } from '../../../selectors/accountTrackerController';
 import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboarding';
@@ -509,7 +509,7 @@ class Onboarding extends PureComponent {
           <Button
             variant={ButtonVariants.Primary}
             onPress={() => this.handleCtaActions('create')}
-            testID={OnboardingSelectorIDs.NEW_WALLET_BUTTON}
+            testID={OnboardingSelectorIDs.CREATE_A_NEW_WALLET_BUTTON}
             label={strings('onboarding.start_exploring_now')}
             width={ButtonWidthTypes.Full}
             size={ButtonSize.Lg}
@@ -517,7 +517,7 @@ class Onboarding extends PureComponent {
           <Button
             variant={ButtonVariants.Secondary}
             onPress={() => this.handleCtaActions('existing')}
-            testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
+            testID={OnboardingSelectorIDs.HAVE_AN_EXISTING_WALLET_BUTTON}
             label={strings('onboarding.have_existing_wallet')}
             width={ButtonWidthTypes.Full}
             size={ButtonSize.Lg}

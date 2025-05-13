@@ -17,7 +17,7 @@ describe(Regression('Seedless Onboarding - Carousel'), () => {
 
   it('should see bottom button enabled', async () => {
     await Assertions.checkIfVisible(OnboardingCarouselView.getStartedButton);
-    await Assertions.checkIfElementEnabled(OnboardingCarouselView.getStartedButton);
+    await Assertions.checkIfEnabled(OnboardingCarouselView.getStartedButton);
   });
 
   it('should swipe screens and see all correct texts', async () => {

@@ -231,7 +231,7 @@ class Assertions {
    * @param {Promise<Detox.IndexableNativeElement>} element - The element to check
    * @return {Promise<boolean>} - Resolves to true if the element is enabled, false otherwise
    */
-  static async checkIfElementEnabled(element) {
+  static async checkIfEnabled(element) {
     return (await (await element).getAttributes()).enabled;
   }
 
@@ -240,7 +240,7 @@ class Assertions {
    * @param {Promise<Detox.IndexableNativeElement>} element - The element to check
    * @return {Promise<boolean>} - Resolves to true if the element is disabled, false otherwise
    */
-  static async checkIfElementDisabled(element) {
+  static async checkIfDisabled(element) {
     return (await (await element).getAttributes()).enabled;
   }
 }

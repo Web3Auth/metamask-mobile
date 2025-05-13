@@ -18,7 +18,7 @@ import Icon, {
 } from '../../../component-library/components/Icons/Icon';
 import { strings } from '../../../../locales/i18n';
 import { useTheme } from '../../../util/theme';
-import { OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onboarding.selectors';
+import { OnboardingSelectorIDs } from '../../../../e2e/selectors/SeedlessOnboarding/Onboarding.selectors';
 
 export interface OnboardingSheetParams {
   onPressCreate?: () => void;
@@ -110,9 +110,9 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
   };
 
   return (
-    <BottomSheet ref={sheetRef}>
+    <BottomSheet ref={sheetRef} testID={OnboardingSelectorIDs.BOTTOM_SHEET_CONTAINER}>
       <View style={styles.bottomSheetContainer}>
-        <Text variant={TextVariant.HeadingMD} color={TextColor.Default}>
+        <Text variant={TextVariant.HeadingMD} color={TextColor.Default} testID={OnboardingSelectorIDs.BOTTOM_SHEET_TITLE}>
           {strings('onboarding.bottom_sheet_title')}
         </Text>
         <View style={styles.buttonWrapper}>
@@ -120,7 +120,7 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
             variant={ButtonVariants.Secondary}
             overridePressedColor={colors.background.alternative}
             onPress={onPressContinueWithGoogleAction}
-            testID={OnboardingSelectorIDs.NEW_WALLET_BUTTON}
+            testID={OnboardingSelectorIDs.GOOGLE_BUTTON}
             label={
               <View style={styles.buttonLabel}>
                 <Icon
@@ -146,7 +146,7 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
             variant={ButtonVariants.Secondary}
             overridePressedColor={colors.background.alternative}
             onPress={onPressContinueWithAppleAction}
-            testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
+            testID={OnboardingSelectorIDs.APPLE_BUTTON}
             label={
               <View style={styles.buttonLabel}>
                 <Icon
@@ -180,7 +180,7 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
           <Button
             variant={ButtonVariants.Secondary}
             onPress={createWallet ? onPressCreateAction : onPressImportAction}
-            testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
+            testID={OnboardingSelectorIDs.CONTINUE_WITH_SRP_BUTTON}
             label={
               createWallet
                 ? strings('onboarding.continue_with_srp')

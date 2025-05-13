@@ -15,7 +15,7 @@ describe(Regression('Seedless Onboarding - Term of Use'), () => {
     await OnboardingCarouselView.tapOnGetStartedButton();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
     await Assertions.checkIfVisible(TermsOfUseModal.acceptButton);
-    await Assertions.checkIfElementDisabled(TermsOfUseModal.acceptButton);
+    await Assertions.checkIfDisabled(TermsOfUseModal.acceptButton);
     await Assertions.checkIfVisible(TermsOfUseModal.scrollArrowButton);
     await Assertions.checkIfVisible(TermsOfUseModal.closeButton);
   });
@@ -30,14 +30,14 @@ describe(Regression('Seedless Onboarding - Term of Use'), () => {
     await OnboardingCarouselView.tapOnGetStartedButton();
     await TermsOfUseModal.tapScrollEndButton();
     await TermsOfUseModal.tapAgreeCheckBox();
-    await Assertions.checkIfElementEnabled(TermsOfUseModal.acceptButton);
+    await Assertions.checkIfEnabled(TermsOfUseModal.acceptButton);
   });
 
   it('should react to checkbox change', async () => {
     await TermsOfUseModal.tapAgreeCheckBox();
-    await Assertions.checkIfElementDisabled(TermsOfUseModal.acceptButton);
+    await Assertions.checkIfDisabled(TermsOfUseModal.acceptButton);
     await TermsOfUseModal.tapAgreeCheckBox();
-    await Assertions.checkIfElementEnabled(TermsOfUseModal.acceptButton);
+    await Assertions.checkIfEnabled(TermsOfUseModal.acceptButton);
   });
 
   it('should accept terms of use normally', async () => {
