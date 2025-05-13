@@ -579,11 +579,6 @@ class ChoosePassword extends PureComponent {
         {loading ? (
           <View style={styles.loadingWrapper}>
             <View style={styles.foxWrapper}>
-              {/* <Image
-                source={require('../../../images/branding/fox.png')}
-                style={styles.image}
-                resizeMethod={'auto'}
-              /> */}
               <LottieView
                 style={styles.image}
                 autoPlay
@@ -609,7 +604,6 @@ class ChoosePassword extends PureComponent {
           </View>
         ) : (
           <View style={styles.wrapper}>
-            {/* <OnboardingProgress steps={CHOOSE_PASSWORD_STEPS} /> */}
             <KeyboardAwareScrollView
               style={styles.scrollableWrapper}
               contentContainerStyle={styles.keyboardScrollableWrapper}
@@ -774,8 +768,6 @@ class ChoosePassword extends PureComponent {
                     }
                   />
                 </View>
-
-                {/* <View>{this.renderSwitch()}</View> */}
 
                 {!!error && <Text color={TextColor.Error}>{error}</Text>}
               </View>

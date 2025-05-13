@@ -3,10 +3,9 @@ import { StyleSheet, Dimensions, TextStyle } from 'react-native';
 import { Theme } from '../../../../util/theme/models';
 import { getFontFamily, TextVariant } from '../../Texts/Text';
 import { typography } from '@metamask/design-tokens';
+import { colors as commonColors } from '../../../../styles/common';
 
 const screenHeight = Dimensions.get('window').height;
-// eslint-disable-next-line @metamask/design-tokens/color-no-hex
-const bgColor = '#ECEEFF';
 /**
  * Style sheet function for ModalConfirmation component.
  *
@@ -69,14 +68,14 @@ const styleSheet = (params: { theme: Theme }) => {
       width: 40,
       height: 40,
       borderRadius: 40 / 2,
-      backgroundColor: bgColor,
+      backgroundColor: commonColors.modalScrollButton,
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 10,
       position: 'absolute',
       bottom: 175,
       right: 32,
-      boxShadow: `0px 3px 8px ${bgColor}`,
+      boxShadow: `0px 3px 8px ${commonColors.modalScrollButton}`,
     },
     footerHelpText: {
       marginTop: 16,
