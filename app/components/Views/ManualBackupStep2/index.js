@@ -245,7 +245,7 @@ const ManualBackupStep2 = ({ navigation, seedphraseBackedUp, route }) => {
                     isEmpty && styles.emptySlot,
                     isSelected && styles.selectedSlotBox,
                     {
-                      width: innerWidth / (Platform.OS === 'ios' ? 3.75 : 3.8),
+                      width: innerWidth / (Platform.OS === 'ios' ? 3.75 : 3.85),
                     },
                   ]}
                   onPress={() => handleSlotPress(index)}
