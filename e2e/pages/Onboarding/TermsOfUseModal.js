@@ -1,4 +1,4 @@
-import { TermsOfUseModalSelectorsIDs } from '../../selectors/Onboarding/TermsOfUseModal.selectors';
+import { TermsOfUseModalSelectorsIDs } from '../../selectors/SeedlessOnboarding/TermsOfUseModal.selectors';
 import Matchers from '../../utils/Matchers';
 import Gestures from '../../utils/Gestures';
 
@@ -21,6 +21,10 @@ class TermsOfUseModal {
     return Matchers.getElementByID(TermsOfUseModalSelectorsIDs.ACCEPT_BUTTON);
   }
 
+  get closeButton() {
+    return Matchers.getElementByID(TermsOfUseModalSelectorsIDs.CLOSE_BUTTON);
+  }
+
   async tapAgreeCheckBox() {
     await Gestures.waitAndTap(this.checkbox);
   }
@@ -31,6 +35,10 @@ class TermsOfUseModal {
 
   async tapAcceptButton() {
     await Gestures.waitAndTap(this.acceptButton);
+  }
+
+  async tapCloseButton() {
+    await Gestures.waitAndTap(this.closeButton);
   }
 }
 

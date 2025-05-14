@@ -20,19 +20,15 @@ class CreatePasswordView {
   }
 
   get iUnderstandCheckbox() {
-    return device.getPlatform() === 'ios'
-      ? Matchers.getElementByID(
-          ChoosePasswordSelectorsIDs.IOS_I_UNDERSTAND_BUTTON_ID,
-        )
-      : Matchers.getElementByID(
-          ChoosePasswordSelectorsIDs.ANDROID_I_UNDERSTAND_BUTTON_ID,
-        );
+    return Matchers.getElementByID(
+      ChoosePasswordSelectorsIDs.I_UNDERSTAND_CHECKBOX_ID,
+    );
   }
 
   get submitButton() {
-    return device.getPlatform() === 'ios'
-      ? Matchers.getElementByID(ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID)
-      : Matchers.getElementByLabel(ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID);
+    return Matchers.getElementByID(
+      ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID,
+    );
   }
 
   async enterPassword(password) {
