@@ -206,6 +206,16 @@ class Gestures {
       .whileElement(scrollableElement)
       .scroll(scrollAmount, direction);
   }
+
+  /**
+   * Type text into an element.
+   *
+   * @param {Promise<Detox.IndexableNativeElement>} element - The element to type into
+   * @param {string} text - Text to be typed into the element
+   */
+  static async typeText(element, text) {
+    await (await element).typeText(text);
+  }
 }
 
 export default Gestures;
