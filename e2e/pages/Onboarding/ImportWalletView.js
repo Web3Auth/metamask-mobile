@@ -58,7 +58,7 @@ class ImportWalletView {
   }
 
   async enterSecretRecoveryPhrase(secretRecoveryPhrase) {
-    await Gestures.typeTextAndHideKeyboard(
+    await Gestures.typeText(
       this.seedPhraseInput,
       secretRecoveryPhrase,
     );
