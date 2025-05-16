@@ -94,6 +94,7 @@ import { AssetLoader } from '../../Views/AssetLoader';
 import { BridgeTransactionDetails } from '../../UI/Bridge/components/TransactionDetails/TransactionDetails';
 import { BridgeModalStack, BridgeScreenStack } from '../../UI/Bridge/routes';
 import PasswordHint from '../../Views/PasswordHint';
+import ProtectYourWallet from '../../Views/ProtectYourWallet';
 import TurnOnBackupAndSync from '../../Views/Identity/TurnOnBackupAndSync/TurnOnBackupAndSync';
 
 const Stack = createStackNavigator();
@@ -390,6 +391,11 @@ const SettingsFlow = () => (
       name="PasswordHint"
       component={PasswordHint}
       options={PasswordHint.navigationOptions}
+    />
+    <Stack.Screen
+      name="WalletRecovery"
+      component={ProtectYourWallet}
+      options={ProtectYourWallet.navigationOptions}
     />
     <Stack.Screen
       name="AccountBackupStep1B"
