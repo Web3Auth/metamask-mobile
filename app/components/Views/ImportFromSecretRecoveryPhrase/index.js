@@ -88,6 +88,8 @@ import { TextFieldSize } from '../../../component-library/components/Form/TextFi
 import SeedphraseModal from '../../UI/SeedphraseModal';
 import { wordlist } from '@metamask/scure-bip39/dist/wordlists/english';
 import { LoginOptionsSwitch } from '../../UI/LoginOptionsSwitch';
+import { TraceName, endTrace } from '../../../util/trace';
+import { useMetrics } from '../../hooks/useMetrics';
 
 const MINIMUM_SUPPORTED_CLIPBOARD_VERSION = 9;
 
@@ -135,6 +137,7 @@ const ImportFromSecretRecoveryPhrase = ({
   const [learnMore, setLearnMore] = useState(false);
   const [showPasswordIndex, setShowPasswordIndex] = useState([0, 1]);
   const [containerWidth, setContainerWidth] = useState(0);
+  const { isEnabled: isMetricsEnabled } = useMetrics();
 
   const inputPadding = Platform.OS === 'ios' ? 4 : 3;
   const numColumns = 3; // Number of columns
@@ -248,7 +251,6 @@ const ImportFromSecretRecoveryPhrase = ({
     };
 
     setBiometricsOption();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
 
@@ -557,19 +559,41 @@ const ImportFromSecretRecoveryPhrase = ({
           new_wallet: false,
         });
         !onboardingWizard && setOnboardingWizardStep(1);
-        navigation.navigate('OptinMetrics', {
-          onContinue: () => {
-            navigation.reset({
-              index: 1,
-              routes: [
-                {
-                  name: Routes.ONBOARDING.SUCCESS_FLOW,
-                  params: { showPasswordHint: false },
-                },
-              ],
-            });
-          },
-        });
+
+        if (isMetricsEnabled()) {
+          endTrace({ name: TraceName.OnboardingExistingSrpImport });
+          endTrace({ name: TraceName.OnboardingJourneyOverall });
+
+          navigation.reset({
+            index: 1,
+            routes: [
+              {
+                name: Routes.ONBOARDING.SUCCESS_FLOW,
+                params: { showPasswordHint: false },
+              },
+            ],
+          });
+        } else {
+          navigation.navigate('OptinMetrics', {
+            onContinue: () => {
+              navigation.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: Routes.ONBOARDING.SUCCESS_FLOW,
+                    params: {
+                      showPasswordHint: false,
+                    },
+                  },
+                ],
+              });
+            },
+            tracesToEnd: [
+              TraceName.OnboardingExistingSrpImport,
+              TraceName.OnboardingJourneyOverall,
+            ],
+          });
+        }
       } catch (error) {
         // Should we force people to enable passcode / biometrics?
         if (error.toString() === PASSCODE_NOT_SET_ERROR) {
