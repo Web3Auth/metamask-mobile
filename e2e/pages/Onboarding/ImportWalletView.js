@@ -39,12 +39,6 @@ class ImportWalletView {
     );
   }
 
-  get errorMessage() {
-    return Matchers.getElementByID(
-      ImportFromSeedSelectorsIDs.INVALID_SEED_PHRASE_PLACE_HOLDER_TEXT,
-    );
-  }
-
   get continueButton() {
     return Matchers.getElementByID(
       ImportFromSeedSelectorsIDs.SUBMIT_BUTTON_ID,
@@ -57,11 +51,25 @@ class ImportWalletView {
     );
   }
 
+  get spellcheckErrorMessage() {
+    return Matchers.getElementByText(
+      enContent.import_from_seed.spellcheck_error,
+    );
+  }
+
+  async getSeedPhraseAtIndex(index) {
+    return await Matchers.getElementByID(
+      `${ImportFromSeedSelectorsIDs.SEED_PHRASE_INPUT_ID}-${index}`,
+    );
+  }
+
   async enterSecretRecoveryPhrase(secretRecoveryPhrase) {
+    await device.disableSynchronization();
     await Gestures.typeText(
       this.seedPhraseInput,
       secretRecoveryPhrase,
     );
+    await device.enableSynchronization();
   }
 
   async clearSecretRecoveryPhrase() {
@@ -87,6 +95,15 @@ class ImportWalletView {
   async tapTitle() {
     await Gestures.waitAndTap(this.title);
   }
+
+  async tapSeedPhraseAtIndex(index) {
+    await Gestures.tap(await this.getSeedPhraseAtIndex(index));
+  }
+
+  async tapSeedPhrase() {
+    await Gestures.waitAndTap(this.seedPhraseInput);
+  }
+
 }
 
 export default new ImportWalletView();

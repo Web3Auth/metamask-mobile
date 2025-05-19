@@ -755,6 +755,7 @@ const ImportFromSecretRecoveryPhrase = ({
                                   isError={!isValidSeed(item)}
                                   autoCapitalize="none"
                                   numberOfLines={1}
+                                  testID={`${ImportFromSeedSelectorsIDs.SEED_PHRASE_INPUT_ID}-${index}`}
                                 />
                               </View>
                             )}
