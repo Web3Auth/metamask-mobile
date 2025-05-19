@@ -126,7 +126,6 @@ const Main = (props) => {
   const removeNotVisibleNotifications = props.removeNotVisibleNotifications;
   useNotificationHandler();
   useIdentityEffects();
-  useEnableAutomaticSecurityChecks();
   useMinimumVersions();
 
   const { chainId, networkClientId, showIncomingTransactionsNetworks } = props;
