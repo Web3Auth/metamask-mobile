@@ -1,6 +1,7 @@
 import { ChoosePasswordSelectorsIDs } from '../../selectors/Onboarding/ChoosePassword.selectors';
 import Matchers from '../../utils/Matchers';
 import Gestures from '../../utils/Gestures';
+import enContent from '../../../locales/languages/en.json';
 
 class CreatePasswordView {
   get container() {
@@ -31,6 +32,17 @@ class CreatePasswordView {
     );
   }
 
+  get passwordError() {
+    return Matchers.getElementByText(
+      enContent.import_from_seed.password_error,
+    );
+  }
+
+  async resetPasswordInputs() {
+    await Gestures.clearField(this.newPasswordInput);
+    await Gestures.clearField(this.confirmPasswordInput);
+  }
+
   async enterPassword(password) {
     await Gestures.typeTextAndHideKeyboard(this.newPasswordInput, password);
   }
@@ -40,11 +52,11 @@ class CreatePasswordView {
   }
 
   async tapIUnderstandCheckBox() {
-    await Gestures.waitAndTap(this.iUnderstandCheckbox);
+    await Gestures.tap(this.iUnderstandCheckbox);
   }
 
   async tapCreatePasswordButton() {
-    await Gestures.waitAndTap(this.submitButton);
+    await Gestures.tap(this.submitButton);
   }
 }
 
