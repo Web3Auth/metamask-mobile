@@ -107,7 +107,7 @@ export const importWalletWithRecoveryPhrase = async ({
   // tap on import seed phrase button
   await Assertions.checkIfVisible(OnboardingCarouselView.container);
   await OnboardingCarouselView.tapOnGetStartedButton();
-  await OnboardingView.tapImportWalletFromSeedPhrase();
+  await OnboardingView.tapExistWalletButton();
 
   if (optInToMetrics) {
     await MetaMetricsOptIn.tapAgreeButton();

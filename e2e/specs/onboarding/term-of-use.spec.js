@@ -18,7 +18,7 @@ describe(Regression('Term of Use Modal'), () => {
     await OnboardingCarouselView.tapOnGetStartedButton();
 
     await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapImportWalletFromSeedPhrase();
+    await OnboardingView.tapExistWalletButton();
 
     await MetaMetricsOptIn.tapAgreeButton();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
@@ -29,7 +29,7 @@ describe(Regression('Term of Use Modal'), () => {
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
     await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapImportWalletFromSeedPhrase();
+    await OnboardingView.tapExistWalletButton();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
   });
 
@@ -46,7 +46,7 @@ describe(Regression('Term of Use Modal'), () => {
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
     await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapImportWalletFromSeedPhrase();
+    await OnboardingView.tapExistWalletButton();
     await Assertions.checkIfNotVisible(TermsOfUseModal.container);
   });
 });
