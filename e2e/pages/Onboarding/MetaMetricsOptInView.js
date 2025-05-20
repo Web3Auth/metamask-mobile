@@ -27,6 +27,12 @@ class MetaMetricsOptIn {
     );
   }
 
+  get iUnderstandCheckBox() {
+    return Matchers.getElementByID(
+      MetaMetricsOptInSelectorsIDs.OPTIN_METRICS_CHECKBOX_ID,
+    );
+  }
+
   async tapAgreeButton() {
     await Gestures.swipe(this.optInMetricsContent, 'up', 'fast', 0.9);
     await Gestures.waitAndTap(this.iAgreeButton);
@@ -35,6 +41,10 @@ class MetaMetricsOptIn {
   async tapNoThanksButton() {
     await Gestures.swipe(this.optInMetricsContent, 'up', 'fast', 0.9);
     await Gestures.waitAndTap(this.noThanksButton);
+  }
+
+  async tapIUnderstandCheckBox() {
+    await Gestures.waitAndTap(this.iUnderstandCheckBox);
   }
 }
 

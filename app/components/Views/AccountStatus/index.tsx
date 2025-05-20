@@ -30,6 +30,7 @@ import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboardi
 import { IMetaMetricsEvent } from '../../../core/Analytics/MetaMetrics.types';
 
 import AccountStatusImg from '../../../images/already_exist.png';
+import { AccountStatusSelectorIDs } from '../../../../e2e/selectors/Onboarding/AccountStatusView.selectors';
 
 interface AccountStatusProps {
   type?: 'found' | 'not_exist';
@@ -100,9 +101,9 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
   };
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} testID={AccountStatusSelectorIDs.CONTAINER_ID}>
       <View style={styles.content}>
-        <Text variant={TextVariant.DisplayMD}>
+        <Text variant={TextVariant.DisplayMD} testID={AccountStatusSelectorIDs.TITLE_ID}>
           {type === 'found'
             ? strings('account_status.account_already_exists')
             : strings('account_status.account_not_found')}
@@ -141,6 +142,7 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
             ? strings('account_status.log_in')
             : strings('account_status.create_new_wallet')
         }
+        testID={AccountStatusSelectorIDs.CREATE_OR_LOG_IN_BUTTON_ID}
       />
       <Button
         variant={ButtonVariants.Secondary}
@@ -151,6 +153,7 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
         }}
         label={strings('account_status.use_different_login_method')}
         style={styles.secondaryButton}
+        testID={AccountStatusSelectorIDs.USE_DIFFERENT_LOGIN_METHOD_BUTTON_ID}
       />
     </View>
   );
