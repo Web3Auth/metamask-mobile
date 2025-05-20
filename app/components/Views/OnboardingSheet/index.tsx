@@ -18,7 +18,7 @@ import Icon, {
 } from '../../../component-library/components/Icons/Icon';
 import { strings } from '../../../../locales/i18n';
 import { useTheme } from '../../../util/theme';
-import { OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onboarding.selectors';
+import { BottomSheetSelectorIDs, OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onboarding.selectors';
 
 export interface OnboardingSheetParams {
   onPressCreate?: () => void;
@@ -120,7 +120,7 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
             variant={ButtonVariants.Secondary}
             overridePressedColor={colors.background.alternative}
             onPress={onPressContinueWithGoogleAction}
-            testID={OnboardingSelectorIDs.NEW_WALLET_BUTTON}
+            testID={BottomSheetSelectorIDs.GOOGLE_BUTTON}
             label={
               <View style={styles.buttonLabel}>
                 <Icon
@@ -146,7 +146,7 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
             variant={ButtonVariants.Secondary}
             overridePressedColor={colors.background.alternative}
             onPress={onPressContinueWithAppleAction}
-            testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
+            testID={BottomSheetSelectorIDs.APPLE_BUTTON}
             label={
               <View style={styles.buttonLabel}>
                 <Icon
@@ -180,7 +180,7 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
           <Button
             variant={ButtonVariants.Secondary}
             onPress={createWallet ? onPressCreateAction : onPressImportAction}
-            testID={OnboardingSelectorIDs.IMPORT_SEED_BUTTON}
+            testID={BottomSheetSelectorIDs.SRP_BUTTON}
             label={
               createWallet
                 ? strings('onboarding.continue_with_srp')

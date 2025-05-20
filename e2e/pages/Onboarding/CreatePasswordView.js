@@ -8,6 +8,10 @@ class CreatePasswordView {
     return Matchers.getElementByID(ChoosePasswordSelectorsIDs.CONTAINER_ID);
   }
 
+  get title() {
+    return Matchers.getElementByID(ChoosePasswordSelectorsIDs.TITLE_ID);
+  }
+
   get newPasswordInput() {
     return Matchers.getElementByID(
       ChoosePasswordSelectorsIDs.NEW_PASSWORD_INPUT_ID,
@@ -57,6 +61,10 @@ class CreatePasswordView {
 
   async tapCreatePasswordButton() {
     await Gestures.tap(this.submitButton);
+  }
+
+  async tapTitle() {
+    await Gestures.waitAndTap(this.title);
   }
 }
 

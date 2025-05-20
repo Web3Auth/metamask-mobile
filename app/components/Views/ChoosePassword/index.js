@@ -655,7 +655,7 @@ class ChoosePassword extends PureComponent {
                   Step 1 of 3
                 </Text>
 
-                <Text variant={TextVariant.DisplayMD} color={TextColor.Default}>
+                <Text variant={TextVariant.DisplayMD} color={TextColor.Default} testID={ChoosePasswordSelectorsIDs.TITLE_ID}>
                   {strings('choose_password.title')}
                 </Text>
 

@@ -1,5 +1,6 @@
 export const ChoosePasswordSelectorsIDs = {
   CONTAINER_ID: 'create-password-screen',
+  TITLE_ID: 'create-password-screen-title-id',
   NEW_PASSWORD_INPUT_ID: 'create-password-first-input-field',
   CONFIRM_PASSWORD_INPUT_ID: 'create-password-second-input-field',
   PASSWORD_STRENGTH_ID: 'password-strength-label',
