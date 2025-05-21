@@ -69,6 +69,7 @@ import Icon, {
 import Routes from '../../../constants/navigation/Routes';
 import { SecurityOptionToggle } from '../../UI/SecurityOptionToggle';
 import NavigationService from '../../../core/NavigationService';
+import { RecoveryError as SeedlessOnboardingRecoveryError } from '@metamask/seedless-onboarding-controller';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -837,13 +838,7 @@ class ResetPassword extends PureComponent {
                 </View>
               </View>
 
-              {this.state.biometryType && (
-                <SecurityOptionToggle
-                  title={strings('import_from_seed.unlock_with_face_id')}
-                  value={this.state.biometryChoice}
-                  onOptionUpdated={this.updateBiometryChoice}
-                />
-              )}
+              {this.renderSwitch()}
 
               <View style={styles.ctaWrapper}>
                 <Button
