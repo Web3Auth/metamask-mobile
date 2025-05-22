@@ -34,7 +34,7 @@ const mockSnapClient = {
 
 jest.mock('../../core/redux/ReduxService', () => ({
   store: {
-    getState: jest.fn(),
+    getState: () => ({}),
   },
 }));
 
