@@ -74,7 +74,7 @@ exports[`SecuritySettings should render correctly 1`] = `
             }
           }
         >
-          Protect your wallet
+          Wallet Recovery
         </Text>
         <Text
           accessibilityRole="text"

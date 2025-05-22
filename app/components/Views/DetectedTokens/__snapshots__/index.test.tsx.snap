@@ -68,7 +68,7 @@ exports[`DetectedTokens Component matches snapshot when no detected tokens 1`] =
               "padding": 15,
             },
             {
-              "backgroundColor": "white",
+              "backgroundColor": "transparent",
               "borderColor": "blue",
               "borderWidth": 1,
             },
@@ -781,7 +781,7 @@ exports[`DetectedTokens Component renders correctly with detected tokens 1`] = `
               "padding": 15,
             },
             {
-              "backgroundColor": "white",
+              "backgroundColor": "transparent",
               "borderColor": "blue",
               "borderWidth": 1,
             },
