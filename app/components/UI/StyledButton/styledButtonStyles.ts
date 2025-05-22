@@ -140,7 +140,8 @@ const createStyles = (colors: Theme['colors']) =>
     secondary: {
       backgroundColor: colors.background.default,
       borderWidth: 1,
-      borderColor: colors.border.default,
+      // TODO: Get Ganesh to fix this
+      borderColor: colors.border?.default,
     },
     secondaryText: {
       color: colors.text.default,
