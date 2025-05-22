@@ -10,7 +10,7 @@ import { ensureValidState } from './util';
  * as a default Seedless Onboarding State.
  */
 const migration = (state: unknown): unknown => {
-  const migrationVersion = 77;
+  const migrationVersion = 80;
 
   // Ensure the state is valid for migration
   if (!ensureValidState(state, migrationVersion)) {
@@ -32,7 +32,7 @@ const migration = (state: unknown): unknown => {
   } catch (error) {
     captureException(
       new Error(
-        `Migration 077: Adding Seedless Onboarding default state failed with error: ${error}`,
+        `Migration ${migrationVersion}: Adding Seedless Onboarding default state failed with error: ${error}`,
       ),
     );
     return state;
