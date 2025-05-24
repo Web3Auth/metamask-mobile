@@ -477,7 +477,7 @@ const RevealPrivateCredential = ({
       </TextComp>
       <TextField
         style={styles.input}
-        placeholder={'Make sure nobody is looking'}
+        placeholder={strings('reveal_credential.make_sure_nobody_is_looking')}
         placeholderTextColor={colors.text.muted}
         onChangeText={onPasswordChange}
         secureTextEntry

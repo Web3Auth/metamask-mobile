@@ -1352,6 +1352,7 @@
     "seed_phrase_title": "Reveal Secret Recovery Phrase",
     "private_key_title": "Show private key",
     "show_private_key": "Show private key",
+    "make_sure_nobody_is_looking": "Make sure nobody is looking",
     "private_key_title_for_account": "Show private key for \"{{accountName}}\"",
     "cancel": "Cancel",
     "done": "Done",
