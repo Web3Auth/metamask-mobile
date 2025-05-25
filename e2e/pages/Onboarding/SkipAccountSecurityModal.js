@@ -14,13 +14,9 @@ class SkipAccountSecurityModal {
   }
 
   get skipButton() {
-    return device.getPlatform() === 'android'
-      ? Matchers.getElementByLabel(
-          SkipAccountSecurityModalSelectorsIDs.SKIP_BUTTON,
-        )
-      : Matchers.getElementByID(
-          SkipAccountSecurityModalSelectorsIDs.SKIP_BUTTON,
-        );
+    return Matchers.getElementByID(
+      SkipAccountSecurityModalSelectorsIDs.SKIP_BUTTON,
+    );
   }
 
   async tapIUnderstandCheckBox() {
