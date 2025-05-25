@@ -2,11 +2,8 @@ import TermsOfUseModal from '../../pages/Onboarding/TermsOfUseModal';
 import TestHelpers from '../../helpers';
 import OnboardingCarouselView from '../../pages/Onboarding/OnboardingCarouselView';
 import OnboardingView from '../../pages/Onboarding/OnboardingView';
-import MetaMetricsOptIn from '../../pages/Onboarding/MetaMetricsOptInView';
-import ImportWalletView from '../../pages/Onboarding/ImportWalletView';
 import Assertions from '../../utils/Assertions';
 import { Regression } from '../../tags';
-import { acceptTermOfUse } from '../../viewHelper';
 
 describe(Regression('Term of Use Modal'), () => {
   beforeAll(async () => {
