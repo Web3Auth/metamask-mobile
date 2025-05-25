@@ -26,6 +26,7 @@ import StorageWrapper from '../../../store/storage-wrapper';
 import { SOLANA_FEATURE_MODAL_SHOWN } from '../../../constants/storage';
 import Engine from '../../../core/Engine';
 import { SOLANA_NEW_FEATURE_CONTENT_LEARN_MORE } from '../../../constants/urls';
+import { SolanaNewFeatureModalSelectorsIDs } from '../../../../e2e/selectors/Onboarding/SolanaNewFeatureModal.selectors';
 
 const SolanaNewFeatureContent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -114,7 +115,7 @@ const SolanaNewFeatureContent = () => {
       onClose={handleSheetClose}
       shouldNavigateBack={false}
     >
-      <View style={styles.wrapper}>
+      <View style={styles.wrapper} testID={SolanaNewFeatureModalSelectorsIDs.CONTAINER}>
         <SolanaLogo name="solana-logo" height={65} />
         <Text style={styles.title}>
           {strings('solana_new_feature_content.title')}
@@ -154,6 +155,7 @@ const SolanaNewFeatureContent = () => {
           label={strings('solana_new_feature_content.not_now')}
           onPress={handleClose}
           style={styles.cancelButton}
+          testID={SolanaNewFeatureModalSelectorsIDs.CANCEL_BUTTON}
         />
       </View>
     </BottomSheet>
