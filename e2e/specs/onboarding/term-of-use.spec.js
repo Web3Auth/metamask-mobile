@@ -6,6 +6,7 @@ import MetaMetricsOptIn from '../../pages/Onboarding/MetaMetricsOptInView';
 import ImportWalletView from '../../pages/Onboarding/ImportWalletView';
 import Assertions from '../../utils/Assertions';
 import { Regression } from '../../tags';
+import { acceptTermOfUse } from '../../viewHelper';
 
 describe(Regression('Term of Use Modal'), () => {
   beforeAll(async () => {
@@ -16,11 +17,6 @@ describe(Regression('Term of Use Modal'), () => {
   it('should displayed Term of Use when first launching app', async () => {
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
-
-    await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapExistWalletButton();
-
-    await MetaMetricsOptIn.tapAgreeButton();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
   });
 
@@ -28,8 +24,6 @@ describe(Regression('Term of Use Modal'), () => {
     await TestHelpers.relaunchApp();
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
-    await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapExistWalletButton();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
   });
 
@@ -38,15 +32,13 @@ describe(Regression('Term of Use Modal'), () => {
     await TermsOfUseModal.tapAgreeCheckBox();
     await TermsOfUseModal.tapAcceptButton();
     await Assertions.checkIfNotVisible(TermsOfUseModal.container);
-    await Assertions.checkIfVisible(ImportWalletView.container);
+    await Assertions.checkIfVisible(OnboardingView.container);
   });
 
   it('should restart app after accepting terms', async () => {
     await TestHelpers.relaunchApp();
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
-    await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapExistWalletButton();
     await Assertions.checkIfNotVisible(TermsOfUseModal.container);
   });
 });
