@@ -4721,10 +4721,10 @@
     single-call-balance-checker-abi "^1.0.0"
     uuid "^8.3.2"
 
-"@metamask/auth-network-utils@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@metamask/auth-network-utils/-/auth-network-utils-0.1.0.tgz#8520c4dd69b758030975dfb6802f4ee921033c64"
-  integrity sha512-eSxnbDxu+s/LCoPt/d9bSDoHfb3hWazT3xPnOxn9aeWov6L4vnjew37zUlKHDxfYzxw7oEeEsdZEHzNo5C8enQ==
+"@metamask/auth-network-utils@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@metamask/auth-network-utils/-/auth-network-utils-0.2.0.tgz#2a0de16175a0ae63e1b81a1fd6dbaeb1e09f8709"
+  integrity sha512-5m3z/5ZEXMGYoSp9ru5hBEW6zcQeJZFN5IWpHzT4yIiSrdn5mUpNnuxC2+Y0KPVvwHd/yihQC+8Jq0PBEfT1NQ==
   dependencies:
     "@noble/curves" "^1.8.1"
     "@noble/hashes" "^1.7.1"
@@ -5654,13 +5654,13 @@
     utf-8-validate "^5.0.2"
     uuid "^8.3.2"
 
-"@metamask/seedless-onboarding-controller@https://github.com/Web3Auth/core/raw/7b0ec56fc8ffa8ab92c15444240ec234ffd779a1/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz":
+"@metamask/seedless-onboarding-controller@https://github.com/Web3Auth/core/raw/c536cd3d87a94f735ed4961a02aaf96f7a166081/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz":
   version "0.0.0"
-  resolved "https://github.com/Web3Auth/core/raw/7b0ec56fc8ffa8ab92c15444240ec234ffd779a1/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz#995e1551f8f0c4d883c568a648fa930afb1503f9"
+  resolved "https://github.com/Web3Auth/core/raw/c536cd3d87a94f735ed4961a02aaf96f7a166081/packages/seedless-onboarding-controller/seedless-onboarding-controller.tgz#a1ad88a5d442aa845ac2db0579d5dd7d9d33aaa3"
   dependencies:
-    "@metamask/auth-network-utils" "^0.1.0"
+    "@metamask/auth-network-utils" "^0.2.0"
     "@metamask/base-controller" "^8.0.1"
-    "@metamask/toprf-secure-backup" "^0.1.0"
+    "@metamask/toprf-secure-backup" "^0.2.0"
     "@metamask/utils" "^11.2.0"
     async-mutex "^0.5.0"
 
@@ -5875,12 +5875,12 @@
     "@metamask/base-controller" "^8.0.0"
     "@metamask/utils" "^11.2.0"
 
-"@metamask/toprf-secure-backup@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@metamask/toprf-secure-backup/-/toprf-secure-backup-0.1.0.tgz#e06f34efb3497e43600131f63ca20ed7067f3fbb"
-  integrity sha512-vcbvVgT/FY08judGDbQAepPp4wgSeCYcUOyljKgvrk2bRrO4n10tkg/Vke7dJSMT8LLtWR641yY2A14bPM3KQA==
+"@metamask/toprf-secure-backup@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@metamask/toprf-secure-backup/-/toprf-secure-backup-0.2.0.tgz#1cdcc735f01513061faf087c6d698fbd12f221e7"
+  integrity sha512-vZRMvzb/9YPu3khWk64CWnZrfJac3sTpYzID6BsibfM/iMrudV69/AFuZSGVtzRAHEmgErRyf0yC9XRfOvFxiA==
   dependencies:
-    "@metamask/auth-network-utils" "^0.1.0"
+    "@metamask/auth-network-utils" "^0.2.0"
     "@noble/ciphers" "^1.2.1"
     "@noble/curves" "^1.8.1"
     "@noble/hashes" "^1.7.1"
