@@ -16,41 +16,42 @@ export class OAuthServiceTestUtils {
 
   // These are not real urls, they are used to mock the OAuthService.handleSeedlessAuthenticate and OAuthService.handleOAuthLogin methods
   readonly #mockOAuthServiceLoginURL = 'https://mock-oauth-service-login';
-  readonly #mockControllerAuthenticateURL = 'https://mock-controller-authenticate';
+  readonly #mockControllerAuthenticateURL =
+    'https://mock-controller-authenticate';
 
-  public async getMockedOAuthLoginResponse(
-  ): Promise<LoginHandlerResult> {
+  public async getMockedOAuthLoginResponse(): Promise<LoginHandlerResult> {
     const response = await fetch(this.#mockOAuthServiceLoginURL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    return response.json();
+    return await response.json();
   }
 
-  public async getMockedSeedlessAuthenticateResponse(
-  ): Promise<HandleOAuthLoginResult> {
+  public async getMockedSeedlessAuthenticateResponse(): Promise<HandleOAuthLoginResult> {
     const response = await fetch(this.#mockControllerAuthenticateURL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    return response.json();
+    return await response.json();
   }
 
   public generateMockOAuthLoginResponse(response: LoginHandlerResult) {
     return {
-        endpoint: this.#mockOAuthServiceLoginURL,
-        response,
-        responseCode: 200,
+      urlEndpoint: this.#mockOAuthServiceLoginURL,
+      response,
+      responseCode: 200,
     };
   }
 
-  public generateMockSeedlessAuthenticateResponse(response: HandleOAuthLoginResult) {
+  public generateMockSeedlessAuthenticateResponse(
+    response: HandleOAuthLoginResult,
+  ) {
     return {
-      endpoint: this.#mockControllerAuthenticateURL,
+      urlEndpoint: this.#mockControllerAuthenticateURL,
       response,
       responseCode: 200,
     };
