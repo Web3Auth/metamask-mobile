@@ -32,6 +32,9 @@ describe(Regression('Create Wallet -> Google login -> new user'), () => {
         existingUser: false,
         accountName: 'new-account-name',
       }),
+      OAuthServiceTestUtils.getInstance().generateMockCreateToprfKeyAndBackupSeedPhraseResponse({
+        ignore: true,
+      }),
     ];
     await TestHelpers.reverseServerPort();
 

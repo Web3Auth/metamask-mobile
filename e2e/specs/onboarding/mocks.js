@@ -1,4 +1,5 @@
-import { getDecodedProxiedURL } from '../../identity/utils/helpers';
+const getDecodedProxiedURL = (url) =>
+  decodeURIComponent(String(new URL(url).searchParams.get('url')));
 
 export const applyMock = (mockServer, mockData = []) => {
   for (const mock of mockData) {

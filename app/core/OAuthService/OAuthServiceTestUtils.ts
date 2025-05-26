@@ -18,6 +18,8 @@ export class OAuthServiceTestUtils {
   readonly #mockOAuthServiceLoginURL = 'https://mock-oauth-service-login';
   readonly #mockControllerAuthenticateURL =
     'https://mock-controller-authenticate';
+  readonly #mockCreateToprfKeyAndBackupSeedPhraseURL =
+    'https://mock-create-toprf-key-and-backup-seed-phrase';
 
   public async getMockedOAuthLoginResponse(): Promise<LoginHandlerResult> {
     const response = await fetch(this.#mockOAuthServiceLoginURL, {
@@ -39,6 +41,16 @@ export class OAuthServiceTestUtils {
     return await response.json();
   }
 
+  public async getMockedCreateToprfKeyAndBackupSeedPhraseResponse(): Promise<{ ignore: boolean }> {
+    const response = await fetch(this.#mockCreateToprfKeyAndBackupSeedPhraseURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return await response.json();
+  }
+
   public generateMockOAuthLoginResponse(response: LoginHandlerResult) {
     return {
       urlEndpoint: this.#mockOAuthServiceLoginURL,
@@ -52,6 +64,16 @@ export class OAuthServiceTestUtils {
   ) {
     return {
       urlEndpoint: this.#mockControllerAuthenticateURL,
+      response,
+      responseCode: 200,
+    };
+  }
+
+  public generateMockCreateToprfKeyAndBackupSeedPhraseResponse(
+    response: { ignore: boolean },
+  ) {
+    return {
+      urlEndpoint: this.#mockCreateToprfKeyAndBackupSeedPhraseURL,
       response,
       responseCode: 200,
     };

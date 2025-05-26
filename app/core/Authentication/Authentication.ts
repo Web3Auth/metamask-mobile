@@ -39,6 +39,8 @@ import Logger from '../../util/Logger';
 import { resetVaultBackup } from '../BackupVault/backupVault';
 import OAuthService from '../OAuthService/OAuthService';
 import { KeyringTypes } from '@metamask/keyring-controller';
+import { isE2E } from '../../util/test/utils';
+import { OAuthServiceTestUtils } from '../OAuthService/OAuthServiceTestUtils';
 ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
 /**
@@ -490,6 +492,19 @@ class AuthenticationService {
     const { SeedlessOnboardingController, KeyringController } = Engine.context;
     // rollback on fail ( reset wallet )
     await this.createWalletVaultAndKeychain(password);
+
+    // in e2e, we mock the createToprfKeyAndBackupSeedPhrase response to avoid creating a toprf key and backup seed phrase
+    if (isE2E) {
+      // get the mock result
+      const mockResult = await OAuthServiceTestUtils.getInstance().getMockedCreateToprfKeyAndBackupSeedPhraseResponse();
+
+      // if the mock result is to ignore, we don't need to create a toprf key and backup seed phrase
+      if (mockResult.ignore) {
+        this.dispatchOauthReset();
+        return;
+      }
+    }
+
     try {
       const keyringMetadata = KeyringController.state.keyringsMetadata.at(0);
       if (!keyringMetadata) {
@@ -501,10 +516,8 @@ class AuthenticationService {
       );
 
       Logger.log(
-        'SeedlessOnboardingController state',
         SeedlessOnboardingController.state,
       );
-
       await SeedlessOnboardingController.createToprfKeyAndBackupSeedPhrase(
         password,
         seedPhrase,
@@ -521,7 +534,6 @@ class AuthenticationService {
     }
 
     Logger.log(
-      'SeedlessOnboardingController state',
       SeedlessOnboardingController.state,
     );
   };

@@ -34,6 +34,9 @@ describe(Regression('Create Wallet -> Apple login -> new user'), () => {
         existingUser: false,
         accountName: 'new-account-name',
       }),
+      OAuthServiceTestUtils.getInstance().generateMockCreateToprfKeyAndBackupSeedPhraseResponse({
+        ignore: true,
+      }),
     ];
     await TestHelpers.reverseServerPort();
 
