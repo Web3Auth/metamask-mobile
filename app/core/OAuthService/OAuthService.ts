@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import Engine from '../Engine';
 import Logger from '../../util/Logger';
 import ReduxService from '../redux';
@@ -144,6 +143,7 @@ export class OAuthService {
           { ...result, web3AuthNetwork },
           this.config.authServerUrl,
         );
+
         const audience = 'metamask';
 
         if (!data.jwt_tokens[audience]) {
