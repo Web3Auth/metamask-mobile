@@ -482,6 +482,18 @@ const Login: React.FC = () => {
         setError(loginErrorMessage);
       }
       Logger.error(loginError, 'Failed to unlock');
+
+      // Check if we are in the onboarding flow
+      const onboardingTraceCtxFromRoute = route.params?.onboardingTraceCtx;
+      if (onboardingTraceCtxFromRoute) {
+        bufferedTrace({
+          name: TraceName.OnboardingPasswordLoginError,
+          op: TraceOperation.OnboardingError,
+          tags: { errorMessage: loginErrorMessage },
+          parentContext: onboardingTraceCtxFromRoute,
+        });
+        bufferedEndTrace({ name: TraceName.OnboardingPasswordLoginError });
+      }
     }
     endTrace({ name: TraceName.Login });
   };

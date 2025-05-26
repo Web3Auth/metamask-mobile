@@ -149,6 +149,18 @@ export class OAuthService {
         });
         result = await loginHandler.login();
         providerLoginSuccess = true;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+
+        bufferedTrace({
+          name: TraceName.OnboardingOAuthProviderLoginError,
+          op: TraceOperation.OnboardingError,
+          tags: { errorMessage },
+        });
+        bufferedEndTrace({ name: TraceName.OnboardingOAuthProviderLoginError });
+
+        throw error;
       } finally {
         bufferedEndTrace({
           name: TraceName.OnboardingOAuthProviderLogin,
@@ -171,6 +183,20 @@ export class OAuthService {
             this.config.authServerUrl,
           );
           getAuthTokensSuccess = true;
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : 'Unknown error';
+
+          bufferedTrace({
+            name: TraceName.OnboardingOAuthBYOAServerGetAuthTokensError,
+            op: TraceOperation.OnboardingError,
+            tags: { errorMessage },
+          });
+          bufferedEndTrace({
+            name: TraceName.OnboardingOAuthBYOAServerGetAuthTokensError,
+          });
+
+          throw error;
         } finally {
           bufferedEndTrace({
             name: TraceName.OnboardingOAuthBYOAServerGetAuthTokens,
@@ -206,6 +232,20 @@ export class OAuthService {
             authConnection,
           );
           seedlessAuthSuccess = true;
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : 'Unknown error';
+
+          bufferedTrace({
+            name: TraceName.OnboardingOAuthSeedlessAuthenticateError,
+            op: TraceOperation.OnboardingError,
+            tags: { errorMessage },
+          });
+          bufferedEndTrace({
+            name: TraceName.OnboardingOAuthSeedlessAuthenticateError,
+          });
+
+          throw error;
         } finally {
           bufferedEndTrace({
             name: TraceName.OnboardingOAuthSeedlessAuthenticate,

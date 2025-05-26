@@ -484,7 +484,7 @@ class Onboarding extends PureComponent {
       const result = await OAuthLoginService.handleOAuthLogin(
         loginHandler,
       ).catch((e) => {
-        this.handleLoginError(e);
+        this.handleLoginError(e, 'apple');
         return { type: 'error', error: e, existingUser: false };
       });
       this.handlePostSocialLogin(result, createWallet);
@@ -505,7 +505,7 @@ class Onboarding extends PureComponent {
       const result = await OAuthLoginService.handleOAuthLogin(
         loginHandler,
       ).catch((error) => {
-        this.handleLoginError(error);
+        this.handleLoginError(error, 'google');
         return { type: 'error', error, existingUser: false };
       });
       this.handlePostSocialLogin(result, createWallet);
@@ -513,7 +513,7 @@ class Onboarding extends PureComponent {
     this.handleExistingUser(action);
   };
 
-  handleLoginError = (error) => {
+  handleLoginError = (error, socialConnectionType) => {
     let errorMessage;
     if (error instanceof OAuthError) {
       if (error.code === OAuthErrorType.UserCancelled) {
@@ -521,6 +521,22 @@ class Onboarding extends PureComponent {
       } else {
         errorMessage = 'oauth_error';
       }
+    }
+
+    bufferedTrace({
+      name: TraceName.OnboardingSocialLoginError,
+      op: TraceOperation.OnboardingError,
+      tags: { provider: socialConnectionType, errorMessage },
+      parentContext: this.onboardingTraceCtx,
+    });
+    bufferedEndTrace({ name: TraceName.OnboardingSocialLoginError });
+
+    if (this.socialLoginTraceCtx) {
+      bufferedEndTrace({
+        name: TraceName.OnboardingSocialLoginAttempt,
+        data: { success: false },
+      });
+      this.socialLoginTraceCtx = null;
     }
 
     this.props.navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
