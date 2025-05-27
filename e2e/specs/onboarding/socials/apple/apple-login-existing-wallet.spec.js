@@ -8,7 +8,7 @@ import AccountStatusView from '../../../../pages/Onboarding/AccountStatusView';
 import { startMockServer, stopMockServer } from '../../../../api-mocking/mock-server';
 import Assertions from '../../../../utils/Assertions';
 import LoginView from '../../../../pages/wallet/LoginView';
-import { OAuthServiceTestUtils } from '../../../../../app/core/OAuthService/OAuthServiceTestUtils';
+import { SeedlessOnboardingTestUtilts } from '../../../../../app/util/test/seedlessOnboardingTestUtilts';
 import { applyMock } from '../../mocks';
 
 describe(Regression('Existing Wallet -> Apple login'), () => {
@@ -17,14 +17,14 @@ describe(Regression('Existing Wallet -> Apple login'), () => {
   beforeAll(async () => {
 
     const testSpecificMock = [
-      OAuthServiceTestUtils.getInstance().generateMockOAuthLoginResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockOAuthLoginResponse({
         authConnection: 'apple',
         code: 'mock-code',
         clientId: 'mock-byoa-client-id',
         codeVerifier: 'mock-code-verifier',
         redirectUri: 'https://api-develop-torus-byoa.web3auth.io/api/v1/oauth/callback',
       }),
-      OAuthServiceTestUtils.getInstance().generateMockSeedlessAuthenticateResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockSeedlessAuthenticateResponse({
         type: 'success',
         existingUser: true,
         accountName: 'existing-account-name',

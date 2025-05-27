@@ -12,7 +12,7 @@ import OnboardingSuccessView from '../../../../pages/Onboarding/OnboardingSucces
 import Assertions from '../../../../utils/Assertions';
 import LoginView from '../../../../pages/wallet/LoginView';
 import WalletView from '../../../../pages/wallet/WalletView';
-import { OAuthServiceTestUtils } from '../../../../../app/core/OAuthService/OAuthServiceTestUtils';
+import { SeedlessOnboardingTestUtilts } from '../../../../../app/util/test/seedlessOnboardingTestUtilts';
 import { applyMock } from '../../mocks';
 
 
@@ -22,17 +22,17 @@ describe(Regression('Create Wallet -> Google login -> new user'), () => {
   beforeAll(async () => {
 
     const testSpecificMock = [
-      OAuthServiceTestUtils.getInstance().generateMockOAuthLoginResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockOAuthLoginResponse({
         authConnection: 'google',
         idToken: 'mock-id-token',
         clientId: 'mock-byoa-client-id',
       }),
-      OAuthServiceTestUtils.getInstance().generateMockSeedlessAuthenticateResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockSeedlessAuthenticateResponse({
         type: 'success',
         existingUser: false,
         accountName: 'new-account-name',
       }),
-      OAuthServiceTestUtils.getInstance().generateMockCreateToprfKeyAndBackupSeedPhraseResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockCreateToprfKeyAndBackupSeedPhraseResponse({
         ignore: true,
       }),
     ];
@@ -95,12 +95,12 @@ describe(Regression('Create Wallet -> Google login -> existing user'), () => {
   beforeAll(async () => {
 
     const testSpecificMock = [
-      OAuthServiceTestUtils.getInstance().generateMockOAuthLoginResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockOAuthLoginResponse({
         authConnection: 'google',
         idToken: 'mock-id-token',
         clientId: 'mock-byoa-client-id',
       }),
-      OAuthServiceTestUtils.getInstance().generateMockSeedlessAuthenticateResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockSeedlessAuthenticateResponse({
         type: 'success',
         existingUser: true,
         accountName: 'existing-account-name',

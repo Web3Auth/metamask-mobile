@@ -8,7 +8,7 @@ import AccountStatusView from '../../../../pages/Onboarding/AccountStatusView';
 import { startMockServer, stopMockServer } from '../../../../api-mocking/mock-server';
 import Assertions from '../../../../utils/Assertions';
 import LoginView from '../../../../pages/wallet/LoginView';
-import { OAuthServiceTestUtils } from '../../../../../app/core/OAuthService/OAuthServiceTestUtils';
+import { SeedlessOnboardingTestUtilts } from '../../../../../app/util/test/seedlessOnboardingTestUtilts';
 import { applyMock } from '../../mocks';
 
 describe(Regression('Existing Wallet -> Google login'), () => {
@@ -17,12 +17,12 @@ describe(Regression('Existing Wallet -> Google login'), () => {
   beforeAll(async () => {
 
     const testSpecificMock = [
-      OAuthServiceTestUtils.getInstance().generateMockOAuthLoginResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockOAuthLoginResponse({
         authConnection: 'google',
         idToken: 'mock-id-token',
         clientId: 'mock-byoa-client-id',
       }),
-      OAuthServiceTestUtils.getInstance().generateMockSeedlessAuthenticateResponse({
+      SeedlessOnboardingTestUtilts.getInstance().generateMockSeedlessAuthenticateResponse({
         type: 'success',
         existingUser: true,
         accountName: 'existing-account-name',

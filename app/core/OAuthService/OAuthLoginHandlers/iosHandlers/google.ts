@@ -7,7 +7,7 @@ import {
 import { BaseLoginHandler } from '../baseHandler';
 import { OAuthErrorType, OAuthError } from '../../error';
 import { isE2E } from '../../../../util/test/utils';
-import { OAuthServiceTestUtils } from '../../OAuthServiceTestUtils';
+import { SeedlessOnboardingTestUtilts } from '../../../../util/test/seedlessOnboardingTestUtilts';
 
 /**
  * IosGoogleLoginHandlerParams is the params for the Google login handler
@@ -62,7 +62,7 @@ export class IosGoogleLoginHandler extends BaseLoginHandler {
     // Do mock response if running in e2e mode
     if (isE2E) {
       // check if there is a mock result
-      const mockResult = await OAuthServiceTestUtils.getInstance().getMockedOAuthLoginResponse();
+      const mockResult = await SeedlessOnboardingTestUtilts.getInstance().getMockedOAuthLoginResponse();
 
       // Only return mock result if it is not null, otherwise continue with the original flow
       if (mockResult) {

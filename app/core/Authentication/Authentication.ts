@@ -40,7 +40,7 @@ import { resetVaultBackup } from '../BackupVault/backupVault';
 import OAuthService from '../OAuthService/OAuthService';
 import { KeyringTypes } from '@metamask/keyring-controller';
 import { isE2E } from '../../util/test/utils';
-import { OAuthServiceTestUtils } from '../OAuthService/OAuthServiceTestUtils';
+import { SeedlessOnboardingTestUtilts } from '../../util/test/seedlessOnboardingTestUtilts';
 ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
 /**
@@ -496,7 +496,7 @@ class AuthenticationService {
     // in e2e, we mock the createToprfKeyAndBackupSeedPhrase response to avoid creating a toprf key and backup seed phrase
     if (isE2E) {
       // get the mock result
-      const mockResult = await OAuthServiceTestUtils.getInstance().getMockedCreateToprfKeyAndBackupSeedPhraseResponse();
+      const mockResult = await SeedlessOnboardingTestUtilts.getInstance().getMockedCreateToprfKeyAndBackupSeedPhraseResponse();
 
       // if the mock result is to ignore, we don't need to create a toprf key and backup seed phrase
       if (mockResult.ignore) {

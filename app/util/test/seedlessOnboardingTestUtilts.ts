@@ -1,25 +1,37 @@
-import { HandleOAuthLoginResult, LoginHandlerResult } from './OAuthInterface';
+import { HandleOAuthLoginResult, LoginHandlerResult } from '../../core/OAuthService/OAuthInterface';
 
-export class OAuthServiceTestUtils {
-  public static instance: OAuthServiceTestUtils | null = null;
+export class SeedlessOnboardingTestUtilts {
+  public static instance: SeedlessOnboardingTestUtilts | null = null;
 
-  public static getInstance(): OAuthServiceTestUtils {
-    if (!OAuthServiceTestUtils.instance) {
-      OAuthServiceTestUtils.instance = new OAuthServiceTestUtils();
+  public static getInstance(): SeedlessOnboardingTestUtilts {
+    if (!SeedlessOnboardingTestUtilts.instance) {
+      SeedlessOnboardingTestUtilts.instance = new SeedlessOnboardingTestUtilts();
     }
-    return OAuthServiceTestUtils.instance;
+    return SeedlessOnboardingTestUtilts.instance;
   }
 
   public static resetInstance(): void {
-    OAuthServiceTestUtils.instance = null;
+    SeedlessOnboardingTestUtilts.instance = null;
   }
 
   // These are not real urls, they are used to mock the OAuthService.handleSeedlessAuthenticate and OAuthService.handleOAuthLogin methods
+  readonly #mockClipboardTextURL = 'https://mock-clipboard-text';
   readonly #mockOAuthServiceLoginURL = 'https://mock-oauth-service-login';
   readonly #mockControllerAuthenticateURL =
     'https://mock-controller-authenticate';
   readonly #mockCreateToprfKeyAndBackupSeedPhraseURL =
     'https://mock-create-toprf-key-and-backup-seed-phrase';
+
+  public async getMockedClipboardTextResponse(): Promise<string> {
+    const response = await fetch(this.#mockClipboardTextURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    return data.clipboardText;
+  }
 
   public async getMockedOAuthLoginResponse(): Promise<LoginHandlerResult> {
     const response = await fetch(this.#mockOAuthServiceLoginURL, {
