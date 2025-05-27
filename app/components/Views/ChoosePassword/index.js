@@ -660,7 +660,7 @@ class ChoosePassword extends PureComponent {
                   Step 1 of 3
                 </Text>
 
-                <Text variant={TextVariant.DisplayMD} color={TextColor.Default}>
+                <Text variant={TextVariant.DisplayMD} color={TextColor.Default} testID={ChoosePasswordSelectorsIDs.TITLE_ID}>
                   {strings('choose_password.title')}
                 </Text>
 
@@ -820,6 +820,7 @@ class ChoosePassword extends PureComponent {
                   width={ButtonWidthTypes.Full}
                   size={ButtonSize.Lg}
                   isDisabled={!canSubmit}
+                  testID={ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID}
                 />
               </View>
             </KeyboardAwareScrollView>

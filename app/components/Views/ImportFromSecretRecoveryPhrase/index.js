@@ -20,7 +20,6 @@ import { connect } from 'react-redux';
 import StorageWrapper from '../../../store/storage-wrapper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import zxcvbn from 'zxcvbn';
-import Clipboard from '@react-native-clipboard/clipboard';
 import AppConstants from '../../../core/AppConstants';
 import Device from '../../../util/device';
 import {
@@ -88,6 +87,7 @@ import { TextFieldSize } from '../../../component-library/components/Form/TextFi
 import SeedphraseModal from '../../UI/SeedphraseModal';
 import { wordlist } from '@metamask/scure-bip39/dist/wordlists/english';
 import { LoginOptionsSwitch } from '../../UI/LoginOptionsSwitch';
+import { clearClipboard, getClipboardText } from './util';
 import { useMetrics } from '../../hooks/useMetrics';
 
 const MINIMUM_SUPPORTED_CLIPBOARD_VERSION = 9;
@@ -297,7 +297,7 @@ const ImportFromSecretRecoveryPhrase = ({
 
   const clearSecretRecoveryPhrase = async (seed) => {
     // get clipboard contents
-    const clipboardContents = await Clipboard.getString();
+    const clipboardContents = await getClipboardText();
     const parsedClipboardContents = parseSeedPhrase(clipboardContents);
     if (
       // only clear clipboard if contents isValidMnemonic
@@ -306,7 +306,7 @@ const ImportFromSecretRecoveryPhrase = ({
       // only clear clipboard if the seed phrase entered matches what's in the clipboard
       parseSeedPhrase(seed) === parsedClipboardContents
     ) {
-      await Clipboard.clearString();
+      clearClipboard();
     }
   };
 
@@ -424,7 +424,7 @@ const ImportFromSecretRecoveryPhrase = ({
 
   const handlePaste = async () => {
     setError('');
-    const text = await Clipboard.getString(); // Get copied text
+    const text = await getClipboardText(); // Get copied text
     if (text.trim() !== '') {
       const pastedData = text.split(' '); // Split by spaces
       setSeedPhrase([...pastedData].filter((item) => item !== ''));
@@ -673,6 +673,7 @@ const ImportFromSecretRecoveryPhrase = ({
                       name={IconName.Info}
                       size={IconSize.Md}
                       color={colors.icon.alternative}
+                      testID={ImportFromSeedSelectorsIDs.SEED_PHRASE_INFO_ICON_ID}
                     />
                   </TouchableOpacity>
                 </View>
@@ -701,6 +702,7 @@ const ImportFromSecretRecoveryPhrase = ({
                           autoComplete="off"
                           blurOnSubmit={false}
                           autoCapitalize="none"
+                          testID={ImportFromSeedSelectorsIDs.SEED_PHRASE_INPUT_ID}
                         />
                       ) : (
                         <View
@@ -771,6 +773,7 @@ const ImportFromSecretRecoveryPhrase = ({
                                   isError={!isValidSeed(item)}
                                   autoCapitalize="none"
                                   numberOfLines={1}
+                                  testID={`${ImportFromSeedSelectorsIDs.SEED_PHRASE_INPUT_ID}-${index}`}
                                 />
                               </View>
                             )}
@@ -789,6 +792,7 @@ const ImportFromSecretRecoveryPhrase = ({
                             : strings('import_from_seed.show_all')
                         }
                         width={ButtonWidthTypes.Full}
+                        testID={ImportFromSeedSelectorsIDs.SHOW_HIDE_SEED_PHRASE_BUTTON_ID}
                       />
                       <Button
                         label={
@@ -806,6 +810,7 @@ const ImportFromSecretRecoveryPhrase = ({
                           }
                         }}
                         width={ButtonWidthTypes.Full}
+                        testID={ImportFromSeedSelectorsIDs.PASTE_CLEAR_BUTTON_ID}
                       />
                     </View>
                   </View>
@@ -813,6 +818,7 @@ const ImportFromSecretRecoveryPhrase = ({
                     <Text
                       variant={TextVariant.BodySMMedium}
                       color={TextColor.Error}
+                      testID={ImportFromSeedSelectorsIDs.ERROR_MESSAGE_ID}
                     >
                       {error}
                     </Text>
@@ -826,6 +832,7 @@ const ImportFromSecretRecoveryPhrase = ({
                     width={ButtonWidthTypes.Full}
                     size={ButtonSize.Lg}
                     isDisabled={isSRPContinueButtonDisabled() || Boolean(error)}
+                    testID={ImportFromSeedSelectorsIDs.SUBMIT_BUTTON_ID}
                   />
                 </View>
               </View>
@@ -837,7 +844,7 @@ const ImportFromSecretRecoveryPhrase = ({
               <Text
                 variant={TextVariant.DisplayMD}
                 color={TextColor.Default}
-                testID={ImportFromSeedSelectorsIDs.SCREEN_TITLE_ID}
+                testID={ChoosePasswordSelectorsIDs.SCREEN_TITLE_ID}
               >
                 {strings('import_from_seed.create_password')}
               </Text>
@@ -890,7 +897,7 @@ const ImportFromSecretRecoveryPhrase = ({
                   ) : (
                     <Text
                       style={styles.passwordStrengthLabel}
-                      testID={ImportFromSeedSelectorsIDs.PASSWORD_STRENGTH_ID}
+                      testID={ChoosePasswordSelectorsIDs.PASSWORD_STRENGTH_ID}
                     >
                       {strings('choose_password.password_strength')}
                       <Text style={styles[`strength_${passwordStrengthWord}`]}>
@@ -935,7 +942,7 @@ const ImportFromSecretRecoveryPhrase = ({
                       />
                     }
                     testID={
-                      ImportFromSeedSelectorsIDs.CONFIRM_PASSWORD_INPUT_ID
+                      ChoosePasswordSelectorsIDs.CONFIRM_PASSWORD_INPUT_ID
                     }
                     isDisabled={password === ''}
                   />
@@ -976,6 +983,7 @@ const ImportFromSecretRecoveryPhrase = ({
                       </Text>
                     </View>
                   }
+                  testID={ChoosePasswordSelectorsIDs.I_UNDERSTAND_CHECKBOX_ID}
                 />
               </View>
 
@@ -988,6 +996,7 @@ const ImportFromSecretRecoveryPhrase = ({
                   disabled={isContinueButtonDisabled()}
                   size={ButtonSize.Lg}
                   isDisabled={isContinueButtonDisabled()}
+                  testID={ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID}
                 />
               </View>
             </View>

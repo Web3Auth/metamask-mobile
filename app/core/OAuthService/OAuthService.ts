@@ -20,6 +20,8 @@ import {
 } from './OAuthLoginHandlers/constants';
 import { OAuthError, OAuthErrorType } from './error';
 import { BaseLoginHandler } from './OAuthLoginHandlers/baseHandler';
+import { isE2E } from '../../util/test/utils';
+import { SeedlessOnboardingTestUtilts } from '../../util/test/seedlessOnboardingTestUtilts';
 
 export interface OAuthServiceConfig {
   authConnectionId: string;
@@ -96,6 +98,17 @@ export class OAuthService {
 
       if (!userId) {
         throw new Error('No user id found');
+      }
+
+      // Do mock response if running in e2e mode
+      if (isE2E) {
+        // check if there is a mock result
+        const mockResult = await SeedlessOnboardingTestUtilts.getInstance().getMockedSeedlessAuthenticateResponse();
+
+        // Only return mock result if it is not null, otherwise continue with the original flow
+        if (mockResult) {
+          return mockResult;
+        }
       }
 
       const result =

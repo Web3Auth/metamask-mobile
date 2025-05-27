@@ -44,8 +44,8 @@ class OnboardingCarouselView {
     );
   }
 
-  async swipeCarousel() {
-    await Gestures.swipe(this.container, 'left');
+  async swipeCarousel(direction = 'left') {
+    await Gestures.swipe(this.container, direction);
   }
 
   async tapOnGetStartedButton() {

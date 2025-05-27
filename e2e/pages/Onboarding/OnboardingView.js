@@ -7,24 +7,20 @@ class OnboardingView {
     return Matchers.getElementByID(OnboardingSelectorIDs.CONTAINER_ID);
   }
 
-  get importSeedButton() {
-    return device.getPlatform() === 'android'
-      ? Matchers.getElementByLabel(OnboardingSelectorIDs.IMPORT_SEED_BUTTON)
-      : Matchers.getElementByID(OnboardingSelectorIDs.IMPORT_SEED_BUTTON);
+  get existWalletButton() {
+    return Matchers.getElementByID(OnboardingSelectorIDs.EXIST_WALLET_BUTTON);
   }
 
   get newWalletButton() {
-    return device.getPlatform() === 'android'
-      ? Matchers.getElementByLabel(OnboardingSelectorIDs.NEW_WALLET_BUTTON)
-      : Matchers.getElementByID(OnboardingSelectorIDs.NEW_WALLET_BUTTON);
+    return Matchers.getElementByID(OnboardingSelectorIDs.NEW_WALLET_BUTTON);
   }
 
   async tapCreateWallet() {
     await Gestures.waitAndTap(this.newWalletButton);
   }
 
-  async tapImportWalletFromSeedPhrase() {
-    await Gestures.waitAndTap(this.importSeedButton);
+  async tapExistWalletButton() {
+    await Gestures.waitAndTap(this.existWalletButton);
   }
 }
 

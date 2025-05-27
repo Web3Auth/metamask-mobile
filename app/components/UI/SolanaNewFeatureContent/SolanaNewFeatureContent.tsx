@@ -24,6 +24,7 @@ import { SOLANA_FEATURE_MODAL_SHOWN } from '../../../constants/storage';
 import { WalletClientType } from '../../../core/SnapKeyring/MultichainWalletSnapClient';
 import Engine from '../../../core/Engine';
 import { SOLANA_NEW_FEATURE_CONTENT_LEARN_MORE } from '../../../constants/urls';
+import { SolanaNewFeatureModalSelectorsIDs } from '../../../../e2e/selectors/Onboarding/SolanaNewFeatureModal.selectors';
 import Routes from '../../../constants/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 
@@ -111,7 +112,7 @@ const SolanaNewFeatureContent = () => {
       onClose={handleSheetClose}
       shouldNavigateBack={false}
     >
-      <View style={styles.wrapper}>
+      <View style={styles.wrapper} testID={SolanaNewFeatureModalSelectorsIDs.CONTAINER}>
         <SolanaLogo name="solana-logo" height={65} />
         <Text style={styles.title}>
           {strings('solana_new_feature_content.title')}
@@ -151,6 +152,7 @@ const SolanaNewFeatureContent = () => {
           label={strings('solana_new_feature_content.not_now')}
           onPress={handleClose}
           style={styles.cancelButton}
+          testID={SolanaNewFeatureModalSelectorsIDs.CANCEL_BUTTON}
         />
       </View>
     </BottomSheet>

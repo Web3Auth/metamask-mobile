@@ -2,8 +2,6 @@ import TermsOfUseModal from '../../pages/Onboarding/TermsOfUseModal';
 import TestHelpers from '../../helpers';
 import OnboardingCarouselView from '../../pages/Onboarding/OnboardingCarouselView';
 import OnboardingView from '../../pages/Onboarding/OnboardingView';
-import MetaMetricsOptIn from '../../pages/Onboarding/MetaMetricsOptInView';
-import ImportWalletView from '../../pages/Onboarding/ImportWalletView';
 import Assertions from '../../utils/Assertions';
 import { Regression } from '../../tags';
 
@@ -16,11 +14,6 @@ describe(Regression('Term of Use Modal'), () => {
   it('should displayed Term of Use when first launching app', async () => {
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
-
-    await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapImportWalletFromSeedPhrase();
-
-    await MetaMetricsOptIn.tapAgreeButton();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
   });
 
@@ -28,8 +21,6 @@ describe(Regression('Term of Use Modal'), () => {
     await TestHelpers.relaunchApp();
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
-    await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapImportWalletFromSeedPhrase();
     await Assertions.checkIfVisible(TermsOfUseModal.container);
   });
 
@@ -38,15 +29,13 @@ describe(Regression('Term of Use Modal'), () => {
     await TermsOfUseModal.tapAgreeCheckBox();
     await TermsOfUseModal.tapAcceptButton();
     await Assertions.checkIfNotVisible(TermsOfUseModal.container);
-    await Assertions.checkIfVisible(ImportWalletView.container);
+    await Assertions.checkIfVisible(OnboardingView.container);
   });
 
   it('should restart app after accepting terms', async () => {
     await TestHelpers.relaunchApp();
     await Assertions.checkIfVisible(OnboardingCarouselView.container);
     await OnboardingCarouselView.tapOnGetStartedButton();
-    await Assertions.checkIfVisible(OnboardingView.container);
-    await OnboardingView.tapImportWalletFromSeedPhrase();
     await Assertions.checkIfNotVisible(TermsOfUseModal.container);
   });
 });

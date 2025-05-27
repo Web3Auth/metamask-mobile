@@ -20,6 +20,8 @@ import TabBarComponent from '../../pages/wallet/TabBarComponent';
 import CommonView from '../../pages/CommonView';
 import Assertions from '../../utils/Assertions';
 import ExperienceEnhancerBottomSheet from '../../pages/Onboarding/ExperienceEnhancerBottomSheet';
+import OnboardingBottomSheetView from '../../pages/Onboarding/OnboardingBottomSheetView';
+import SolanaNewFeatureModal from '../../pages/Onboarding/SolanaNewFeatureModal';
 
 const PASSWORD = '12345678';
 
@@ -31,13 +33,11 @@ describe(
       await TestHelpers.launchApp();
     });
 
-    it('should be able to opt-in of the onboarding-wizard', async () => {
+    it('should be able to enter create password screen', async () => {
       await OnboardingCarouselView.tapOnGetStartedButton();
-      await OnboardingView.tapCreateWallet();
-      await Assertions.checkIfVisible(MetaMetricsOptIn.container);
-      await MetaMetricsOptIn.tapAgreeButton();
       await acceptTermOfUse();
-      await Assertions.checkIfVisible(CreatePasswordView.container);
+      await OnboardingView.tapCreateWallet();
+      await OnboardingBottomSheetView.tapSrpButton();
     });
 
     it('should be able to create a new wallet', async () => {
@@ -47,12 +47,20 @@ describe(
       await CreatePasswordView.tapCreatePasswordButton();
     });
 
+
     it('Should skip backup check', async () => {
       // Check that we are on the Secure your wallet screen
       await Assertions.checkIfVisible(ProtectYourWalletView.container);
       await ProtectYourWalletView.tapOnRemindMeLaterButton();
+      await Assertions.checkIfVisible(SkipAccountSecurityModal.container);
       await SkipAccountSecurityModal.tapIUnderstandCheckBox();
       await SkipAccountSecurityModal.tapSkipButton();
+    });
+
+    it('should be able to opt-in of the onboarding-wizard', async () => {
+      await Assertions.checkIfVisible(MetaMetricsOptIn.container);
+      await MetaMetricsOptIn.tapAgreeButton();
+      await Assertions.checkIfVisible(OnboardingSuccessView.container);
       await OnboardingSuccessView.tapDone();
     });
 
@@ -76,6 +84,11 @@ describe(
       }
     });
 
+    it('should dismiss the solana new feature modal', async () => {
+      await Assertions.checkIfVisible(SolanaNewFeatureModal.container);
+      await SolanaNewFeatureModal.tapCancelButton();
+    });
+
     it('should dismiss the marketing consent bottom sheet', async () => {
       // dealing with flakiness on bitrise.
       await TestHelpers.delay(1000);
@@ -87,17 +100,6 @@ describe(
 
         console.log('The marketing consent sheet is not visible');
       }
-    });
-
-    it('should dismiss the protect your wallet modal', async () => {
-      await Assertions.checkIfVisible(
-        ProtectYourWalletModal.collapseWalletModal,
-      );
-      await TestHelpers.delay(1000);
-      await ProtectYourWalletModal.tapRemindMeLaterButton();
-      await SkipAccountSecurityModal.tapIUnderstandCheckBox();
-      await SkipAccountSecurityModal.tapSkipButton();
-      await Assertions.checkIfVisible(WalletView.container);
     });
 
     it('should check that metametrics is enabled in settings', async () => {

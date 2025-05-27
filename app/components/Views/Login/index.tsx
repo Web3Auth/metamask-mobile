@@ -664,6 +664,7 @@ const Login: React.FC = () => {
                   )
                 }
                 isDisabled={password.length === 0 || disabledInput}
+                testID={LoginViewSelectors.LOGIN_BUTTON_ID}
               />
 
               {!oauthLoginSuccess && (

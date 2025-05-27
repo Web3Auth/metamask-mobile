@@ -117,7 +117,7 @@ const SkipAccountSecurityModal = ({ route }) => {
 
   return (
     <BottomSheet ref={sheetRef}>
-      <View style={styles.skipModalContainer}>
+      <View style={styles.skipModalContainer} testID={SkipAccountSecurityModalSelectorsIDs.CONTAINER}>
         <Icon
           name={IconName.DangerSolid}
           size={IconSize.Lg}
@@ -162,6 +162,7 @@ const SkipAccountSecurityModal = ({ route }) => {
             variant={ButtonVariants.Secondary}
             width={ButtonWidthTypes.Full}
             style={styles.button}
+            testID={SkipAccountSecurityModalSelectorsIDs.CANCEL_BUTTON}
           />
           <Button
             onPress={onConfirmAction}
@@ -172,6 +173,7 @@ const SkipAccountSecurityModal = ({ route }) => {
             width={ButtonWidthTypes.Full}
             style={styles.skipButton}
             isDisabled={!skipCheckbox}
+            testID={SkipAccountSecurityModalSelectorsIDs.SKIP_BUTTON}
           />
         </View>
       </View>
