@@ -75,7 +75,7 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: 28,
       justifyContent: 'center',
       textAlign: 'center',
-      paddingHorizontal: 60,
+      paddingHorizontal: Device.isAndroid() ? 40 : 60,
       fontFamily: 'MMSans-Regular',
     },
     subtitle: {
@@ -106,7 +106,7 @@ const createStyles = (colors: ThemeColors) =>
     bar: {
       width: 10,
       height: 2,
-      backgroundColor: colors.icon.default,
+      backgroundColor: constColors.btnBlack,
       opacity: 0.4,
       marginHorizontal: 2,
     },
