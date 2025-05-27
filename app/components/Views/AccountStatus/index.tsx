@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Text from '../../../component-library/components/Texts/Text';
 import {
   TextColor,
@@ -101,8 +101,8 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
   };
 
   return (
-    <View style={styles.root} testID={AccountStatusSelectorIDs.CONTAINER_ID}>
-      <View style={styles.content}>
+    <ScrollView contentContainerStyle={styles.root}>
+      <View style={styles.content} testID={AccountStatusSelectorIDs.CONTAINER_ID}>
         <Text variant={TextVariant.DisplayMD} testID={AccountStatusSelectorIDs.TITLE_ID}>
           {type === 'found'
             ? strings('account_status.account_already_exists')
@@ -132,7 +132,7 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
         width={ButtonWidthTypes.Full}
         onPress={() => {
           if (type === 'found') {
-            navigateNextScreen('Login', 'Onboarding', 'import');
+            navigateNextScreen('Rehydrate', 'Onboarding', 'import');
           } else {
             navigateNextScreen('ChoosePassword', 'Onboarding', 'create');
           }
@@ -155,7 +155,7 @@ const AccountStatus = ({ type = 'not_exist' }: AccountStatusProps) => {
         style={styles.secondaryButton}
         testID={AccountStatusSelectorIDs.USE_DIFFERENT_LOGIN_METHOD_BUTTON_ID}
       />
-    </View>
+    </ScrollView>
   );
 };
 

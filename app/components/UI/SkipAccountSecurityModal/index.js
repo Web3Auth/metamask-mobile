@@ -81,6 +81,7 @@ const createStyles = (colors) =>
       justifyContent: 'flex-start',
       gap: 16,
       marginTop: 24,
+      marginBottom: Platform.OS === 'ios' ? 8 : 16,
     },
     button: {
       flex: 1,
@@ -104,15 +105,13 @@ const SkipAccountSecurityModal = ({ route }) => {
 
   const onConfirmAction = () => {
     if (route && route.params && route.params.onConfirm) {
-      route.params.onConfirm();
-      // sheetRef.current?.onCloseBottomSheet?.();
+      sheetRef.current?.onCloseBottomSheet?.(route.params.onConfirm);
     }
   };
 
   const onCancelAction = () => {
     if (route && route.params && route.params.onCancel) {
-      route.params.onCancel();
-      sheetRef.current?.onCloseBottomSheet?.();
+      sheetRef.current?.onCloseBottomSheet?.(route.params.onCancel);
     }
   };
 
