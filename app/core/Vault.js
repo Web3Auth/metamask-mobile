@@ -2,6 +2,12 @@ import Engine from './Engine';
 import Logger from '../util/Logger';
 import { KeyringTypes } from '@metamask/keyring-controller';
 import { withLedgerKeyring } from './Ledger/Ledger';
+import {
+  bufferedTrace,
+  bufferedEndTrace,
+  TraceName,
+  TraceOperation,
+} from '../util/trace';
 ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
 import ReduxService from './redux';
 ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
@@ -113,12 +119,35 @@ export const recreateVaultWithNewPassword = async (
     ReduxService.store.getState().engine.backgroundState
       .SeedlessOnboardingController.vault
   ) {
+    let specificTraceSucceeded = false;
     try {
+      bufferedTrace({
+        name: TraceName.OnboardingResetPassword,
+        op: TraceOperation.OnboardingSecurityOp,
+      });
       await SeedlessOnboardingController.changePassword(newPassword, password);
+      specificTraceSucceeded = true;
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+
+      bufferedTrace({
+        name: TraceName.OnboardingResetPasswordError,
+        op: TraceOperation.OnboardingError,
+        tags: { errorMessage },
+      });
+      bufferedEndTrace({
+        name: TraceName.OnboardingResetPasswordError,
+      });
+
       Logger.error(error);
       await KeyringController.createNewVaultAndRestore(password, seedPhrase);
       throw new Error('Password change failed');
+    } finally {
+      bufferedEndTrace({
+        name: TraceName.OnboardingResetPassword,
+        data: { success: specificTraceSucceeded },
+      });
     }
   }
   ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
