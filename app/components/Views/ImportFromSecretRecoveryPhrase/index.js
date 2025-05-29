@@ -174,21 +174,21 @@ const ImportFromSecretRecoveryPhrase = ({
 
   const handleSeedPhraseChange = useCallback(
     (text, index) => {
-      if (error) setError('');
-
       if (text.includes(SPACE_CHAR)) {
         const isEndWithSpace = text.at(-1) === SPACE_CHAR;
         // handle use pasting multiple words / whole seed phrase separated by spaces
         const splitArray = text.trim().split(' ');
 
-        if (splitArray.length > 1) {
+        if (splitArray.length > 0) {
           const isAllValid = splitArray.reduce(
             (acc, item) => acc && checkValidSeedWord(item),
             true,
           );
 
           if (!isAllValid) {
-            setIsAnyNewWordError(true);
+            setError(strings('import_from_seed.spellcheck_error'));
+          } else {
+            setError('');
           }
         }
 
@@ -203,7 +203,7 @@ const ImportFromSecretRecoveryPhrase = ({
           // input the array into the correct index
         });
 
-        setNextSeedPhraseInputFocusedIndex(totalLength - 1);
+        setNextSeedPhraseInputFocusedIndex(index + 1);
       } else {
         setSeedPhrase((prev) => {
           // update the word at the correct index
@@ -214,11 +214,11 @@ const ImportFromSecretRecoveryPhrase = ({
       }
     },
     [
-      error,
+      setError,
       seedPhrase,
       setSeedPhrase,
-      setNextSeedPhraseInputFocusedIndex,
       checkValidSeedWord,
+      setNextSeedPhraseInputFocusedIndex,
     ],
   );
 
@@ -428,7 +428,9 @@ const ImportFromSecretRecoveryPhrase = ({
       if (seedPhrase[index] === '') {
         const newData = seedPhrase.filter((_, idx) => idx !== index);
         setSeedPhrase(newData);
-        setNextSeedPhraseInputFocusedIndex(newData.length - 1);
+        if (index > 0) {
+          setNextSeedPhraseInputFocusedIndex(index - 1);
+        }
       }
       return;
     }
@@ -660,28 +662,9 @@ const ImportFromSecretRecoveryPhrase = ({
 
   const handleOnFocus = useCallback(
     (index) => {
-      if (seedPhraseInputFocusedIndex !== index) {
-        setError('');
-        const focusOutWord = seedPhrase[seedPhraseInputFocusedIndex];
-
-        if (
-          isAnyWordError ||
-          (focusOutWord && !checkValidSeedWord(focusOutWord))
-        ) {
-          setIsAnyNewWordError(false);
-          setError(strings('import_from_seed.spellcheck_error'));
-        }
-      }
       setSeedPhraseInputFocusedIndex(index);
     },
-    [
-      seedPhrase,
-      seedPhraseInputFocusedIndex,
-      setError,
-      isAnyWordError,
-      checkValidSeedWord,
-      setSeedPhraseInputFocusedIndex,
-    ],
+    [setSeedPhraseInputFocusedIndex],
   );
 
   return (
@@ -784,11 +767,7 @@ const ImportFromSecretRecoveryPhrase = ({
                                       {index + 1}.
                                     </Text>
                                   }
-                                  value={getSecureWord(
-                                    item,
-                                    index,
-                                    seedPhraseInputFocusedIndex,
-                                  )}
+                                  value={item}
                                   secureTextEntry={
                                     checkValidSeedWord(item) &&
                                     (showAllSeedPhrase
@@ -802,11 +781,6 @@ const ImportFromSecretRecoveryPhrase = ({
                                     handleSeedPhraseChange(text, index)
                                   }
                                   placeholderTextColor={colors.text.muted}
-                                  autoFocus={
-                                    showAllSeedPhrase
-                                      ? false
-                                      : index === seedPhrase.length - 1
-                                  }
                                   onSubmitEditing={(e) => {
                                     handleKeyPress(e, index, true);
                                   }}
@@ -816,7 +790,6 @@ const ImportFromSecretRecoveryPhrase = ({
                                   autoComplete="off"
                                   textAlignVertical="center"
                                   showSoftInputOnFocus
-                                  blurOnSubmit={false}
                                   isError={!checkValidSeedWord(item)}
                                   autoCapitalize="none"
                                   numberOfLines={1}
