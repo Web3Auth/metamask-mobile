@@ -386,7 +386,9 @@ class Onboarding extends PureComponent {
         [PREVIOUS_SCREEN]: ONBOARDING,
         onboardingTraceCtx: this.onboardingTraceCtx,
       });
-      this.track(MetaMetricsEvents.WALLET_SETUP_STARTED);
+      this.track(MetaMetricsEvents.WALLET_SETUP_STARTED, {
+        account_type: 'metamask',
+      });
     };
 
     this.handleExistingUser(action);
@@ -410,13 +412,15 @@ class Onboarding extends PureComponent {
           onboardingTraceCtx: this.onboardingTraceCtx,
         },
       );
-      this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED);
+      this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED, {
+        account_type: 'imported',
+      });
     };
     this.handleExistingUser(action);
   };
 
   ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
-  handlePostSocialLogin = (result, createWallet) => {
+  handlePostSocialLogin = (result, createWallet, provider) => {
     if (this.socialLoginTraceCtx) {
       bufferedEndTrace({ name: TraceName.OnboardingSocialLoginAttempt });
       this.socialLoginTraceCtx = null;
@@ -442,7 +446,9 @@ class Onboarding extends PureComponent {
             oauthLoginSuccess: true,
             onboardingTraceCtx: this.onboardingTraceCtx,
           });
-          this.track(MetaMetricsEvents.WALLET_SETUP_STARTED);
+          this.track(MetaMetricsEvents.WALLET_SETUP_STARTED, {
+            account_type: `metamask_${provider}`,
+          });
         }
       } else if (!createWallet) {
         if (result.existingUser) {
@@ -457,7 +463,9 @@ class Onboarding extends PureComponent {
             oauthLoginSuccess: true,
             onboardingTraceCtx: this.onboardingTraceCtx,
           });
-          this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED);
+          this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED, {
+            account_type: `imported_${provider}`,
+          });
         } else {
           this.props.navigation.navigate('AccountNotFound', {
             accountName: result.accountName,
@@ -487,7 +495,7 @@ class Onboarding extends PureComponent {
         this.handleLoginError(e, 'apple');
         return { type: 'error', error: e, existingUser: false };
       });
-      this.handlePostSocialLogin(result, createWallet);
+      this.handlePostSocialLogin(result, createWallet, 'apple');
     };
     this.handleExistingUser(action);
   };
@@ -508,7 +516,7 @@ class Onboarding extends PureComponent {
         this.handleLoginError(error, 'google');
         return { type: 'error', error, existingUser: false };
       });
-      this.handlePostSocialLogin(result, createWallet);
+      this.handlePostSocialLogin(result, createWallet, 'google');
     };
     this.handleExistingUser(action);
   };
@@ -551,8 +559,10 @@ class Onboarding extends PureComponent {
     });
   };
   ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
-  track = (event) => {
-    trackOnboarding(MetricsEventBuilder.createEventBuilder(event).build());
+  track = (event, properties) => {
+    trackOnboarding(
+      MetricsEventBuilder.createEventBuilder(event).addProperties(properties).build(),
+    );
   };
 
   alertExistingUser = (callback) => {
