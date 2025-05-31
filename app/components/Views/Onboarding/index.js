@@ -31,6 +31,9 @@ import Device from '../../../util/device';
 import BaseNotification from '../../UI/Notification/BaseNotification';
 import ElevatedView from 'react-native-elevated-view';
 import {
+  saveOnboardingEvent as SaveEvent,
+} from '../../../actions/onboarding';
+import {
   loadingSet,
   loadingUnset,
   UserActionType,
@@ -230,6 +233,10 @@ class Onboarding extends PureComponent {
      * unset loading status
      */
     unsetLoading: PropTypes.func,
+    /**
+     * Action to save onboarding event
+     */
+    saveOnboardingEvent: PropTypes.func,
     /**
      * loadings msg
      */
@@ -562,6 +569,7 @@ class Onboarding extends PureComponent {
   track = (event, properties) => {
     trackOnboarding(
       MetricsEventBuilder.createEventBuilder(event).addProperties(properties).build(),
+      this.props.saveOnboardingEvent,
     );
   };
 
@@ -770,6 +778,8 @@ const mapDispatchToProps = (dispatch) => ({
   unsetLoading: () => dispatch(loadingUnset()),
   disableNewPrivacyPolicyToast: () =>
     dispatch(storePrivacyPolicyClickedOrClosedAction()),
+  saveOnboardingEvent: (...eventArgs) =>
+    dispatch(SaveEvent(eventArgs)),
 });
 
 export default connect(

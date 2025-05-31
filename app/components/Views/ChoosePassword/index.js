@@ -16,6 +16,9 @@ import Text, {
 import StorageWrapper from '../../../store/storage-wrapper';
 import { connect } from 'react-redux';
 import {
+  saveOnboardingEvent as SaveEvent,
+} from '../../../actions/onboarding';
+import {
   passwordSet,
   passwordUnset,
   seedphraseNotBackedUp,
@@ -205,6 +208,10 @@ class ChoosePassword extends PureComponent {
      */
     seedphraseNotBackedUp: PropTypes.func,
     /**
+     * Action to save onboarding event
+     */
+    saveOnboardingEvent: PropTypes.func,
+    /**
      * Object that represents the current route info like params passed to it
      */
     route: PropTypes.object,
@@ -239,7 +246,7 @@ class ChoosePassword extends PureComponent {
   track = (event, properties) => {
     const eventBuilder = MetricsEventBuilder.createEventBuilder(event);
     eventBuilder.addProperties(properties);
-    trackOnboarding(eventBuilder.build());
+    trackOnboarding(eventBuilder.build(), this.props.saveOnboardingEvent);
   };
 
   updateNavBar = () => {
@@ -872,6 +879,8 @@ const mapDispatchToProps = (dispatch) => ({
   passwordUnset: () => dispatch(passwordUnset()),
   setLockTime: (time) => dispatch(setLockTime(time)),
   seedphraseNotBackedUp: () => dispatch(seedphraseNotBackedUp()),
+  saveOnboardingEvent: (...eventArgs) =>
+    dispatch(SaveEvent(eventArgs)),
 });
 
 const mapStateToProps = (state) => ({
