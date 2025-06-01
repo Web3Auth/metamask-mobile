@@ -458,6 +458,10 @@ class Onboarding extends PureComponent {
           });
         }
       } else if (!createWallet) {
+        // Track wallet login completed only for existing social logins
+        this.track(MetaMetricsEvents.WALLET_LOGIN_COMPLETED, {
+          account_type: provider,
+        });
         if (result.existingUser) {
           bufferedTrace({
             name: TraceName.OnboardingExistingSocialLogin,
@@ -494,6 +498,14 @@ class Onboarding extends PureComponent {
       tags: { ...getTraceTags(store.getState()), provider: 'apple' },
       parentContext: this.onboardingTraceCtx,
     });
+
+    // Track wallet login selected only for existing social logins
+    if (!createWallet) {
+      this.track(MetaMetricsEvents.WALLET_LOGIN_SELECTED, {
+        account_type: 'apple',
+      });
+    }
+
     const action = async () => {
       const loginHandler = createLoginHandler(Platform.OS, 'apple');
       const result = await OAuthLoginService.handleOAuthLogin(
@@ -515,6 +527,13 @@ class Onboarding extends PureComponent {
       tags: { ...getTraceTags(store.getState()), provider: 'google' },
       parentContext: this.onboardingTraceCtx,
     });
+
+    if (!createWallet) {
+      this.track(MetaMetricsEvents.WALLET_LOGIN_SELECTED, {
+        account_type: 'google',
+      });
+    }
+
     const action = async () => {
       const loginHandler = createLoginHandler(Platform.OS, 'google');
       const result = await OAuthLoginService.handleOAuthLogin(
