@@ -164,11 +164,7 @@ const ManualBackupStep1 = ({ route, navigation, appTheme, saveOnboardingEvent })
 
   const revealSeedPhrase = () => {
     setSeedPhraseHidden(false);
-    trackOnboarding(
-      MetricsEventBuilder.createEventBuilder(
-        MetaMetricsEvents.WALLET_SECURITY_PHRASE_REVEALED,
-      ).build(),
-    );
+    track(MetaMetricsEvents.WALLET_SECURITY_PHRASE_REVEALED, {});
   };
 
   const tryUnlockWithPassword = async (password) => {

@@ -232,11 +232,7 @@ const AccountBackupStep1B = (props) => {
       ...props.route.params,
       settingsBackup: true,
     });
-    trackOnboarding(
-      MetricsEventBuilder.createEventBuilder(
-        MetaMetricsEvents.WALLET_SECURITY_MANUAL_BACKUP_INITIATED,
-      ).build(),
-    );
+    track(MetaMetricsEvents.WALLET_SECURITY_MANUAL_BACKUP_INITIATED, {});
   };
 
   const learnMore = () => {
