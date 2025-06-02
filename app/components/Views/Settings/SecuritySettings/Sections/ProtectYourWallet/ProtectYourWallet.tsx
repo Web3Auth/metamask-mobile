@@ -60,6 +60,13 @@ const ProtectYourWallet = ({
 
   ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
   const openSRPList = () => {
+    trackEvent(
+      createEventBuilder(MetaMetricsEvents.SECRET_RECOVERY_PHRASE_PICKER_CLICKED)
+        .addProperties({
+          button_type: 'picker',
+        })
+        .build(),
+    );
     navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.SHEET.SELECT_SRP,
     });
