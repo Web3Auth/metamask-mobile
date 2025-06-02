@@ -144,6 +144,9 @@ enum EVENT_NAME {
   WALLET_REHYDRATION_COMPLETED = 'Wallet Rehydration Completed',
   WALLET_REHYDRATION_FAILED = 'Wallet Rehydration Failed',
   PASSWORD_CHANGED = 'Password Changed',
+  // TODO: Add this event once we have a forgot password flow
+  // FORGOT_PASSWORD_CLICKED = 'Forgot Password Clicked',
+  RESET_WALLET_CLICKED = 'Reset Wallet Clicked',
 
   // Account
   SWITCHED_ACCOUNT = 'Switched Account',
@@ -604,6 +607,8 @@ const events = {
   ),
   WALLET_REHYDRATION_FAILED: generateOpt(EVENT_NAME.WALLET_REHYDRATION_FAILED),
   PASSWORD_CHANGED: generateOpt(EVENT_NAME.PASSWORD_CHANGED),
+  FORGOT_PASSWORD_CLICKED: generateOpt(EVENT_NAME.FORGOT_PASSWORD_CLICKED),
+  RESET_WALLET_CLICKED: generateOpt(EVENT_NAME.RESET_WALLET_CLICKED),
   SWITCHED_ACCOUNT: generateOpt(EVENT_NAME.SWITCHED_ACCOUNT),
   BROWSER_OPENED: generateOpt(EVENT_NAME.BROWSER_OPENED),
   BROWSER_SEARCH_USED: generateOpt(EVENT_NAME.BROWSER_SEARCH_USED),

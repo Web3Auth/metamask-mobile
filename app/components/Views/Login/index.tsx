@@ -152,8 +152,6 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
     theme: { colors, themeAppearance },
   } = useStyles(stylesheet, {});
   const {
-    trackEvent,
-    createEventBuilder,
     ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
     isEnabled: isMetricsEnabled,
     ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
@@ -210,9 +208,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
       });
     }
 
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.LOGIN_SCREEN_VIEWED).build(),
-    );
+    track(MetaMetricsEvents.LOGIN_SCREEN_VIEWED, {});
 
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
@@ -567,6 +563,11 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
   };
 
   const toggleWarningModal = () => {
+    // Track reset wallet clicked event
+    track(MetaMetricsEvents.RESET_WALLET_CLICKED, {
+      account_type: oauthLoginSuccess ? 'social' : 'metamask',
+    });
+
     navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.MODAL.DELETE_WALLET,
     });
@@ -593,9 +594,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
   const handleDownloadStateLogs = () => {
     const fullState = ReduxService.store.getState();
 
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.LOGIN_DOWNLOAD_LOGS).build(),
-    );
+    track(MetaMetricsEvents.LOGIN_DOWNLOAD_LOGS, {});
     downloadStateLogs(fullState, false);
   };
 
