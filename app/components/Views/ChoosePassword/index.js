@@ -360,7 +360,10 @@ class ChoosePassword extends PureComponent {
       Alert.alert('Error', strings('choose_password.password_dont_match'));
       return;
     }
-    this.track(MetaMetricsEvents.WALLET_CREATION_ATTEMPTED);
+    const provider = this.props.route.params?.provider;
+    this.track(MetaMetricsEvents.WALLET_CREATION_ATTEMPTED, {
+      account_type: provider ? `metamask_${provider}` : 'metamask',
+    });
 
     try {
       this.setState({ loading: true });
