@@ -459,7 +459,7 @@ class Onboarding extends PureComponent {
         }
       } else if (!createWallet) {
         // Track wallet login completed only for existing social logins
-        this.track(MetaMetricsEvents.WALLET_LOGIN_COMPLETED, {
+        this.track(MetaMetricsEvents.SOCIAL_LOGIN_COMPLETED, {
           account_type: provider,
         });
         if (result.existingUser) {
@@ -501,7 +501,7 @@ class Onboarding extends PureComponent {
 
     // Track wallet login selected only for existing social logins
     if (!createWallet) {
-      this.track(MetaMetricsEvents.WALLET_LOGIN_SELECTED, {
+      this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
         account_type: 'apple',
       });
     }
@@ -529,7 +529,7 @@ class Onboarding extends PureComponent {
     });
 
     if (!createWallet) {
-      this.track(MetaMetricsEvents.WALLET_LOGIN_SELECTED, {
+      this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
         account_type: 'google',
       });
     }
