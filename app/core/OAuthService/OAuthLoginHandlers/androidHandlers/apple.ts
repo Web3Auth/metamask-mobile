@@ -27,7 +27,6 @@ export class AndroidAppleLoginHandler
 
   readonly #scope = ['name', 'email'];
 
-  protected clientId: string;
   protected redirectUri: string;
   protected appRedirectUri: string;
 
@@ -51,9 +50,8 @@ export class AndroidAppleLoginHandler
    * @param params.appRedirectUri - The Android App redirectUri for the customChromeTab to handle auth-session login.
    */
   constructor(params: AndroidAppleLoginHandlerParams) {
-    super();
-    const { appRedirectUri, redirectUri, clientId } = params;
-    this.clientId = clientId;
+    super(params);
+    const { appRedirectUri, redirectUri } = params;
     this.redirectUri = redirectUri;
     this.appRedirectUri = appRedirectUri;
   }
@@ -101,6 +99,7 @@ export class AndroidAppleLoginHandler
       state,
     });
 
+    console.log('>>>> start prompt async', authUrl);
     // prompt the auth request using generated auth url instead of the client auth request instance
     const result = await authRequestClient.promptAsync(
       {
@@ -110,6 +109,7 @@ export class AndroidAppleLoginHandler
         url: authUrl,
       },
     );
+    console.log('>>>> end prompt async', result);
     if (result.type === 'success') {
       return {
         authConnection: AuthConnection.Apple,

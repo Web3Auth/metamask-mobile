@@ -19,8 +19,6 @@ export class IosAppleLoginHandler extends BaseLoginHandler {
     AppleAuthenticationScope.EMAIL,
   ];
 
-  protected clientId: string;
-
   get authConnection() {
     return AuthConnection.Apple;
   }
@@ -31,16 +29,6 @@ export class IosAppleLoginHandler extends BaseLoginHandler {
 
   get authServerPath() {
     return 'api/v1/oauth/id_token';
-  }
-
-  /**
-   * This constructor is used to initialize the clientId.
-   *
-   * @param params.clientId - The Bundle ID from the apple developer account for the app.
-   */
-  constructor(params: { clientId: string }) {
-    super();
-    this.clientId = params.clientId;
   }
 
   /**

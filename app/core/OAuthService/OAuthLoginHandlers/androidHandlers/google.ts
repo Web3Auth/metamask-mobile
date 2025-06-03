@@ -12,8 +12,6 @@ import { OAuthErrorType, OAuthError } from '../../error';
 export class AndroidGoogleLoginHandler extends BaseLoginHandler {
   readonly #scope = ['email', 'profile'];
 
-  protected clientId: string;
-
   get authConnection() {
     return AuthConnection.Google;
   }
@@ -24,17 +22,6 @@ export class AndroidGoogleLoginHandler extends BaseLoginHandler {
 
   get authServerPath() {
     return 'api/v1/oauth/id_token';
-  }
-
-  /**
-   * This constructor is used to initialize the clientId.
-   *
-   * @param params.clientId - The web clientId for the Google login.
-   * Note: The android clientId must be created from the same OAuth clientId in the web.
-   */
-  constructor(params: { clientId: string }) {
-    super();
-    this.clientId = params.clientId;
   }
 
   /**

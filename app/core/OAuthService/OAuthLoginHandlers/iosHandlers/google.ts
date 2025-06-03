@@ -24,7 +24,6 @@ export class IosGoogleLoginHandler extends BaseLoginHandler {
 
   readonly #scope = ['email', 'profile'];
 
-  protected clientId: string;
   protected redirectUri: string;
 
   get authConnection() {
@@ -46,8 +45,7 @@ export class IosGoogleLoginHandler extends BaseLoginHandler {
    * @param params.redirectUri - The iOS redirectUri for the Google login.
    */
   constructor(params: IosGoogleLoginHandlerParams) {
-    super();
-    this.clientId = params.clientId;
+    super(params);
     this.redirectUri = params.redirectUri;
   }
 

@@ -1,9 +1,16 @@
+import { Web3AuthNetwork } from '@metamask/seedless-onboarding-controller';
 import {
   AuthConnection,
+  AuthRefreshTokenResponse,
   AuthRequestParams,
+  AuthRequestRefreshTokenParams,
   AuthResponse,
+  AuthRevokeTokenResponse,
   HandleFlowParams,
   LoginHandlerResult,
+  OauthAccessType,
+  OauthGrantType,
+  RefreshTokenParams,
 } from '../OAuthInterface';
 import { OAuthError, OAuthErrorType } from '../error';
 
@@ -69,6 +76,7 @@ export async function getAuthTokens(
       network: web3AuthNetwork,
       redirect_uri: redirectUri,
       code_verifier: codeVerifier,
+      access_type: OauthAccessType.OFFLINE,
     };
   } else {
     body = {
@@ -78,6 +86,7 @@ export async function getAuthTokens(
       network: web3AuthNetwork,
       redirect_uri: redirectUri,
       code_verifier: codeVerifier,
+      access_type: OauthAccessType.OFFLINE,
     };
   }
 
@@ -89,9 +98,77 @@ export async function getAuthTokens(
     body: JSON.stringify(body),
   });
 
-  if (res.status === 200) {
+  if (res.status === 200 || res.status === 201) {
     const data = (await res.json()) satisfies AuthResponse;
-    if (data.success) {
+    if (data.jwt_tokens) {
+      return data;
+    }
+    throw new OAuthError(data.message, OAuthErrorType.AuthServerError);
+  }
+
+  throw new OAuthError(
+    `AuthServer Error, request failed with status: [${
+      res.status
+    }]: ${await res.text()}`,
+    OAuthErrorType.AuthServerError,
+  );
+}
+
+export async function refreshNewTokens(
+  params: RefreshTokenParams,
+  pathname: string,
+  authServerUrl: string,
+): Promise<AuthRefreshTokenResponse> {
+  const { authConnection, clientId, refreshToken, web3AuthNetwork } = params;
+  const body: AuthRequestRefreshTokenParams = {
+    refresh_token: refreshToken,
+    client_id: clientId,
+    login_provider: authConnection,
+    network: web3AuthNetwork,
+    grant_type: OauthGrantType.REFRESH_TOKEN,
+  };
+  const res = await fetch(`${authServerUrl}/${pathname}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (res.status === 200 || res.status === 201) {
+    const data = (await res.json()) satisfies AuthRefreshTokenResponse;
+    if (data.jwt_tokens) {
+      return data;
+    }
+    throw new OAuthError(data.message, OAuthErrorType.AuthServerError);
+  }
+
+  throw new OAuthError(
+    `AuthServer Error, request failed with status: [${
+      res.status
+    }]: ${await res.text()}`,
+    OAuthErrorType.AuthServerError,
+  );
+}
+
+export async function revokeRefreshToken(
+  revokeToken: string,
+  authServerUrl: string,
+): Promise<AuthRevokeTokenResponse> {
+  const body = {
+    revoke_token: revokeToken,
+  };
+  const res = await fetch(`${authServerUrl}/api/v1/oauth/revoke`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (res.status === 200 || res.status === 201) {
+    const data = (await res.json()) satisfies AuthRevokeTokenResponse;
+    if (data.refresh_token) {
       return data;
     }
     throw new OAuthError(data.message, OAuthErrorType.AuthServerError);
@@ -111,6 +188,8 @@ export async function getAuthTokens(
 export abstract class BaseLoginHandler {
   public nonce: string;
 
+  protected clientId: string;
+
   abstract get authConnection(): AuthConnection;
 
   abstract get scope(): string[];
@@ -119,7 +198,8 @@ export abstract class BaseLoginHandler {
 
   abstract login(): Promise<LoginHandlerResult | undefined>;
 
-  constructor() {
+  constructor({ clientId }: { clientId: string }) {
+    this.clientId = clientId;
     this.nonce = this.#generateNonce();
   }
 
@@ -131,6 +211,23 @@ export abstract class BaseLoginHandler {
    */
   getAuthTokens(params: HandleFlowParams, authServerUrl: string) {
     return getAuthTokens(params, this.authServerPath, authServerUrl);
+  }
+
+  refreshNewTokens(
+    params: { refreshToken: string; network: Web3AuthNetwork },
+    authServerUrl: string,
+  ) {
+    const payload: RefreshTokenParams = {
+      authConnection: this.authConnection,
+      clientId: this.clientId,
+      web3AuthNetwork: params.network,
+      refreshToken: params.refreshToken,
+    };
+    return refreshNewTokens(payload, this.authServerPath, authServerUrl);
+  }
+
+  revokeRefreshToken(params: { revokeToken: string }, authServerUrl: string) {
+    return revokeRefreshToken(params.revokeToken, authServerUrl);
   }
 
   /**
