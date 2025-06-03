@@ -372,6 +372,7 @@ class ChoosePassword extends PureComponent {
       );
 
       const oauth2LoginSuccess = this.props.route.params?.oauthLoginSuccess;
+      const provider = this.props.route.params?.provider;
       authType.oauth2Login = oauth2LoginSuccess;
 
       Logger.log('previous_screen', previous_screen);
@@ -429,6 +430,7 @@ class ChoosePassword extends PureComponent {
       this.track(MetaMetricsEvents.WALLET_SETUP_COMPLETED, {
         wallet_setup_type: 'new',
         new_wallet: true,
+        account_type: provider ? `metamask_${provider}` : 'metamask',
       });
     } catch (error) {
       try {

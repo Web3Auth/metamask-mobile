@@ -451,6 +451,7 @@ class Onboarding extends PureComponent {
             [PREVIOUS_SCREEN]: ONBOARDING,
             oauthLoginSuccess: true,
             onboardingTraceCtx: this.onboardingTraceCtx,
+            provider,
           });
           this.track(MetaMetricsEvents.WALLET_SETUP_STARTED, {
             account_type: `metamask_${provider}`,
