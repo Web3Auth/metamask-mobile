@@ -24,6 +24,8 @@ import Avatar, {
 } from '../../../component-library/components/Avatars/Avatar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../reducers';
+import { MetaMetricsEvents } from '../../../core/Analytics';
+import { useMetrics } from '../../hooks/useMetrics';
 
 const SRPListItem = ({
   name,
@@ -33,6 +35,7 @@ const SRPListItem = ({
 }: SRPListItemProps) => {
   const { styles } = useStyles(styleSheet, {});
   const [showAccounts, setShowAccounts] = useState(false);
+  const { trackEvent, createEventBuilder } = useMetrics();
   const accountsToBeShown = useMemo(
     () =>
       keyring.accounts.map((accountAddress) =>
@@ -46,9 +49,31 @@ const SRPListItem = ({
       : AvatarAccountType.JazzIcon,
   );
 
+  const handleSRPSelection = () => {
+    trackEvent(
+      createEventBuilder(MetaMetricsEvents.SECRET_RECOVERY_PHRASE_PICKER_CLICKED)
+        .addProperties({
+          button_type: 'srp_select',
+        })
+        .build(),
+    );
+    onActionComplete(keyring.metadata.id);
+  };
+
+  const handleDetailsToggle = () => {
+    trackEvent(
+      createEventBuilder(MetaMetricsEvents.SECRET_RECOVERY_PHRASE_PICKER_CLICKED)
+        .addProperties({
+          button_type: 'details',
+        })
+        .build(),
+    );
+    setShowAccounts(!showAccounts);
+  };
+
   return (
     <TouchableWithoutFeedback
-      onPress={() => onActionComplete(keyring.metadata.id)}
+      onPress={handleSRPSelection}
       testID={`${SRPListItemSelectorsIDs.SRP_LIST_ITEM}-${keyring.metadata.id}`}
     >
       <View style={styles.srpItem}>
@@ -81,7 +106,7 @@ const SRPListItem = ({
                   ? 'accounts.show_accounts'
                   : 'accounts.hide_accounts',
               )} ${keyring.accounts.length} ${strings('accounts.accounts')}`}
-              onPress={() => setShowAccounts(!showAccounts)}
+              onPress={handleDetailsToggle}
             />
           </View>
           {showAccounts && (

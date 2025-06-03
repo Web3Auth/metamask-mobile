@@ -31,6 +31,9 @@ import Device from '../../../util/device';
 import BaseNotification from '../../UI/Notification/BaseNotification';
 import ElevatedView from 'react-native-elevated-view';
 import {
+  saveOnboardingEvent as SaveEvent,
+} from '../../../actions/onboarding';
+import {
   loadingSet,
   loadingUnset,
   UserActionType,
@@ -40,7 +43,6 @@ import PreventScreenshot from '../../../core/PreventScreenshot';
 import { PREVIOUS_SCREEN, ONBOARDING } from '../../../constants/navigation';
 import { EXISTING_USER } from '../../../constants/storage';
 import { MetaMetricsEvents } from '../../../core/Analytics';
-import { withMetricsAwareness } from '../../hooks/useMetrics';
 import { Authentication } from '../../../core';
 import { ThemeContext, mockTheme } from '../../../util/theme';
 import { OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onboarding.selectors';
@@ -231,6 +233,10 @@ class Onboarding extends PureComponent {
      */
     unsetLoading: PropTypes.func,
     /**
+     * Action to save onboarding event
+     */
+    saveOnboardingEvent: PropTypes.func,
+    /**
      * loadings msg
      */
     loadingMsg: PropTypes.string,
@@ -386,7 +392,9 @@ class Onboarding extends PureComponent {
         [PREVIOUS_SCREEN]: ONBOARDING,
         onboardingTraceCtx: this.onboardingTraceCtx,
       });
-      this.track(MetaMetricsEvents.WALLET_SETUP_STARTED);
+      this.track(MetaMetricsEvents.WALLET_SETUP_STARTED, {
+        account_type: 'metamask',
+      });
     };
 
     this.handleExistingUser(action);
@@ -410,19 +418,25 @@ class Onboarding extends PureComponent {
           onboardingTraceCtx: this.onboardingTraceCtx,
         },
       );
-      this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED);
+      this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED, {
+        account_type: 'imported',
+      });
     };
     this.handleExistingUser(action);
   };
 
   ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
-  handlePostSocialLogin = (result, createWallet) => {
+  handlePostSocialLogin = (result, createWallet, provider) => {
     if (this.socialLoginTraceCtx) {
       bufferedEndTrace({ name: TraceName.OnboardingSocialLoginAttempt });
       this.socialLoginTraceCtx = null;
     }
 
     if (result.type === 'success') {
+      // Track social login completed
+      this.track(MetaMetricsEvents.SOCIAL_LOGIN_COMPLETED, {
+        account_type: provider,
+      });
       if (createWallet) {
         if (result.existingUser) {
           this.props.navigation.navigate('AccountAlreadyExists', {
@@ -441,8 +455,11 @@ class Onboarding extends PureComponent {
             [PREVIOUS_SCREEN]: ONBOARDING,
             oauthLoginSuccess: true,
             onboardingTraceCtx: this.onboardingTraceCtx,
+            provider,
           });
-          this.track(MetaMetricsEvents.WALLET_SETUP_STARTED);
+          this.track(MetaMetricsEvents.WALLET_SETUP_STARTED, {
+            account_type: `metamask_${provider}`,
+          });
         }
       } else if (!createWallet) {
         if (result.existingUser) {
@@ -457,7 +474,9 @@ class Onboarding extends PureComponent {
             oauthLoginSuccess: true,
             onboardingTraceCtx: this.onboardingTraceCtx,
           });
-          this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED);
+          this.track(MetaMetricsEvents.WALLET_IMPORT_STARTED, {
+            account_type: `imported_${provider}`,
+          });
         } else {
           this.props.navigation.navigate('AccountNotFound', {
             accountName: result.accountName,
@@ -479,6 +498,11 @@ class Onboarding extends PureComponent {
       tags: { ...getTraceTags(store.getState()), provider: 'apple' },
       parentContext: this.onboardingTraceCtx,
     });
+
+    this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
+      account_type: 'apple',
+    });
+
     const action = async () => {
       const loginHandler = createLoginHandler(Platform.OS, 'apple');
       const result = await OAuthLoginService.handleOAuthLogin(
@@ -487,7 +511,7 @@ class Onboarding extends PureComponent {
         this.handleLoginError(e, 'apple');
         return { type: 'error', error: e, existingUser: false };
       });
-      this.handlePostSocialLogin(result, createWallet);
+      this.handlePostSocialLogin(result, createWallet, 'apple');
     };
     this.handleExistingUser(action);
   };
@@ -500,6 +524,11 @@ class Onboarding extends PureComponent {
       tags: { ...getTraceTags(store.getState()), provider: 'google' },
       parentContext: this.onboardingTraceCtx,
     });
+
+    this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
+      account_type: 'google',
+    });
+
     const action = async () => {
       const loginHandler = createLoginHandler(Platform.OS, 'google');
       const result = await OAuthLoginService.handleOAuthLogin(
@@ -508,7 +537,7 @@ class Onboarding extends PureComponent {
         this.handleLoginError(error, 'google');
         return { type: 'error', error, existingUser: false };
       });
-      this.handlePostSocialLogin(result, createWallet);
+      this.handlePostSocialLogin(result, createWallet, 'google');
     };
     this.handleExistingUser(action);
   };
@@ -551,8 +580,11 @@ class Onboarding extends PureComponent {
     });
   };
   ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
-  track = (event) => {
-    trackOnboarding(MetricsEventBuilder.createEventBuilder(event).build());
+  track = (event, properties) => {
+    trackOnboarding(
+      MetricsEventBuilder.createEventBuilder(event).addProperties(properties).build(),
+      this.props.saveOnboardingEvent,
+    );
   };
 
   alertExistingUser = (callback) => {
@@ -760,9 +792,11 @@ const mapDispatchToProps = (dispatch) => ({
   unsetLoading: () => dispatch(loadingUnset()),
   disableNewPrivacyPolicyToast: () =>
     dispatch(storePrivacyPolicyClickedOrClosedAction()),
+  saveOnboardingEvent: (...eventArgs) =>
+    dispatch(SaveEvent(eventArgs)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withMetricsAwareness(Onboarding));
+)(Onboarding);

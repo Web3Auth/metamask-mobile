@@ -23,9 +23,11 @@ import Button, {
 } from '../../../component-library/components/Buttons/Button';
 import { strings } from '../../../../locales/i18n';
 import FadeOutOverlay from '../../UI/FadeOutOverlay';
+import { OnboardingActionTypes, saveOnboardingEvent as SaveEvent } from '../../../actions/onboarding';
 import setOnboardingWizardStepUtil from '../../../actions/wizard';
 import { setAllowLoginWithRememberMe as setAllowLoginWithRememberMeUtil } from '../../../actions/security';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
   passcodeType,
   updateAuthTypeStorageFlags,
@@ -100,7 +102,10 @@ import { LoginOptionsSwitch } from '../../UI/LoginOptionsSwitch';
 import ConcealingFox from '../../../animations/Concealing_Fox.json';
 import SearchingFox from '../../../animations/Searching_Fox.json';
 import LottieView from 'lottie-react-native';
+import trackOnboarding from '../../../util/metrics/TrackOnboarding/trackOnboarding';
 import { RecoveryError as SeedlessOnboardingControllerRecoveryError } from '@metamask/seedless-onboarding-controller';
+import { MetricsEventBuilder } from '../../../core/Analytics/MetricsEventBuilder';
+import { IMetaMetricsEvent, ITrackingEvent } from '../../../core/Analytics/MetaMetrics.types';
 
 interface LoginRouteParams {
   locked: boolean;
@@ -108,10 +113,14 @@ interface LoginRouteParams {
   onboardingTraceCtx?: unknown;
 }
 
+interface LoginProps {
+  saveOnboardingEvent: (...eventArgs: [ITrackingEvent]) => void;
+}
+
 /**
  * View where returning users can authenticate
  */
-const Login: React.FC = () => {
+const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
   const [disabledInput, setDisabledInput] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
@@ -136,6 +145,7 @@ const Login: React.FC = () => {
   const [hasBiometricCredentials, setHasBiometricCredentials] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [hintText, setHintText] = useState('');
+  const [rehydrationFailedAttempts, setRehydrationFailedAttempts] = useState(0);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp< { params: LoginRouteParams }, 'params'>>();
   const {
@@ -143,8 +153,6 @@ const Login: React.FC = () => {
     theme: { colors, themeAppearance },
   } = useStyles(stylesheet, {});
   const {
-    trackEvent,
-    createEventBuilder,
     ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
     isEnabled: isMetricsEnabled,
     ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
@@ -157,6 +165,13 @@ const Login: React.FC = () => {
   const passwordLoginAttemptTraceCtxRef = useRef<TraceContext | null>(null);
 
   const oauthLoginSuccess = route?.params?.oauthLoginSuccess ?? false;
+
+  const track = (event: IMetaMetricsEvent, properties: Record<string, string | boolean | number>) => {
+    trackOnboarding(
+      MetricsEventBuilder.createEventBuilder(event).addProperties(properties).build(),
+      saveOnboardingEvent,
+    );
+  };
 
   const handleBackPress = () => {
     if (!oauthLoginSuccess) {
@@ -194,9 +209,7 @@ const Login: React.FC = () => {
       });
     }
 
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.LOGIN_SCREEN_VIEWED).build(),
-    );
+    track(MetaMetricsEvents.LOGIN_SCREEN_VIEWED, {});
 
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
@@ -341,6 +354,16 @@ const Login: React.FC = () => {
   const onLogin = async () => {
     endTrace({ name: TraceName.LoginUserInteraction });
 
+    // Track wallet rehydration attempted only for social login flows
+    if (oauthLoginSuccess) {
+      track(
+        MetaMetricsEvents.REHYDRATION_PASSWORD_ATTEMPTED, {
+          account_type: 'social',
+          biometrics: biometryChoice,
+        },
+      );
+    }
+
     try {
       const locked = !passwordRequirementsMet(password);
       if (locked) {
@@ -383,6 +406,12 @@ const Login: React.FC = () => {
 
       ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
       if (oauthLoginSuccess) {
+        track(MetaMetricsEvents.REHYDRATION_PASSWORD_COMPLETED, {
+          account_type: 'social',
+          biometrics: biometryChoice,
+          failed_attempts: rehydrationFailedAttempts,
+        });
+
         if (onboardingWizard) {
           setOnboardingWizardStep(1);
         }
@@ -435,12 +464,24 @@ const Login: React.FC = () => {
     } catch (loginErr: unknown) {
       const loginError = loginErr as Error;
       const loginErrorMessage = loginError.toString();
+
+      const newFailedAttempts = rehydrationFailedAttempts + 1;
+      setRehydrationFailedAttempts(newFailedAttempts);
+
       if (
         toLowerCaseEquals(loginErrorMessage, WRONG_PASSWORD_ERROR) ||
         toLowerCaseEquals(loginErrorMessage, WRONG_PASSWORD_ERROR_ANDROID) ||
         toLowerCaseEquals(loginErrorMessage, WRONG_PASSWORD_ERROR_ANDROID_2) ||
         loginErrorMessage.includes(PASSWORD_REQUIREMENTS_NOT_MET)
       ) {
+        // Track failed rehydration attempt only for social login flows
+        if (oauthLoginSuccess) {
+          track(MetaMetricsEvents.REHYDRATION_PASSWORD_FAILED, {
+            account_type: 'social',
+            failed_attempts: newFailedAttempts,
+          });
+        }
+
         setLoading(false);
         setError(strings('login.invalid_password'));
         trackErrorAsAnalytics('Login: Invalid Password', loginErrorMessage);
@@ -529,6 +570,11 @@ const Login: React.FC = () => {
   };
 
   const toggleWarningModal = () => {
+    // Track reset wallet clicked event
+    track(MetaMetricsEvents.RESET_WALLET_CLICKED, {
+      account_type: oauthLoginSuccess ? 'social' : 'metamask',
+    });
+
     navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.MODAL.DELETE_WALLET,
     });
@@ -555,9 +601,7 @@ const Login: React.FC = () => {
   const handleDownloadStateLogs = () => {
     const fullState = ReduxService.store.getState();
 
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.LOGIN_DOWNLOAD_LOGS).build(),
-    );
+    track(MetaMetricsEvents.LOGIN_DOWNLOAD_LOGS, {});
     downloadStateLogs(fullState, false);
   };
 
@@ -728,4 +772,9 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+const mapDispatchToProps = (dispatch: Dispatch<OnboardingActionTypes>) => ({
+  saveOnboardingEvent: (...eventArgs: [ITrackingEvent]) =>
+    dispatch(SaveEvent(eventArgs)),
+});
+
+export default connect(null, mapDispatchToProps)(Login);
