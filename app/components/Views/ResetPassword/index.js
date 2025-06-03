@@ -459,6 +459,7 @@ class ResetPassword extends PureComponent {
       const { biometryChoice } = this.state;
       const eventBuilder = MetricsEventBuilder.createEventBuilder(MetaMetricsEvents.PASSWORD_CHANGED)
         .addProperties({
+          biometry_type: this.state.biometryType,
           biometrics_enabled: Boolean(biometryChoice),
         });
       MetaMetrics.getInstance().trackEvent(eventBuilder.build());
