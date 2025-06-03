@@ -433,6 +433,10 @@ class Onboarding extends PureComponent {
     }
 
     if (result.type === 'success') {
+      // Track social login completed
+      this.track(MetaMetricsEvents.SOCIAL_LOGIN_COMPLETED, {
+        account_type: provider,
+      });
       if (createWallet) {
         if (result.existingUser) {
           this.props.navigation.navigate('AccountAlreadyExists', {
@@ -458,10 +462,6 @@ class Onboarding extends PureComponent {
           });
         }
       } else if (!createWallet) {
-        // Track wallet login completed only for existing social logins
-        this.track(MetaMetricsEvents.SOCIAL_LOGIN_COMPLETED, {
-          account_type: provider,
-        });
         if (result.existingUser) {
           bufferedTrace({
             name: TraceName.OnboardingExistingSocialLogin,
@@ -499,12 +499,9 @@ class Onboarding extends PureComponent {
       parentContext: this.onboardingTraceCtx,
     });
 
-    // Track wallet login selected only for existing social logins
-    if (!createWallet) {
-      this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
-        account_type: 'apple',
-      });
-    }
+    this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
+      account_type: 'apple',
+    });
 
     const action = async () => {
       const loginHandler = createLoginHandler(Platform.OS, 'apple');
@@ -528,11 +525,9 @@ class Onboarding extends PureComponent {
       parentContext: this.onboardingTraceCtx,
     });
 
-    if (!createWallet) {
-      this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
-        account_type: 'google',
-      });
-    }
+    this.track(MetaMetricsEvents.WALLET_REHYDRATION_SELECTED, {
+      account_type: 'google',
+    });
 
     const action = async () => {
       const loginHandler = createLoginHandler(Platform.OS, 'google');
