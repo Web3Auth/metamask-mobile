@@ -356,7 +356,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
     // Track wallet rehydration attempted only for social login flows
     if (oauthLoginSuccess) {
       track(
-        MetaMetricsEvents.WALLET_REHYDRATION_ATTEMPTED, {
+        MetaMetricsEvents.REHYDRATION_PASSWORD_ATTEMPTED, {
           account_type: 'social',
           biometrics: biometryChoice,
         },
@@ -405,7 +405,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
 
       ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
       if (oauthLoginSuccess) {
-        track(MetaMetricsEvents.WALLET_REHYDRATION_COMPLETED, {
+        track(MetaMetricsEvents.REHYDRATION_PASSWORD_COMPLETED, {
           account_type: 'social',
           biometrics: biometryChoice,
         });
@@ -470,7 +470,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
       ) {
         // Track failed rehydration attempt only for social login flows
         if (oauthLoginSuccess) {
-          track(MetaMetricsEvents.WALLET_REHYDRATION_FAILED, {
+          track(MetaMetricsEvents.REHYDRATION_PASSWORD_FAILED, {
             account_type: 'social',
           });
         }
