@@ -145,6 +145,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
   const [hasBiometricCredentials, setHasBiometricCredentials] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [hintText, setHintText] = useState('');
+  const [rehydrationFailedAttempts, setRehydrationFailedAttempts] = useState(0);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp< { params: LoginRouteParams }, 'params'>>();
   const {
@@ -408,6 +409,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
         track(MetaMetricsEvents.REHYDRATION_PASSWORD_COMPLETED, {
           account_type: 'social',
           biometrics: biometryChoice,
+          failed_attempts: rehydrationFailedAttempts,
         });
 
         if (onboardingWizard) {
@@ -462,6 +464,10 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
     } catch (loginErr: unknown) {
       const loginError = loginErr as Error;
       const loginErrorMessage = loginError.toString();
+
+      const newFailedAttempts = rehydrationFailedAttempts + 1;
+      setRehydrationFailedAttempts(newFailedAttempts);
+
       if (
         toLowerCaseEquals(loginErrorMessage, WRONG_PASSWORD_ERROR) ||
         toLowerCaseEquals(loginErrorMessage, WRONG_PASSWORD_ERROR_ANDROID) ||
@@ -472,6 +478,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
         if (oauthLoginSuccess) {
           track(MetaMetricsEvents.REHYDRATION_PASSWORD_FAILED, {
             account_type: 'social',
+            failed_attempts: newFailedAttempts,
           });
         }
 
