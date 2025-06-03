@@ -10,6 +10,7 @@ import {
 import AppConstants from '../../../AppConstants';
 import { Encryptor, LEGACY_DERIVATION_OPTIONS } from '../../../Encryptor';
 import { EncryptionKey, EncryptionResult } from '../../../Encryptor/types';
+import OAuthService from '../../../OAuthService/OAuthService';
 
 const web3AuthNetwork = AppConstants.SEEDLESS_ONBOARDING.WEB3AUTH_NETWORK;
 
@@ -42,6 +43,9 @@ export const seedlessOnboardingControllerInit: ControllerInitFunction<
 
   const controller = new SeedlessOnboardingController({
     messenger: controllerMessenger,
+    refreshJWTToken: OAuthService.getNewRefreshToken.bind(OAuthService),
+    revokeRefreshToken:
+      OAuthService.revokeAndGetNewRefreshToken.bind(OAuthService),
     state:
       seedlessOnboardingControllerState as SeedlessOnboardingControllerState,
     encryptor: {

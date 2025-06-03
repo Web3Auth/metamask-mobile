@@ -17,6 +17,16 @@ export enum AuthConnection {
   Apple = 'apple',
 }
 
+export enum OauthAccessType {
+  OFFLINE = 'offline',
+  ONLINE = 'online',
+}
+
+export enum OauthGrantType {
+  AUTHORIZATION_CODE = 'authorization_code',
+  REFRESH_TOKEN = 'refresh_token',
+}
+
 export interface LoginHandlerCodeResult {
   authConnection: AuthConnection;
   code: string;
@@ -31,6 +41,13 @@ export interface LoginHandlerIdTokenResult {
   clientId: string;
   redirectUri?: string;
   codeVerifier?: string;
+}
+
+export interface RefreshTokenParams {
+  authConnection: AuthConnection;
+  clientId: string;
+  web3AuthNetwork: Web3AuthNetwork;
+  refreshToken: string;
 }
 
 export type LoginHandlerResult =
@@ -53,6 +70,8 @@ export interface AuthRequestCodeParams {
   network: Web3AuthNetwork;
   redirect_uri?: string;
   code_verifier?: string;
+  access_type?: OauthAccessType;
+  grant_type?: OauthGrantType;
 }
 
 export interface AuthRequestIdTokenParams {
@@ -62,6 +81,15 @@ export interface AuthRequestIdTokenParams {
   network: Web3AuthNetwork;
   redirect_uri?: string;
   code_verifier?: string;
+  access_type?: OauthAccessType;
+}
+
+export interface AuthRequestRefreshTokenParams {
+  refresh_token: string;
+  client_id: string;
+  login_provider: AuthConnection;
+  network: Web3AuthNetwork;
+  grant_type: OauthGrantType.REFRESH_TOKEN;
 }
 
 export type AuthRequestParams =
@@ -70,12 +98,23 @@ export type AuthRequestParams =
 
 export interface AuthResponse {
   id_token: string;
-  refresh_token?: string;
   indexes: number[];
   endpoints: Record<string, string>;
   success: boolean;
   message: string;
   jwt_tokens: Record<string, string>;
+  refresh_token?: string;
+  revoke_token?: string;
+}
+
+export type AuthRefreshTokenResponse = Pick<
+  AuthResponse,
+  'jwt_tokens' | 'refresh_token' | 'revoke_token'
+>;
+
+export interface AuthRevokeTokenResponse {
+  refresh_token: string;
+  revoke_token: string;
 }
 
 export interface LoginHandler {

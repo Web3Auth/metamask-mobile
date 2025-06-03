@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import Engine from '../Engine';
 import Logger from '../../util/Logger';
 import ReduxService from '../redux';
@@ -21,6 +20,8 @@ import {
 import { OAuthError, OAuthErrorType } from './error';
 import { BaseLoginHandler } from './OAuthLoginHandlers/baseHandler';
 
+import { createLoginHandler } from './OAuthLoginHandlers';
+import { Platform } from 'react-native';
 export interface OAuthServiceConfig {
   authConnectionId: string;
   groupedAuthConnectionId?: string;
@@ -35,6 +36,9 @@ interface OAuthServiceLocalState {
   oauthLoginSuccess: boolean;
   oauthLoginError: string | null;
 }
+
+const audience = 'metamask';
+
 export class OAuthService {
   public localState: OAuthServiceLocalState;
 
@@ -106,6 +110,8 @@ export class OAuthService {
           groupedAuthConnectionId: this.config.groupedAuthConnectionId,
           userId,
           socialLoginEmail: accountName,
+          refreshToken: data.refresh_token,
+          revokeToken: data.revoke_token,
         });
       Logger.log('handleCodeFlow: result', result);
       return {
@@ -114,7 +120,8 @@ export class OAuthService {
         accountName,
       };
     } catch (error) {
-      Logger.log(error as Error, {
+      console.error('>>>> eoreor seedless authenticate', error);
+      Logger.error(error as Error, {
         message: 'handleCodeFlow',
       });
       throw error;
@@ -145,7 +152,6 @@ export class OAuthService {
           this.config.authServerUrl,
         );
         Logger.log('handlegetAuthToken: data', data);
-        const audience = 'metamask';
 
         if (!data.jwt_tokens[audience]) {
           throw new OAuthError('No token found', OAuthErrorType.LoginError);
@@ -170,7 +176,8 @@ export class OAuthService {
       }
       throw new OAuthError('No result', OAuthErrorType.LoginError);
     } catch (error) {
-      Logger.log(error as Error, {
+      console.error('>>>> eoreor login oauth', error);
+      Logger.error(error as Error, {
         message: 'handleOAuthLogin',
       });
       this.#dispatchPostLogin({
@@ -187,6 +194,48 @@ export class OAuthService {
       );
     }
   };
+
+  async getNewRefreshToken({
+    connection,
+    refreshToken,
+  }: {
+    connection: AuthConnection;
+    refreshToken: string;
+  }): Promise<{ idTokens: string[] }> {
+    const loginHandler = createLoginHandler(Platform.OS, connection);
+
+    const refreshTokenData = await loginHandler.refreshNewTokens(
+      {
+        refreshToken,
+        network: this.config.web3AuthNetwork,
+      },
+      this.config.authServerUrl,
+    );
+    const idToken = refreshTokenData.jwt_tokens[audience];
+
+    return {
+      idTokens: [idToken],
+    };
+  }
+
+  async revokeAndGetNewRefreshToken({
+    connection,
+    revokeToken,
+  }: {
+    connection: AuthConnection;
+    revokeToken: string;
+  }): Promise<{ newRevokeToken: string; newRefreshToken: string }> {
+    const loginHandler = createLoginHandler(Platform.OS, connection);
+
+    const res = await loginHandler.revokeRefreshToken(
+      { revokeToken },
+      this.config.authServerUrl,
+    );
+    return {
+      newRefreshToken: res.refresh_token,
+      newRevokeToken: res.revoke_token,
+    };
+  }
 
   updateLocalState = (newState: Partial<OAuthService['localState']>) => {
     this.localState = {
