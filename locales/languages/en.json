@@ -301,7 +301,9 @@
     "clean_vault_error": "MetaMask encountered an error due to reaching a storage limit. The local data has been corrupted. Please reinstall MetaMask and restore with your Secret Recovery Phrase.",
     "security_alert_title": "Security Alert",
     "security_alert_desc": "In order to proceed, you need to turn Passcode on or any biometrics authentication method supported in your device (FaceID, TouchID or Fingerprint)",
-    
+    "seedless_password_outdated_modal_title": "Your password changed",
+    "seedless_password_outdated_modal_content": "Enter your new password to stay logged in to Metamask.",
+    "seedless_password_outdated_modal_confirm": "Continue",
     "too_many_attempts": "Too many attempts. Please try again in {{remainingTime}} seconds.",
     "apple_button": "Sign in with Apple",
     "google_button": "Sign in with Google",
