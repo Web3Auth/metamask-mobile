@@ -663,7 +663,6 @@ class AuthenticationService {
         selectSelectedInternalAccountFormattedAddress(
           ReduxService.store.getState(),
         ),
-        true,
       );
       await this.resetPassword();
 

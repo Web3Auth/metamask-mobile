@@ -120,8 +120,7 @@ export class OAuthService {
         accountName,
       };
     } catch (error) {
-      console.error('>>>> eoreor seedless authenticate', error);
-      Logger.error(error as Error, {
+      Logger.log(error as Error, {
         message: 'handleCodeFlow',
       });
       throw error;
@@ -176,8 +175,7 @@ export class OAuthService {
       }
       throw new OAuthError('No result', OAuthErrorType.LoginError);
     } catch (error) {
-      console.error('>>>> eoreor login oauth', error);
-      Logger.error(error as Error, {
+      Logger.log(error as Error, {
         message: 'handleOAuthLogin',
       });
       this.#dispatchPostLogin({

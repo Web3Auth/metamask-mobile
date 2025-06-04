@@ -99,7 +99,6 @@ export class AndroidAppleLoginHandler
       state,
     });
 
-    console.log('>>>> start prompt async', authUrl);
     // prompt the auth request using generated auth url instead of the client auth request instance
     const result = await authRequestClient.promptAsync(
       {
@@ -109,7 +108,6 @@ export class AndroidAppleLoginHandler
         url: authUrl,
       },
     );
-    console.log('>>>> end prompt async', result);
     if (result.type === 'success') {
       return {
         authConnection: AuthConnection.Apple,

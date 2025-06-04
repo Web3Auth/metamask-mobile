@@ -91,11 +91,7 @@ const ManualBackupStep2 = ({ navigation, seedphraseBackedUp, route }) => {
       seedphraseBackedUp();
       InteractionManager.runAfterInteractions(async () => {
         if (backupFlow) {
-          navigation.navigate('OptinMetrics', {
-            onContinue: () => {
-              navigation.reset({ routes: [{ name: 'HomeNav' }] });
-            },
-          });
+          navigation.reset({ routes: [{ name: 'HomeNav' }] });
         } else if (settingsBackup) {
           navigation.navigate(Routes.ONBOARDING.SECURITY_SETTINGS);
         } else {
@@ -104,7 +100,7 @@ const ManualBackupStep2 = ({ navigation, seedphraseBackedUp, route }) => {
             words,
             onContinue: () => {
               navigation.navigate('OnboardingSuccess', {
-                showPasswordHint: true,
+                backedUpSRP: true,
               });
             },
           });
@@ -245,7 +241,7 @@ const ManualBackupStep2 = ({ navigation, seedphraseBackedUp, route }) => {
                     isEmpty && styles.emptySlot,
                     isSelected && styles.selectedSlotBox,
                     {
-                      width: innerWidth / (Platform.OS === 'ios' ? 3.75 : 3.85),
+                      width: innerWidth / 3.85,
                     },
                   ]}
                   onPress={() => handleSlotPress(index)}
