@@ -21,6 +21,16 @@ const Routes = {
     SETTINGS: 'RampSettings',
     ACTIVATION_KEY_FORM: 'RampActivationKeyForm',
   },
+  DEPOSIT: {
+    ID: 'Deposit',
+    ROOT: 'DepositRoot',
+    BUILD_QUOTE: 'BuildQuote',
+    ENTER_EMAIL: 'EnterEmail',
+    OTP_CODE: 'OtpCode',
+    VERIFY_IDENTITY: 'VerifyIdentity',
+    BASIC_INFO: 'BasicInfo',
+    ENTER_ADDRESS: 'EnterAddress',
+  },
   HW: {
     CONNECT: 'ConnectHardwareWalletFlow',
     SELECT_DEVICE: 'SelectHardwareWallet',
@@ -116,9 +126,15 @@ const Routes = {
     TOKEN_SORT: 'TokenSort',
     TOKEN_FILTER: 'TokenFilter',
     CHANGE_IN_SIMULATION_MODAL: 'ChangeInSimulationModal',
-    ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
     SELECT_SRP: 'SelectSRP',
-    ///: END:ONLY_INCLUDE_IF
+    MULTICHAIN_ACCOUNT_DETAILS: {
+      EDIT_ACCOUNT_NAME: 'MultichainEditAccountName',
+      EDIT_WALLET_NAME: 'EditWalletName',
+      SHARE_ADDRESS: 'ShareAddress',
+      DELETE_ACCOUNT: 'DeleteAccount',
+      REVEAL_PRIVATE_CREDENTIAL: 'RevealPrivateCredential',
+      REVEAL_SRP_CREDENTIAL: 'RevealSRPCredential',
+    },
   },
   BROWSER: {
     HOME: 'BrowserTabHome',
@@ -183,6 +199,10 @@ const Routes = {
       EARN_TOKEN_LIST: 'EarnTokenList',
     },
   },
+  EARN: {
+    ROOT: 'EarnScreens',
+    LENDING_DEPOSIT_CONFIRMATION: 'EarnLendingDepositConfirmation',
+  },
   STANDALONE_CONFIRMATIONS: {
     STAKE_DEPOSIT: 'RedesignedStakeDeposit',
     STAKE_WITHDRAWAL: 'RedesignedStakeWithdrawal',
@@ -192,11 +212,12 @@ const Routes = {
   IDENTITY: {
     TURN_ON_BACKUP_AND_SYNC: 'TurnOnBackupAndSync',
   },
-  ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
   MULTI_SRP: {
     IMPORT: 'ImportSRPView',
   },
-  ///: END:ONLY_INCLUDE_IF
+  MULTICHAIN_ACCOUNTS: {
+    ACCOUNT_DETAILS: 'MultichainAccountDetails',
+  },
   ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
   SNAPS: {
     SNAPS_SETTINGS_LIST: 'SnapsSettingsList',

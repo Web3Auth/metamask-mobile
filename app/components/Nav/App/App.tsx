@@ -129,13 +129,11 @@ import {
 import getUIStartupSpan from '../../../core/Performance/UIStartup';
 import { selectUserLoggedIn } from '../../../reducers/user/selectors';
 import { Confirm } from '../../Views/confirmations/components/confirm';
-///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 import ImportNewSecretRecoveryPhrase from '../../Views/ImportNewSecretRecoveryPhrase';
 import { SelectSRPBottomSheet } from '../../Views/SelectSRP/SelectSRPBottomSheet';
-///: END:ONLY_INCLUDE_IF
 import NavigationService from '../../../core/NavigationService';
 import ConfirmTurnOnBackupAndSyncModal from '../../UI/Identity/ConfirmTurnOnBackupAndSyncModal/ConfirmTurnOnBackupAndSyncModal';
-import AddNewAccount from '../../Views/AddNewAccount';
+import AddNewAccountBottomSheet from '../../Views/AddNewAccount/AddNewAccountBottomSheet';
 import SwitchAccountTypeModal from '../../Views/confirmations/components/modals/switch-account-type-modal';
 
 const clearStackNavigatorOptions = {
@@ -231,7 +229,11 @@ const OnboardingNav = () => (
       name={Routes.ONBOARDING.IMPORT_FROM_SECRET_RECOVERY_PHRASE}
       component={ImportFromSecretRecoveryPhrase}
     />
-    <Stack.Screen name="OptinMetrics" component={OptinMetrics} />
+    <Stack.Screen
+      name="OptinMetrics"
+      component={OptinMetrics}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
@@ -305,18 +307,12 @@ const DetectedTokensFlow = () => (
   </Stack.Navigator>
 );
 
-///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 interface RootModalFlowProps {
   route: {
     params: Record<string, unknown>;
   };
 }
-///: END:ONLY_INCLUDE_IF(multi-srp)
-const RootModalFlow = (
-  ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
-  props: RootModalFlowProps,
-  ///: END:ONLY_INCLUDE_IF
-) => (
+const RootModalFlow = (props: RootModalFlowProps) => (
   <Stack.Navigator mode={'modal'} screenOptions={clearStackNavigatorOptions}>
     <Stack.Screen
       name={Routes.MODAL.WALLET_ACTIONS}
@@ -338,7 +334,10 @@ const RootModalFlow = (
       name={Routes.SHEET.ACCOUNT_SELECTOR}
       component={AccountSelector}
     />
-    <Stack.Screen name={Routes.SHEET.ADD_ACCOUNT} component={AddNewAccount} />
+    <Stack.Screen
+      name={Routes.SHEET.ADD_ACCOUNT}
+      component={AddNewAccountBottomSheet}
+    />
     <Stack.Screen name={Routes.SHEET.SDK_LOADING} component={SDKLoadingModal} />
     <Stack.Screen
       name={Routes.SHEET.SDK_FEEDBACK}
@@ -430,19 +429,15 @@ const RootModalFlow = (
       component={EnableAutomaticSecurityChecksModal}
     />
     {
-      ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
       <Stack.Screen
         name={Routes.SHEET.SELECT_SRP}
         component={SelectSRPBottomSheet}
       />
-      ///: END:ONLY_INCLUDE_IF
     }
     <Stack.Screen
       name={Routes.MODAL.SRP_REVEAL_QUIZ}
       component={SRPQuiz}
-      ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
       initialParams={{ ...props.route.params }}
-      ///: END:ONLY_INCLUDE_IF
     />
     <Stack.Screen
       name={Routes.SHEET.ACCOUNT_ACTIONS}
@@ -501,7 +496,6 @@ const ImportPrivateKeyView = () => (
   </Stack.Navigator>
 );
 
-///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 const ImportSRPView = () => (
   <Stack.Navigator
     screenOptions={{
@@ -514,7 +508,6 @@ const ImportSRPView = () => (
     />
   </Stack.Navigator>
 );
-///: END:ONLY_INCLUDE_IF
 
 const ConnectQRHardwareFlow = () => (
   <Stack.Navigator
@@ -641,13 +634,11 @@ const AppFlow = () => {
         options={{ animationEnabled: true }}
       />
       {
-        ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
         <Stack.Screen
           name="ImportSRPView"
           component={ImportSRPView}
           options={{ animationEnabled: true }}
         />
-        ///: END:ONLY_INCLUDE_IF
       }
       <Stack.Screen
         name="ConnectQRHardwareFlow"
@@ -719,12 +710,10 @@ const AppFlow = () => {
         name={Routes.CONFIRMATION_REQUEST_MODAL}
         component={ModalConfirmationRequest}
       />
-      {process.env.MM_SMART_ACCOUNT_UI_ENABLED && (
-        <Stack.Screen
-          name={Routes.CONFIRMATION_SWITCH_ACCOUNT_TYPE}
-          component={ModalSwitchAccountType}
-        />
-      )}
+      <Stack.Screen
+        name={Routes.CONFIRMATION_SWITCH_ACCOUNT_TYPE}
+        component={ModalSwitchAccountType}
+      />
     </Stack.Navigator>
   );
 };
@@ -954,6 +943,7 @@ const App: React.FC = () => {
               rpcEndpoints: [
                 {
                   url: network.rpcUrl,
+                  failoverUrls: network.failoverRpcUrls,
                   name: network.nickname,
                   type: RpcEndpointType.Custom,
                 },

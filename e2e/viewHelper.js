@@ -29,6 +29,7 @@ import Assertions from './utils/Assertions';
 import { CustomNetworks } from './resources/networks.e2e';
 import ToastModal from './pages/wallet/ToastModal';
 import TestDApp from './pages/Browser/TestDApp';
+import SolanaNewFeatureSheet from './pages/wallet/SolanaNewFeatureSheet';
 
 const LOCALHOST_URL = `http://localhost:${getGanachePort()}/`;
 const validAccount = Accounts.getValidAccount();
@@ -41,7 +42,17 @@ export const acceptTermOfUse = async () => {
   await TermsOfUseModal.tapAcceptButton();
   await Assertions.checkIfNotVisible(TermsOfUseModal.container);
 };
-export const closeOnboardingModals = async () => {
+
+/**
+ * Closes various onboarding modals and dialogs.
+ * @async
+ * @function closeOnboardingModals
+ * @param {('dismiss'|'create'|'viewAccount')} [solanaSheetAction='dismiss'] - Action to take for the Solana feature sheet.
+ *   - 'dismiss': Taps "Not now" on the Solana sheet.
+ *   - 'create': Taps "Create Account" on the Solana sheet.
+ *   - 'viewAccount': Intended to navigate to a view/manage existing account flow for Solana.
+ */
+export const closeOnboardingModals = async (solanaSheetAction = 'dismiss') => {
   /*
 These onboarding modals are becoming a bit wild. We need less of these so we don't
 have to have all these workarounds in the tests
@@ -67,6 +78,18 @@ have to have all these workarounds in the tests
     /* eslint-disable no-undef */
 
     console.log('The marketing toast is not visible');
+  }
+
+  // Handle Solana New feature sheet
+  if (solanaSheetAction === 'dismiss') {
+    await SolanaNewFeatureSheet.tapNotNowButton();
+    console.log("Solana feature sheet: 'Not Now' tapped.");
+  } else if (solanaSheetAction === 'create') {
+    await SolanaNewFeatureSheet.tapCreateAccountButton();
+    console.log("Solana feature sheet: 'Create Account' tapped.");
+  } else if (solanaSheetAction === 'viewAccount') {
+    await SolanaNewFeatureSheet.tapViewAccountButton();
+    console.log("Solana feature sheet: 'View Account' tapped.");
   }
 };
 
@@ -97,16 +120,19 @@ export const skipNotificationsDeviceSettings = async () => {
  * @param {string} [options.seedPhrase] - The secret recovery phrase to import the wallet. Defaults to a valid account's seed phrase.
  * @param {string} [options.password] - The password to set for the wallet. Defaults to a valid account's password.
  * @param {boolean} [options.optInToMetrics=true] - Whether to opt in to MetaMetrics. Defaults to true.
+ * @param {('dismiss'|'create'|'viewAccount')} [options.solanaSheetAction='dismiss'] - Action for the Solana feature sheet.
  * @returns {Promise<void>} Resolves when the wallet import process is complete.
  */
 export const importWalletWithRecoveryPhrase = async ({
   seedPhrase,
   password,
   optInToMetrics = true,
+  solanaSheetAction = 'dismiss',
 } = {}) => {
   // tap on import seed phrase button
   await Assertions.checkIfVisible(OnboardingCarouselView.container);
   await OnboardingCarouselView.tapOnGetStartedButton();
+  await acceptTermOfUse();
   await OnboardingView.tapImportWalletFromSeedPhrase();
 
   if (optInToMetrics) {
@@ -116,14 +142,21 @@ export const importWalletWithRecoveryPhrase = async ({
   }
 
   await TestHelpers.delay(3500);
-  await acceptTermOfUse();
   // should import wallet with secret recovery phrase
   await ImportWalletView.clearSecretRecoveryPhraseInputBox();
   await ImportWalletView.enterSecretRecoveryPhrase(
     seedPhrase ?? validAccount.seedPhrase,
   );
-  await ImportWalletView.enterPassword(password ?? validAccount.password);
-  await ImportWalletView.reEnterPassword(password ?? validAccount.password);
+
+  await ImportWalletView.tapTitle();
+  await ImportWalletView.tapContinueButton();
+
+  await TestHelpers.delay(3500);
+
+  await CreatePasswordView.enterPassword(password ?? validAccount.password);
+  await CreatePasswordView.reEnterPassword(password ?? validAccount.password);
+  await CreatePasswordView.tapIUnderstandCheckBox();
+  await CreatePasswordView.tapCreatePasswordButton();
 
   //'Should dismiss Enable device Notifications checks alert'
   await TestHelpers.delay(3500);
@@ -135,7 +168,7 @@ export const importWalletWithRecoveryPhrase = async ({
   await EnableAutomaticSecurityChecksView.tapNoThanks();
   // should dismiss the onboarding wizard
   // dealing with flakiness on bitrise.
-  await closeOnboardingModals();
+  await closeOnboardingModals(solanaSheetAction);
 };
 
 export const CreateNewWallet = async () => {
@@ -172,7 +205,7 @@ export const CreateNewWallet = async () => {
 
   // 'should dismiss the onboarding wizard'
   // dealing with flakiness on bitrise.
-  await this.closeOnboardingModals();
+  await this.closeOnboardingModals('dismiss');
 
   // Dismissing to protect your wallet modal
   await Assertions.checkIfVisible(ProtectYourWalletModal.collapseWalletModal);
@@ -253,10 +286,11 @@ export const waitForTestDappToLoad = async () => {
 
       await Assertions.webViewElementExists(TestDApp.DappConnectButton);
       return; // Success - page is fully loaded and interactive
-
     } catch (error) {
       if (attempt === MAX_RETRIES) {
-        throw new Error(`Test dapp failed to load after ${MAX_RETRIES} attempts: ${error.message}`);
+        throw new Error(
+          `Test dapp failed to load after ${MAX_RETRIES} attempts: ${error.message}`,
+        );
       }
       await TestHelpers.delay(RETRY_DELAY);
     }

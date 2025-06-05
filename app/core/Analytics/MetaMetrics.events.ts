@@ -387,6 +387,10 @@ enum EVENT_NAME {
   ACCOUNT_REMOVE_FAILED = 'Account remove failed',
   // Account added
   ACCOUNT_ADDED = 'Account Added',
+  // Multi SRP
+  IMPORT_SECRET_RECOVERY_PHRASE_CLICKED = 'Import Secret Recovery Phrase Clicked',
+  IMPORT_SECRET_RECOVERY_PHRASE_COMPLETED = 'Import Secret Recovery Phrase Completed',
+  SECRET_RECOVERY_PHRASE_PICKER_CLICKED = 'Secret Recovery Phrase Picker Clicked',
 
   //Notifications
   ALL_NOTIFICATIONS = 'All Notifications',
@@ -402,6 +406,9 @@ enum EVENT_NAME {
 
   // Smart transactions
   SMART_TRANSACTION_OPT_IN = 'Smart Transaction Opt In',
+
+  // Dismiss smart account upgrade suggestion
+  DISMISS_SMART_ACCOUNT_SUGGESTION_ENABLED = 'Dismiss smart account suggestion enabled',
 
   // Simulations
   INCOMPLETE_ASSET_DISPLAYED = 'Incomplete Asset Displayed',
@@ -427,6 +434,10 @@ enum EVENT_NAME {
 
   // Tooltip
   TOOLTIP_OPENED = 'Tooltip Opened',
+
+  // RPC Failover
+  RPC_SERVICE_UNAVAILABLE = 'RPC Service Unavailable',
+  RPC_SERVICE_DEGRADED = 'RPC Service Degraded',
 }
 
 enum ACTIONS {
@@ -872,6 +883,11 @@ const events = {
   // Smart transactions
   SMART_TRANSACTION_OPT_IN: generateOpt(EVENT_NAME.SMART_TRANSACTION_OPT_IN),
 
+  // Dismiss smart account upgrade suggestion
+  DISMISS_SMART_ACCOUNT_SUGGESTION_ENABLED: generateOpt(
+    EVENT_NAME.DISMISS_SMART_ACCOUNT_SUGGESTION_ENABLED,
+  ),
+
   // Notifications
   ALL_NOTIFICATIONS: generateOpt(
     EVENT_NAME.ALL_NOTIFICATIONS,
@@ -1025,6 +1041,21 @@ const events = {
   // Bridge
   BRIDGE_PAGE_VIEWED: generateOpt(EVENT_NAME.BRIDGE_PAGE_VIEWED),
   SWAP_PAGE_VIEWED: generateOpt(EVENT_NAME.SWAP_PAGE_VIEWED), // Temporary event until unified swap/bridge is done
+
+  // RPC Failover
+  RPC_SERVICE_UNAVAILABLE: generateOpt(EVENT_NAME.RPC_SERVICE_UNAVAILABLE),
+  RPC_SERVICE_DEGRADED: generateOpt(EVENT_NAME.RPC_SERVICE_DEGRADED),
+
+  // Multi SRP
+  IMPORT_SECRET_RECOVERY_PHRASE_CLICKED: generateOpt(
+    EVENT_NAME.IMPORT_SECRET_RECOVERY_PHRASE_CLICKED,
+  ),
+  IMPORT_SECRET_RECOVERY_PHRASE_COMPLETED: generateOpt(
+    EVENT_NAME.IMPORT_SECRET_RECOVERY_PHRASE_COMPLETED,
+  ),
+  SECRET_RECOVERY_PHRASE_PICKER_CLICKED: generateOpt(
+    EVENT_NAME.SECRET_RECOVERY_PHRASE_PICKER_CLICKED,
+  ),
 };
 
 /**
