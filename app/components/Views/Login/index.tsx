@@ -37,7 +37,6 @@ import {
   ONBOARDING_WIZARD,
   TRUE,
   PASSCODE_DISABLED,
-  SEED_PHRASE_HINTS,
 } from '../../../constants/storage';
 import Routes from '../../../constants/navigation/Routes';
 import { passwordRequirementsMet } from '../../../util/password';
@@ -55,12 +54,7 @@ import { LoginViewSelectors } from '../../../../e2e/selectors/wallet/LoginView.s
 import { useMetrics } from '../../../components/hooks/useMetrics';
 import trackErrorAsAnalytics from '../../../util/metrics/TrackError/trackErrorAsAnalytics';
 import { downloadStateLogs } from '../../../util/logs';
-import {
-  trace,
-  endTrace,
-  TraceName,
-  TraceOperation,
-} from '../../../util/trace';
+import { trace, TraceName, TraceOperation } from '../../../util/trace';
 import TextField, {
   TextFieldSize,
 } from '../../../component-library/components/Form/TextField';
@@ -68,8 +62,6 @@ import Label from '../../../component-library/components/Form/Label';
 import HelpText, {
   HelpTextSeverity,
 } from '../../../component-library/components/Form/HelpText';
-import { getTraceTags } from '../../../util/sentry/tags';
-import { store } from '../../../store';
 import {
   DENY_PIN_ERROR_ANDROID,
   JSON_PARSE_ERROR_UNEXPECTED_TOKEN,
@@ -98,6 +90,10 @@ import ConcealingFox from '../../../animations/Concealing_Fox.json';
 import SearchingFox from '../../../animations/Searching_Fox.json';
 import LottieView from 'lottie-react-native';
 import { RecoveryError as SeedlessOnboardingControllerRecoveryError } from '@metamask/seedless-onboarding-controller';
+///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+import { useSelector } from 'react-redux';
+import { selectIsSeedlessPasswordOutdated } from '../../../selectors/seedlessOnboardingController';
+///: END:ONLY_INCLUDE_IF
 
 /**
  * View where returning users can authenticate
@@ -107,13 +103,7 @@ const Login: React.FC = () => {
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const fieldRef = useRef<TextInput>(null);
-  const parentSpanRef = useRef(
-    trace({
-      name: TraceName.Login,
-      op: TraceOperation.Login,
-      tags: getTraceTags(store.getState()),
-    }),
-  );
+
   const [password, setPassword] = useState('');
   const [biometryType, setBiometryType] = useState<
     BIOMETRY_TYPE | AUTHENTICATION_TYPE | string | null
@@ -125,8 +115,6 @@ const Login: React.FC = () => {
   const [biometryPreviouslyDisabled, setBiometryPreviouslyDisabled] =
     useState(false);
   const [hasBiometricCredentials, setHasBiometricCredentials] = useState(false);
-  const [showHint, setShowHint] = useState(false);
-  const [hintText, setHintText] = useState('');
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const route =
     useRoute<
@@ -152,6 +140,18 @@ const Login: React.FC = () => {
   const setAllowLoginWithRememberMe = (enabled: boolean) =>
     setAllowLoginWithRememberMeUtil(enabled);
 
+  ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+  const isSeedlessPasswordOutdated = useSelector(
+    selectIsSeedlessPasswordOutdated,
+  );
+  useEffect(() => {
+    // first error if seedless password is outdated
+    if (isSeedlessPasswordOutdated) {
+      setError(strings('login.seedless_password_outdated'));
+    }
+  }, [isSeedlessPasswordOutdated]);
+  ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
+
   const oauthLoginSuccess = route?.params?.oauthLoginSuccess ?? false;
 
   const handleBackPress = () => {
@@ -163,24 +163,7 @@ const Login: React.FC = () => {
     return false;
   };
 
-  const getHint = async () => {
-    const hint = await StorageWrapper.getItem(SEED_PHRASE_HINTS);
-    const parsedHints = await JSON.parse(hint);
-    setHintText(parsedHints?.manualBackup || '');
-  };
-
-  const toggleHint = () => {
-    setShowHint(!showHint);
-    getHint();
-  };
-
   useEffect(() => {
-    trace({
-      name: TraceName.LoginUserInteraction,
-      op: TraceOperation.Login,
-      parentContext: parentSpanRef.current,
-    });
-
     trackEvent(
       createEventBuilder(MetaMetricsEvents.LOGIN_SCREEN_VIEWED).build(),
     );
@@ -222,8 +205,6 @@ const Login: React.FC = () => {
     };
 
     getUserAuthPreferences();
-
-    getHint();
 
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
@@ -326,8 +307,6 @@ const Login: React.FC = () => {
   };
 
   const onLogin = async () => {
-    endTrace({ name: TraceName.LoginUserInteraction });
-
     try {
       const locked = !passwordRequirementsMet(password);
       if (locked) {
@@ -344,7 +323,12 @@ const Login: React.FC = () => {
       );
 
       ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
-      if (oauthLoginSuccess) {
+      if (isSeedlessPasswordOutdated) {
+        await Authentication.submitLatestGlobalSeedlessPassword(
+          password,
+          authType,
+        );
+      } else if (oauthLoginSuccess) {
         await Authentication.rehydrateSeedPhrase(password, authType);
       } else {
         ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
@@ -352,7 +336,6 @@ const Login: React.FC = () => {
           {
             name: TraceName.AuthenticateUser,
             op: TraceOperation.Login,
-            parentContext: parentSpanRef.current,
           },
           async () => {
             await Authentication.userEntryAuth(password, authType);
@@ -373,7 +356,6 @@ const Login: React.FC = () => {
         if (onboardingWizard) {
           setOnboardingWizardStep(1);
         }
-
         if (isMetricsEnabled()) {
           navigation.reset({
             index: 0,
@@ -464,19 +446,15 @@ const Login: React.FC = () => {
       }
       Logger.error(loginError, 'Failed to unlock');
     }
-    endTrace({ name: TraceName.Login });
   };
 
   const tryBiometric = async () => {
-    endTrace({ name: TraceName.LoginUserInteraction });
-
     fieldRef.current?.blur();
     try {
       await trace(
         {
           name: TraceName.LoginBiometricAuthentication,
           op: TraceOperation.Login,
-          parentContext: parentSpanRef.current,
         },
         async () => {
           await Authentication.appTriggeredAuth();
@@ -584,18 +562,6 @@ const Login: React.FC = () => {
                 >
                   {strings('login.password')}
                 </Label>
-                {hintText && (
-                  <Button
-                    variant={ButtonVariants.Link}
-                    onPress={toggleHint}
-                    testID={LoginViewSelectors.SHOW_HINT_BUTTON}
-                    label={
-                      showHint
-                        ? strings('login.hide_hint')
-                        : strings('login.show_hint')
-                    }
-                  />
-                )}
               </View>
               <TextField
                 size={TextFieldSize.Lg}
@@ -622,16 +588,6 @@ const Login: React.FC = () => {
             </View>
 
             <View style={styles.helperTextContainer}>
-              {showHint && (
-                <Text
-                  variant={TextVariant.BodyMD}
-                  color={TextColor.Alternative}
-                  style={styles.hintText}
-                >
-                  {strings('login.hint', { hint: hintText })}
-                </Text>
-              )}
-
               {!!error && (
                 <HelpText
                   severity={HelpTextSeverity.Error}

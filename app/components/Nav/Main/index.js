@@ -91,9 +91,13 @@ import { getGlobalEthQuery } from '../../../util/networks/global-network';
 import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
 import { isPortfolioViewEnabled } from '../../../util/networks';
 import { useIdentityEffects } from '../../../util/identity/hooks/useIdentityEffects/useIdentityEffects';
-import Routes from '../../../constants/navigation/Routes';
 import ProtectWalletMandatoryModal from '../../Views/ProtectWalletMandatoryModal/ProtectWalletMandatoryModal';
 import InfoNetworkModal from '../../Views/InfoNetworkModal/InfoNetworkModal';
+import { selectIsSeedlessPasswordOutdated } from '../../../selectors/seedlessOnboardingController';
+import { Authentication } from '../../../core';
+import { IconName } from '../../../component-library/components/Icons/Icon';
+import Routes from '../../../constants/navigation/Routes';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
@@ -120,6 +124,32 @@ const Main = (props) => {
   const backgroundMode = useRef(false);
   const locale = useRef(I18n.locale);
   const removeConnectionStatusListener = useRef();
+
+  ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+  const isSeedlessPasswordOutdated = useSelector(
+    selectIsSeedlessPasswordOutdated,
+  );
+
+  useEffect(() => {
+    if (isSeedlessPasswordOutdated) {
+      // show seedless password outdated modal and force user to lock app
+      props.navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
+        screen: Routes.SHEET.SUCCESS_ERROR_SHEET,
+        params: {
+          title: strings('login.seedless_password_outdated_modal_title'),
+          description: strings('login.seedless_password_outdated_modal_content'),
+          primaryButtonLabel: strings('login.seedless_password_outdated_modal_confirm'),
+          icon: IconName.RichDanger,
+          isInteractable: false,
+          onPrimaryButtonPress: async () => {
+            await Authentication.lockApp({ locked: true });
+          },
+          closeOnPrimaryButtonPress: true,
+        },
+      });
+    }
+  }, [isSeedlessPasswordOutdated, props.navigation]);
+  ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
   const { connectionChangeHandler } = useConnectionHandler(props.navigation);
 
@@ -210,39 +240,23 @@ const Main = (props) => {
       <ActivityIndicator size="small" />
     </View>
   );
+  const skipAccountModalSecureNow = () => {
+    props.navigation.navigate('SetPasswordFlow', {
+      screen: 'ManualBackupStep1',
+      params: { backupFlow: true },
+    });
+  };
+
+  const navigation = useNavigation();
 
   const toggleRemindLater = () => {
-    setShowRemindLaterModal(!showRemindLaterModal);
     props.navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.SHEET.SKIP_ACCOUNT_SECURITY_MODAL,
       params: {
-        onConfirm: () => {
-          props.navigation.navigate('SetPasswordFlow', {
-            screen: 'AccountBackupStep1B',
-            params: { ...props.route.params },
-          });
-        },
-        onCancel: () => {
-          toggleRemindLater();
-        },
+        onConfirm: navigation.goBack,
+        onCancel: skipAccountModalSecureNow,
       },
     });
-  };
-
-  const toggleSkipCheckbox = () => {
-    setSkipCheckbox(!skipCheckbox);
-  };
-
-  const skipAccountModalSecureNow = () => {
-    toggleRemindLater();
-    props.navigation.navigate('SetPasswordFlow', {
-      screen: 'AccountBackupStep1B',
-      params: { ...props.route.params },
-    });
-  };
-
-  const skipAccountModalSkip = () => {
-    if (skipCheckbox) toggleRemindLater();
   };
 
   /**
@@ -266,7 +280,7 @@ const Main = (props) => {
 
       return isEvmSelected
         ? chainId !== previousConfig.chainId ||
-            providerConfig.type !== previousConfig.type
+        providerConfig.type !== previousConfig.type
         : chainId !== previousConfig.chainId;
     },
     [providerConfig.type],
@@ -344,10 +358,9 @@ const Main = (props) => {
         variant: ToastVariants.Plain,
         labelOptions: [
           {
-            label: `${
-              (newNetwork?.name || deletedNetwork?.name) ??
+            label: `${(newNetwork?.name || deletedNetwork?.name) ??
               strings('asset_details.network')
-            } `,
+              } `,
             isBold: true,
           },
           {
@@ -505,10 +518,6 @@ Main.propTypes = {
    * Remove not visible notifications from state
    */
   removeNotVisibleNotifications: PropTypes.func,
-  /**
-   * Object that represents the current route info like params passed to it
-   */
-  route: PropTypes.object,
   /**
    * Current chain id
    */

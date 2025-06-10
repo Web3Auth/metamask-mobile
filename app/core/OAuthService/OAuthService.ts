@@ -143,7 +143,6 @@ export class OAuthService {
           { ...result, web3AuthNetwork },
           this.config.authServerUrl,
         );
-
         const audience = 'metamask';
 
         if (!data.jwt_tokens[audience]) {

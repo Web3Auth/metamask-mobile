@@ -129,10 +129,8 @@ import {
 import getUIStartupSpan from '../../../core/Performance/UIStartup';
 import { selectUserLoggedIn } from '../../../reducers/user/selectors';
 import { Confirm } from '../../Views/confirmations/components/confirm';
-///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 import ImportNewSecretRecoveryPhrase from '../../Views/ImportNewSecretRecoveryPhrase';
 import { SelectSRPBottomSheet } from '../../Views/SelectSRP/SelectSRPBottomSheet';
-///: END:ONLY_INCLUDE_IF
 import NavigationService from '../../../core/NavigationService';
 import AccountStatus from '../../Views/AccountStatus';
 import OnboardingSheet from '../../Views/OnboardingSheet';
@@ -142,6 +140,10 @@ import SuccessErrorSheet from '../../Views/SuccessErrorSheet';
 import ConfirmTurnOnBackupAndSyncModal from '../../UI/Identity/ConfirmTurnOnBackupAndSyncModal/ConfirmTurnOnBackupAndSyncModal';
 import AddNewAccount from '../../Views/AddNewAccount';
 import SwitchAccountTypeModal from '../../Views/confirmations/components/modals/switch-account-type-modal';
+///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+import useInterval from '../../hooks/useInterval';
+import { Duration } from '@metamask/utils';
+///: END:ONLY_INCLUDE_IF(seedless-onboarding)
 
 const clearStackNavigatorOptions = {
   headerShown: false,
@@ -160,23 +162,22 @@ const Stack = createStackNavigator();
 
 const OnboardingSuccessComponent = () => {
   const navigation = useNavigation();
-  return (
-    <OnboardingSuccess
-      onDone={() => navigation.reset({ routes: [{ name: 'HomeNav' }] })}
-    />
-  );
-};
+  const route = useRoute();
+  const params = route.params ?? {
+    backedUpSRP: false,
+    noSRP: false,
+  };
 
-const OnboardingSuccessComponentNoSRP = () => {
-  const navigation = useNavigation();
+  const { backedUpSRP, noSRP } = params as {
+    backedUpSRP: boolean;
+    noSRP: boolean;
+  };
+
   return (
     <OnboardingSuccess
-      noSRP
-      onDone={() =>
-        navigation.reset({
-          routes: [{ name: 'HomeNav' }],
-        })
-      }
+      backedUpSRP={backedUpSRP}
+      noSRP={noSRP}
+      onDone={() => navigation.reset({ routes: [{ name: 'HomeNav' }] })}
     />
   );
 };
@@ -228,7 +229,7 @@ const OnboardingNav = () => (
     />
     <Stack.Screen
       name={Routes.ONBOARDING.SUCCESS}
-      component={OnboardingSuccessComponentNoSRP} // Used in SRP flow
+      component={OnboardingSuccessComponent} // Used in SRP flow
     />
     <Stack.Screen
       name={Routes.ONBOARDING.DEFAULT_SETTINGS} // This is being used in import wallet flow
@@ -326,18 +327,12 @@ const DetectedTokensFlow = () => (
   </Stack.Navigator>
 );
 
-///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 interface RootModalFlowProps {
   route: {
     params: Record<string, unknown>;
   };
 }
-///: END:ONLY_INCLUDE_IF(multi-srp)
-const RootModalFlow = (
-  ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
-  props: RootModalFlowProps,
-  ///: END:ONLY_INCLUDE_IF
-) => (
+const RootModalFlow = (props: RootModalFlowProps) => (
   <Stack.Navigator mode={'modal'} screenOptions={clearStackNavigatorOptions}>
     <Stack.Screen
       name={Routes.MODAL.WALLET_ACTIONS}
@@ -467,19 +462,15 @@ const RootModalFlow = (
       component={EnableAutomaticSecurityChecksModal}
     />
     {
-      ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
       <Stack.Screen
         name={Routes.SHEET.SELECT_SRP}
         component={SelectSRPBottomSheet}
       />
-      ///: END:ONLY_INCLUDE_IF
     }
     <Stack.Screen
       name={Routes.MODAL.SRP_REVEAL_QUIZ}
       component={SRPQuiz}
-      ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
       initialParams={{ ...props.route.params }}
-      ///: END:ONLY_INCLUDE_IF
     />
     <Stack.Screen
       name={Routes.SHEET.ACCOUNT_ACTIONS}
@@ -538,7 +529,6 @@ const ImportPrivateKeyView = () => (
   </Stack.Navigator>
 );
 
-///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
 const ImportSRPView = () => (
   <Stack.Navigator
     screenOptions={{
@@ -551,7 +541,6 @@ const ImportSRPView = () => (
     />
   </Stack.Navigator>
 );
-///: END:ONLY_INCLUDE_IF
 
 const ConnectQRHardwareFlow = () => (
   <Stack.Navigator
@@ -678,13 +667,11 @@ const AppFlow = () => {
         options={{ animationEnabled: true }}
       />
       {
-        ///: BEGIN:ONLY_INCLUDE_IF(multi-srp)
         <Stack.Screen
           name="ImportSRPView"
           component={ImportSRPView}
           options={{ animationEnabled: true }}
         />
-        ///: END:ONLY_INCLUDE_IF
       }
       <Stack.Screen
         name="ConnectQRHardwareFlow"
@@ -792,12 +779,38 @@ const App: React.FC = () => {
     endTrace({ name: TraceName.UIStartup });
   }, []);
 
+  ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+  // periodically check seedless password outdated when app UI is open
+  useInterval(
+    async () => {
+      await Authentication.checkIsSeedlessPasswordOutdated();
+    },
+    {
+      delay: Duration.Minute * 30,
+    },
+  );
+  ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
+
   useEffect(() => {
     const appTriggeredAuth = async () => {
       const existingUser = await StorageWrapper.getItem(EXISTING_USER);
       setOnboarded(!!existingUser);
       try {
         if (existingUser) {
+          ///: BEGIN:ONLY_INCLUDE_IF(seedless-onboarding)
+          // check if the seedless password is outdated at app init
+          // if app is locked, check skip cache to ensure user need to input latest global password
+          try {
+            const isOutdated =
+              await Authentication.checkIsSeedlessPasswordOutdated(true);
+            Logger.log(`App: Seedless password is outdated: ${isOutdated}`);
+          } catch (error) {
+            Logger.error(
+              error as Error,
+              'App: Error in checkIsSeedlessPasswordOutdated',
+            );
+          }
+          ///: END:ONLY_INCLUDE_IF(seedless-onboarding)
           // This should only be called if the auth type is not password, which is not the case so consider removing it
           await trace(
             {
@@ -991,6 +1004,7 @@ const App: React.FC = () => {
               rpcEndpoints: [
                 {
                   url: network.rpcUrl,
+                  failoverUrls: network.failoverRpcUrls,
                   name: network.nickname,
                   type: RpcEndpointType.Custom,
                 },
